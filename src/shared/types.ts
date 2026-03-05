@@ -1,6 +1,15 @@
 export type ProviderName = 'openai' | 'gemini' | 'grok';
 
-export type RewriteTemplateId = 'auto_fix' | 'professional' | 'technical' | 'shorten';
+export type RewriteTemplateId = 'auto_fix' | 'professional' | 'custom' | 'shorten';
+
+export type SiteListMode = 'all' | 'allowlist' | 'blocklist';
+
+export type AppLanguage = 'en' | 'de';
+
+export interface TemplateConfig {
+  enabled: boolean;
+  instruction: string;
+}
 
 export interface ProviderSettings {
   defaultTemplateId: RewriteTemplateId;
@@ -8,8 +17,13 @@ export interface ProviderSettings {
   openaiModel: string;
   geminiModel: string;
   grokModel: string;
-  theme: 'dark' | 'light';
   systemPrompt?: string;
+  templateConfigs?: Partial<Record<RewriteTemplateId, TemplateConfig>>;
+  templateOrder?: RewriteTemplateId[];
+  showPillLabels: boolean;
+  language: AppLanguage;
+  siteListMode: SiteListMode;
+  siteList: string[];
 }
 
 export interface RewriteRequestPayload {

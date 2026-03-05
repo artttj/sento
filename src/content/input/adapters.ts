@@ -1,9 +1,65 @@
-import { isContentEditableElement, isTextControl } from '../editable';
+import { extractStructuredText, isContentEditableElement, isTextControl } from '../editable';
 
 export interface EditableAdapter {
   canHandle(el: Element): boolean;
   readSelection(el: Element): string;
   replaceSelection(el: Element, replacement: string): boolean;
+}
+
+function textToRichHtml(text: string): string {
+  const lines = text.split('\n');
+  const htmlParts: string[] = [];
+  let inList = false;
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    const bulletMatch = trimmed.match(/^[-*•]\s+(.*)/);
+
+    if (bulletMatch) {
+      if (!inList) {
+        htmlParts.push('<ul>');
+        inList = true;
+      }
+      const content = bulletMatch[1]
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+      htmlParts.push(`<li>${content}</li>`);
+    } else {
+      if (inList) {
+        htmlParts.push('</ul>');
+        inList = false;
+      }
+      if (!trimmed) {
+        htmlParts.push('<p></p>');
+      } else {
+        const content = trimmed
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+        htmlParts.push(`<p>${content}</p>`);
+      }
+    }
+  }
+
+  if (inList) htmlParts.push('</ul>');
+  return htmlParts.join('');
+}
+
+function simulatePaste(el: Element, text: string, html: string): boolean {
+  const dt = new DataTransfer();
+  dt.setData('text/plain', text);
+  dt.setData('text/html', html);
+
+  const pasteEvent = new ClipboardEvent('paste', {
+    bubbles: true,
+    cancelable: true,
+    composed: true,
+    clipboardData: dt,
+  });
+
+  const cancelled = !el.dispatchEvent(pasteEvent);
+  return cancelled;
 }
 
 function isSelectionInside(el: HTMLElement, selection: Selection | null): boolean {
@@ -57,8 +113,8 @@ export class ContentEditableAdapter implements EditableAdapter {
   readSelection(el: Element): string {
     if (!isContentEditableElement(el)) return '';
     const selection = window.getSelection();
-    if (!isSelectionInside(el, selection)) return '';
-    return selection?.toString() ?? '';
+    if (!isSelectionInside(el, selection) || !selection || selection.rangeCount === 0) return '';
+    return extractStructuredText(selection.getRangeAt(0));
   }
 
   replaceSelection(el: Element, replacement: string): boolean {
@@ -68,15 +124,8 @@ export class ContentEditableAdapter implements EditableAdapter {
     if (!isSelectionInside(el, selection)) return false;
     if (!selection || selection.rangeCount === 0) return false;
 
-    const range = selection.getRangeAt(0);
-    range.deleteContents();
-    const textNode = document.createTextNode(replacement);
-    range.insertNode(textNode);
-    range.setStartAfter(textNode);
-    range.collapse(true);
-    selection.removeAllRanges();
-    selection.addRange(range);
-    return true;
+    const html = textToRichHtml(replacement);
+    return simulatePaste(el, replacement, html);
   }
 }
 
@@ -87,16 +136,15 @@ export class FrameworkEditableAdapter implements EditableAdapter {
 
   readSelection(el: Element): string {
     if (!isContentEditableElement(el)) return '';
-    return window.getSelection()?.toString() ?? '';
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return '';
+    return extractStructuredText(selection.getRangeAt(0));
   }
 
   replaceSelection(el: Element, replacement: string): boolean {
     if (!isContentEditableElement(el)) return false;
     el.focus();
-    try {
-      return document.execCommand('insertText', false, replacement);
-    } catch {
-      return false;
-    }
+    const html = textToRichHtml(replacement);
+    return simulatePaste(el, replacement, html);
   }
 }

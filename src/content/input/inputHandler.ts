@@ -47,9 +47,13 @@ export class InputHandler {
       return { ok: false, message: 'Could not restore text selection. Reselect and try again.' };
     }
 
-    const beforeInput = createBeforeInputEvent(replacement);
-    if (!element.dispatchEvent(beforeInput)) {
-      return { ok: false, message: 'Editor prevented rewrite insertion.' };
+    const richEditor = snapshot.mode === 'contenteditable';
+
+    if (!richEditor) {
+      const beforeInput = createBeforeInputEvent(replacement);
+      if (!element.dispatchEvent(beforeInput)) {
+        return { ok: false, message: 'Editor prevented rewrite insertion.' };
+      }
     }
 
     const adapter = this.adapters.find((item) => item.canHandle(element));
@@ -63,8 +67,11 @@ export class InputHandler {
       return { ok: false, message: 'Unsupported editor implementation. Try selecting again.' };
     }
 
-    element.dispatchEvent(createInputEvent(replacement));
-    element.dispatchEvent(new Event('change', { bubbles: true }));
+    if (!richEditor) {
+      element.dispatchEvent(createInputEvent(replacement));
+      element.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
     return { ok: true };
   }
 

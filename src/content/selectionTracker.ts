@@ -1,4 +1,4 @@
-import { findEditableFromNode, isContentEditableElement, isTextControl, rectToPlain } from './editable';
+import { extractStructuredText, findEditableFromNode, isContentEditableElement, isTextControl, rectToPlain } from './editable';
 import type { EditableElement, SelectionSnapshot } from './types';
 
 interface TrackerOptions {
@@ -112,7 +112,7 @@ export class ActiveEditableTracker {
         return;
       }
 
-      const text = selection.toString();
+      const text = extractStructuredText(range);
       if (!text.trim()) {
         this.setSnapshot(null);
         return;

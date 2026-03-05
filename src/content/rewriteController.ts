@@ -1,11 +1,16 @@
 import { MAX_SELECTION_CHARS } from '../shared/constants';
 import { MSG, type RewriteRuntimeResult } from '../shared/messages';
+import { getOrderedTemplates, REWRITE_TEMPLATES } from '../shared/rewriteTemplates';
 import { getProviderSettings } from '../shared/storage';
 import type { ProviderSettings, RewriteTemplateId } from '../shared/types';
 import { RewriteBubble } from './bubble/rewriteBubble';
 import { InputHandler } from './input/inputHandler';
 import { ActiveEditableTracker } from './selectionTracker';
 import type { SelectionSnapshot } from './types';
+
+function isExtensionAlive(): boolean {
+  return !!(chrome.runtime && chrome.runtime.id);
+}
 
 export class RewriteController {
   private readonly bubble: RewriteBubble;
@@ -22,8 +27,8 @@ export class RewriteController {
     this.inputHandler = new InputHandler();
 
     this.bubble = new RewriteBubble({
-      onRewrite: (templateId) => {
-        void this.handleRewrite(templateId);
+      onRewrite: (templateId, forceApply) => {
+        void this.handleRewrite(templateId, forceApply);
       },
       onApply: (text) => {
         this.handleApply(text);
@@ -41,7 +46,9 @@ export class RewriteController {
         this.bubble.hide();
       },
       onOpenSettings: () => {
-        void chrome.runtime.sendMessage({ type: MSG.OPEN_SETTINGS });
+        if (isExtensionAlive()) {
+          void chrome.runtime.sendMessage({ type: MSG.OPEN_SETTINGS });
+        }
       },
     });
 
@@ -55,24 +62,39 @@ export class RewriteController {
 
   async start(): Promise<void> {
     const settings = await getProviderSettings();
-    this.lastTemplateId = settings.defaultTemplateId;
-    this.bubble.setTheme(settings.theme);
-    this.bubble.setTemplateId(settings.defaultTemplateId);
+    this.applySettings(settings);
 
     chrome.storage.onChanged.addListener((changes, area) => {
       if (area !== 'local') return;
       const settingsChange = changes.apc_settings as chrome.storage.StorageChange | undefined;
       const nextSettings = settingsChange?.newValue as Partial<ProviderSettings> | undefined;
-      if (nextSettings?.theme) {
-        this.bubble.setTheme(nextSettings.theme === 'light' ? 'light' : 'dark');
-      }
-      if (nextSettings?.defaultTemplateId) {
-        this.lastTemplateId = nextSettings.defaultTemplateId;
-        this.bubble.setTemplateId(nextSettings.defaultTemplateId);
+      if (nextSettings) {
+        this.applySettings(nextSettings);
       }
     });
 
     this.tracker.start();
+  }
+
+  private applySettings(settings: Partial<ProviderSettings>): void {
+    if (settings.templateConfigs || settings.defaultTemplateId || settings.templateOrder) {
+      const enabledIds = this.getEnabledIds(settings.templateConfigs, settings.templateOrder);
+      this.bubble.setEnabledTemplates(enabledIds);
+    }
+    if (settings.defaultTemplateId) {
+      this.lastTemplateId = settings.defaultTemplateId;
+      this.bubble.setTemplateId(settings.defaultTemplateId);
+    }
+    if (settings.showPillLabels !== undefined) {
+      this.bubble.setShowLabels(settings.showPillLabels);
+    }
+  }
+
+  private getEnabledIds(configs?: ProviderSettings['templateConfigs'], order?: ProviderSettings['templateOrder']): RewriteTemplateId[] {
+    const ordered = getOrderedTemplates(order);
+    if (!configs) return ordered.map((t) => t.id);
+    const ids = ordered.filter((t) => configs[t.id]?.enabled !== false).map((t) => t.id);
+    return ids.length > 0 ? ids : [ordered[0].id];
   }
 
   private handleSnapshot(snapshot: SelectionSnapshot | null): void {
@@ -88,16 +110,21 @@ export class RewriteController {
       return;
     }
 
-    if (this.loading || this.hasPreview || this.bubble.isInteracting()) {
+    if (this.bubble.isInteracting()) {
       return;
     }
 
+    void this.abortPending();
+    this.loading = false;
+    this.hasPreview = false;
     this.snapshot = null;
-
+    this.bubble.setLoading(false);
+    this.bubble.clearPreview();
+    this.bubble.clearError();
     this.bubble.hide();
   }
 
-  private async handleRewrite(templateId: RewriteTemplateId): Promise<void> {
+  private async handleRewrite(templateId: RewriteTemplateId, forceApply = false): Promise<void> {
     if (this.loading) return;
 
     const snapshot = this.snapshot;
@@ -127,6 +154,11 @@ export class RewriteController {
     this.bubble.setLoading(true);
 
     try {
+      if (!isExtensionAlive()) {
+        this.bubble.showError('Extension was reloaded. Refresh the page.');
+        return;
+      }
+
       const response = (await chrome.runtime.sendMessage({
         type: MSG.REWRITE_REQUEST,
         payload: {
@@ -144,6 +176,11 @@ export class RewriteController {
         const errMsg = response?.error?.message ?? 'Rewrite failed.';
         const showSettingsAction = response?.error?.code === 'MISSING_KEY';
         this.bubble.showError(errMsg, showSettingsAction);
+        return;
+      }
+
+      if (forceApply) {
+        this.handleApply(response.payload.text);
         return;
       }
 
@@ -183,10 +220,12 @@ export class RewriteController {
   private async abortPending(): Promise<void> {
     if (!this.pendingRequestId) return;
 
-    await chrome.runtime.sendMessage({
-      type: MSG.REWRITE_ABORT,
-      requestId: this.pendingRequestId,
-    }).catch(() => {});
+    if (isExtensionAlive()) {
+      await chrome.runtime.sendMessage({
+        type: MSG.REWRITE_ABORT,
+        requestId: this.pendingRequestId,
+      }).catch(() => {});
+    }
 
     this.pendingRequestId = null;
   }

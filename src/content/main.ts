@@ -1,7 +1,14 @@
+import { getProviderSettings, isSiteAllowed } from '../shared/storage';
 import { RewriteController } from './rewriteController';
 
-const controller = new RewriteController();
+async function boot(): Promise<void> {
+  const settings = await getProviderSettings();
+  if (!isSiteAllowed(settings, location.hostname)) return;
 
-void controller.start().catch((error: unknown) => {
+  const controller = new RewriteController();
+  await controller.start();
+}
+
+void boot().catch((error: unknown) => {
   console.error('[Sentō] failed to initialize content script', error);
 });

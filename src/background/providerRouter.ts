@@ -4,6 +4,7 @@ import { getProviderSettings, getOpenAIKey, getGeminiKey, getGrokKey } from '../
 import { getProviderStrategy } from '../shared/providers';
 import type {
   ProviderName,
+  ProviderSettings,
   RewriteErrorPayload,
   RewriteRequestPayload,
   RewriteResponsePayload,
@@ -44,7 +45,7 @@ function normalizeError(error: unknown, provider?: ProviderName, model?: string)
   return { code: 'UNKNOWN', message: 'Unknown error.', provider, model };
 }
 
-async function resolveProviderContext(): Promise<{ provider: ProviderName; model: string; key: string; systemPrompt?: string }> {
+async function resolveProviderContext(): Promise<{ provider: ProviderName; model: string; key: string; systemPrompt?: string; settings: ProviderSettings }> {
   const settings = await getProviderSettings();
   const provider = settings.llmProvider;
 
@@ -54,6 +55,7 @@ async function resolveProviderContext(): Promise<{ provider: ProviderName; model
       model: settings.geminiModel,
       key: await getGeminiKey(),
       systemPrompt: settings.systemPrompt,
+      settings,
     };
   }
 
@@ -63,6 +65,7 @@ async function resolveProviderContext(): Promise<{ provider: ProviderName; model
       model: settings.grokModel,
       key: await getGrokKey(),
       systemPrompt: settings.systemPrompt,
+      settings,
     };
   }
 
@@ -71,6 +74,7 @@ async function resolveProviderContext(): Promise<{ provider: ProviderName; model
     model: settings.openaiModel,
     key: await getOpenAIKey(),
     systemPrompt: settings.systemPrompt,
+    settings,
   };
 }
 
@@ -79,7 +83,7 @@ export async function rewriteWithProvider(
   signal: AbortSignal
 ): Promise<{ ok: true; payload: RewriteResponsePayload } | { ok: false; error: RewriteErrorPayload }> {
   const started = Date.now();
-  const { provider, model, key, systemPrompt } = await resolveProviderContext();
+  const { provider, model, key, systemPrompt, settings } = await resolveProviderContext();
 
   if (!key.trim()) {
     return {
@@ -93,12 +97,15 @@ export async function rewriteWithProvider(
     };
   }
 
+  const templateConfig = settings.templateConfigs?.[payload.templateId];
   const providerStrategy = getProviderStrategy(provider);
   const prompt = buildRewritePrompt({
     templateId: payload.templateId,
     text: payload.text,
     title: payload.context?.title,
     url: payload.context?.url,
+    instructionOverride: templateConfig?.instruction,
+    language: settings.language,
   });
 
   const timeout = AbortSignal.timeout(REQUEST_TIMEOUT_MS);

@@ -1,12 +1,20 @@
 import { DEFAULT_SETTINGS, STORAGE_KEYS } from './constants';
-import type { ProviderName, ProviderSettings, RewriteTemplateId } from './types';
+import type { AppLanguage, ProviderName, ProviderSettings, RewriteTemplateId, SiteListMode } from './types';
 
 function isProviderName(value: string): value is ProviderName {
   return value === 'openai' || value === 'gemini' || value === 'grok';
 }
 
 function isRewriteTemplateId(value: string): value is RewriteTemplateId {
-  return value === 'auto_fix' || value === 'professional' || value === 'technical' || value === 'shorten';
+  return value === 'auto_fix' || value === 'professional' || value === 'custom' || value === 'shorten';
+}
+
+function isSiteListMode(value: string): value is SiteListMode {
+  return value === 'all' || value === 'allowlist' || value === 'blocklist';
+}
+
+function isAppLanguage(value: string): value is AppLanguage {
+  return value === 'en' || value === 'de';
 }
 
 export async function getProviderSettings(): Promise<ProviderSettings> {
@@ -20,14 +28,22 @@ export async function getProviderSettings(): Promise<ProviderSettings> {
   const defaultTemplateId: RewriteTemplateId =
     rawTemplateId && isRewriteTemplateId(rawTemplateId) ? rawTemplateId : DEFAULT_SETTINGS.defaultTemplateId;
 
+  const rawSiteMode = raw.siteListMode;
+  const siteListMode: SiteListMode = rawSiteMode && isSiteListMode(rawSiteMode) ? rawSiteMode : DEFAULT_SETTINGS.siteListMode;
+
   return {
     defaultTemplateId,
     llmProvider: provider,
     openaiModel: raw.openaiModel ?? DEFAULT_SETTINGS.openaiModel,
     geminiModel: raw.geminiModel ?? DEFAULT_SETTINGS.geminiModel,
     grokModel: raw.grokModel ?? DEFAULT_SETTINGS.grokModel,
-    theme: raw.theme === 'light' ? 'light' : 'dark',
     systemPrompt: raw.systemPrompt ?? DEFAULT_SETTINGS.systemPrompt,
+    templateConfigs: raw.templateConfigs,
+    templateOrder: Array.isArray(raw.templateOrder) ? raw.templateOrder : undefined,
+    showPillLabels: raw.showPillLabels ?? DEFAULT_SETTINGS.showPillLabels,
+    language: (raw.language && isAppLanguage(raw.language)) ? raw.language : DEFAULT_SETTINGS.language,
+    siteListMode,
+    siteList: Array.isArray(raw.siteList) ? raw.siteList : [...DEFAULT_SETTINGS.siteList],
   };
 }
 
@@ -57,6 +73,23 @@ export async function getGeminiKey(): Promise<string> {
 
 export async function saveGeminiKey(key: string): Promise<void> {
   await chrome.storage.local.set({ [STORAGE_KEYS.GEMINI_KEY]: key });
+}
+
+export function isSiteAllowed(settings: ProviderSettings, hostname: string): boolean {
+  if (settings.siteListMode === 'all') return true;
+
+  const normalizedHost = hostname.toLowerCase();
+  const matches = settings.siteList.some((pattern) => {
+    const p = pattern.toLowerCase().trim();
+    if (!p) return false;
+    if (p.startsWith('*.')) {
+      const suffix = p.slice(2);
+      return normalizedHost === suffix || normalizedHost.endsWith(`.${suffix}`);
+    }
+    return normalizedHost === p;
+  });
+
+  return settings.siteListMode === 'allowlist' ? matches : !matches;
 }
 
 export async function getGrokKey(): Promise<string> {

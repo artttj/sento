@@ -1,5 +1,5 @@
 import { PROVIDER_MODELS } from '../shared/constants';
-import { REWRITE_TEMPLATES } from '../shared/rewriteTemplates';
+import { getOrderedTemplates, REWRITE_TEMPLATES } from '../shared/rewriteTemplates';
 import {
   getProviderSettings,
   saveProviderSettings,
@@ -10,16 +10,20 @@ import {
   getGrokKey,
   saveGrokKey,
 } from '../shared/storage';
-import type { RewriteTemplateId } from '../shared/types';
+import type { AppLanguage, RewriteTemplateId, SiteListMode, TemplateConfig } from '../shared/types';
 
 type Provider = 'openai' | 'gemini' | 'grok';
-type Theme = 'dark' | 'light';
 
 const refs = {
   defaultTemplate: document.getElementById('default-template') as HTMLSelectElement,
   providerSegmented: document.getElementById('provider-segmented') as HTMLElement,
-  themeSegmented: document.getElementById('theme-segmented') as HTMLElement,
   systemPrompt: document.getElementById('system-prompt') as HTMLTextAreaElement,
+  showPillLabels: document.getElementById('show-pill-labels') as HTMLInputElement,
+  languageSeg: document.getElementById('language-segmented') as HTMLElement,
+  siteModeSeg: document.getElementById('site-mode-segmented') as HTMLElement,
+  siteListRow: document.getElementById('site-list-row') as HTMLElement,
+  siteListTitle: document.getElementById('site-list-title') as HTMLElement,
+  siteList: document.getElementById('site-list') as HTMLTextAreaElement,
   btnSaveSettings: document.getElementById('btn-save-settings') as HTMLButtonElement,
   settingsStatus: document.getElementById('settings-status') as HTMLElement,
 
@@ -45,11 +49,8 @@ const refs = {
   keysStatus: document.getElementById('keys-status') as HTMLElement,
 
   aboutVersion: document.getElementById('about-version') as HTMLElement,
+  templateConfigs: document.getElementById('template-configs') as HTMLElement,
 };
-
-function applyTheme(theme: Theme): void {
-  document.documentElement.dataset.theme = theme;
-}
 
 function flash(el: HTMLElement, text = 'Saved'): void {
   el.textContent = text;
@@ -90,6 +91,126 @@ function wireSegmented(container: HTMLElement, onChange?: (value: string) => voi
       onChange?.(btn.dataset.value ?? '');
     });
   });
+}
+
+function updateSiteListVisibility(mode: SiteListMode): void {
+  const show = mode !== 'all';
+  refs.siteListRow.classList.toggle('hidden', !show);
+  refs.siteListTitle.textContent = mode === 'allowlist' ? 'Allowed Sites' : 'Blocked Sites';
+}
+
+const DRAG_HANDLE_SVG = '<svg viewBox="0 0 12 12" fill="currentColor"><circle cx="4" cy="2.5" r="1"/><circle cx="8" cy="2.5" r="1"/><circle cx="4" cy="6" r="1"/><circle cx="8" cy="6" r="1"/><circle cx="4" cy="9.5" r="1"/><circle cx="8" cy="9.5" r="1"/></svg>';
+
+let dragSourceCard: HTMLElement | null = null;
+
+function renderTemplateConfigs(configs: Partial<Record<RewriteTemplateId, TemplateConfig>>, order?: RewriteTemplateId[]): void {
+  const container = refs.templateConfigs;
+  container.querySelectorAll('.tpl-card').forEach((el) => el.remove());
+
+  const templates = getOrderedTemplates(order);
+
+  templates.forEach((tpl) => {
+    const cfg = configs[tpl.id];
+    const enabled = cfg?.enabled !== false;
+    const instruction = (cfg?.instruction && cfg.instruction.trim()) ? cfg.instruction : tpl.instruction;
+
+    const card = document.createElement('div');
+    card.className = 'tpl-card';
+    card.dataset.templateId = tpl.id;
+    card.draggable = true;
+    card.innerHTML = `
+      <div class="tpl-header">
+        <span class="tpl-drag-handle" title="Drag to reorder">${DRAG_HANDLE_SVG}</span>
+        <label class="tpl-switch">
+          <input type="checkbox" class="tpl-checkbox" ${enabled ? 'checked' : ''} />
+          <span class="tpl-switch-track"></span>
+        </label>
+        <span class="tpl-name">${tpl.label}</span>
+      </div>
+      <textarea class="tpl-instruction setting-textarea" rows="2"></textarea>
+    `;
+    const textarea = card.querySelector('.tpl-instruction') as HTMLTextAreaElement;
+    textarea.value = instruction;
+    container.appendChild(card);
+
+    const checkbox = card.querySelector('.tpl-checkbox') as HTMLInputElement;
+    checkbox.addEventListener('change', () => {
+      enforceMinOneEnabled();
+    });
+
+    card.addEventListener('dragstart', (e) => {
+      dragSourceCard = card;
+      card.classList.add('dragging');
+      e.dataTransfer!.effectAllowed = 'move';
+    });
+
+    card.addEventListener('dragend', () => {
+      card.classList.remove('dragging');
+      container.querySelectorAll('.tpl-card').forEach((el) => el.classList.remove('drag-over'));
+      dragSourceCard = null;
+    });
+
+    card.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer!.dropEffect = 'move';
+      if (dragSourceCard && dragSourceCard !== card) {
+        card.classList.add('drag-over');
+      }
+    });
+
+    card.addEventListener('dragleave', () => {
+      card.classList.remove('drag-over');
+    });
+
+    card.addEventListener('drop', (e) => {
+      e.preventDefault();
+      card.classList.remove('drag-over');
+      if (!dragSourceCard || dragSourceCard === card) return;
+
+      const cards = Array.from(container.querySelectorAll<HTMLElement>('.tpl-card'));
+      const fromIndex = cards.indexOf(dragSourceCard);
+      const toIndex = cards.indexOf(card);
+      if (fromIndex < 0 || toIndex < 0) return;
+
+      if (fromIndex < toIndex) {
+        container.insertBefore(dragSourceCard, card.nextSibling);
+      } else {
+        container.insertBefore(dragSourceCard, card);
+      }
+    });
+  });
+}
+
+function enforceMinOneEnabled(): void {
+  const checkboxes = Array.from(refs.templateConfigs.querySelectorAll<HTMLInputElement>('.tpl-checkbox'));
+  const enabledCount = checkboxes.filter((cb) => cb.checked).length;
+  if (enabledCount <= 1) {
+    checkboxes.forEach((cb) => { if (cb.checked) cb.disabled = true; });
+  } else {
+    checkboxes.forEach((cb) => { cb.disabled = false; });
+  }
+}
+
+function collectTemplateOrder(): RewriteTemplateId[] {
+  return Array.from(refs.templateConfigs.querySelectorAll<HTMLElement>('.tpl-card'))
+    .map((card) => card.dataset.templateId as RewriteTemplateId);
+}
+
+function collectTemplateConfigs(): Partial<Record<RewriteTemplateId, TemplateConfig>> {
+  const result: Partial<Record<RewriteTemplateId, TemplateConfig>> = {};
+  refs.templateConfigs.querySelectorAll<HTMLElement>('.tpl-card').forEach((card) => {
+    const id = card.dataset.templateId as RewriteTemplateId;
+    const tpl = REWRITE_TEMPLATES.find((t) => t.id === id);
+    if (!tpl) return;
+    const checkbox = card.querySelector('.tpl-checkbox') as HTMLInputElement;
+    const textarea = card.querySelector('.tpl-instruction') as HTMLTextAreaElement;
+    const instruction = textarea.value.trim();
+    result[id] = {
+      enabled: checkbox.checked,
+      instruction: instruction === tpl.instruction ? '' : instruction,
+    };
+  });
+  return result;
 }
 
 async function refreshBadges(): Promise<void> {
@@ -140,17 +261,24 @@ async function init(): Promise<void> {
   populateSelect(refs.grokModel, PROVIDER_MODELS.grok, PROVIDER_MODELS.grok[0]);
 
   wireSegmented(refs.providerSegmented);
-  wireSegmented(refs.themeSegmented, (value) => applyTheme(value === 'light' ? 'light' : 'dark'));
+  wireSegmented(refs.languageSeg);
+  wireSegmented(refs.siteModeSeg, (value) => {
+    updateSiteListVisibility(value as SiteListMode);
+  });
 
   const settings = await getProviderSettings();
   refs.defaultTemplate.value = settings.defaultTemplateId ?? 'auto_fix';
   setSegmentedValue(refs.providerSegmented, settings.llmProvider);
-  setSegmentedValue(refs.themeSegmented, settings.theme);
   refs.systemPrompt.value = settings.systemPrompt ?? '';
+  refs.showPillLabels.checked = settings.showPillLabels;
+  setSegmentedValue(refs.languageSeg, settings.language);
+  setSegmentedValue(refs.siteModeSeg, settings.siteListMode);
+  refs.siteList.value = settings.siteList.join('\n');
+  updateSiteListVisibility(settings.siteListMode);
   refs.openaiModel.value = settings.openaiModel;
   refs.geminiModel.value = settings.geminiModel;
   refs.grokModel.value = settings.grokModel;
-  applyTheme(settings.theme);
+  renderTemplateConfigs(settings.templateConfigs ?? {}, settings.templateOrder);
 
   refs.openaiKey.value = await getOpenAIKey();
   refs.geminiKey.value = await getGeminiKey();
@@ -159,19 +287,28 @@ async function init(): Promise<void> {
 
   refs.btnSaveSettings.addEventListener('click', async () => {
     const llmProvider = (getSegmentedValue(refs.providerSegmented) || 'openai') as Provider;
-    const theme = (getSegmentedValue(refs.themeSegmented) || 'dark') as Theme;
+    const language = (getSegmentedValue(refs.languageSeg) || 'en') as AppLanguage;
+    const siteListMode = (getSegmentedValue(refs.siteModeSeg) || 'all') as SiteListMode;
+    const siteList = refs.siteList.value
+      .split('\n')
+      .map((s) => s.trim())
+      .filter(Boolean);
 
     await saveProviderSettings({
       defaultTemplateId: refs.defaultTemplate.value as RewriteTemplateId,
       llmProvider,
-      theme,
       openaiModel: refs.openaiModel.value,
       geminiModel: refs.geminiModel.value,
       grokModel: refs.grokModel.value,
       systemPrompt: refs.systemPrompt.value,
+      templateConfigs: collectTemplateConfigs(),
+      templateOrder: collectTemplateOrder(),
+      showPillLabels: refs.showPillLabels.checked,
+      language,
+      siteListMode,
+      siteList,
     });
 
-    applyTheme(theme);
     flash(refs.settingsStatus, '✓ Saved');
   });
 

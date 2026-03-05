@@ -1,8 +1,8 @@
-# <img src="icons/icon128.png" width="48" alt="" valign="middle" /> Sento
+# <img src="icons/icon128.png" width="48" alt="" valign="middle" /> Sentō
 
 A Chrome extension that adds a floating AI rewrite bubble to any editable field on the web. Select text, pick a template, and get a rewritten version in place.
 
-- **Works everywhere.** Textarea, input fields, contenteditable editors. If you can type in it, Sento can rewrite it.
+- **Works everywhere.** Textarea, input fields, contenteditable editors. If you can type in it, Sentō can rewrite it.
 - **Preview before applying.** Every rewrite shows a preview first. You decide what goes in. Nothing changes until you click Apply.
 - **Your keys, your cost.** Bring your own OpenAI, Gemini, or Grok API key. No middleman, no subscriptions, no data harvesting.
 - **Invisible until needed.** The bubble only appears when you select text in a supported field. It stays out of your way otherwise.
@@ -15,7 +15,7 @@ A Chrome extension that adds a floating AI rewrite bubble to any editable field 
 1. `git clone https://github.com/artttj/sento.git && cd sento`
 2. `npm install && npm run build`
 3. Open `chrome://extensions`, enable **Developer mode**, click **Load unpacked**, select the `dist/` folder.
-4. Click the Sento icon, go to **Settings**, and add your API key under **AI Connections**.
+4. Click the Sentō icon, go to **Settings**, and add your API key under **AI Connections**.
 
 | Provider | Get a key |
 | --- | --- |
@@ -54,7 +54,6 @@ You can set a default template and add a custom system prompt in Settings.
 
 - **Default Template** to pre-select when the bubble opens
 - **AI Provider** switch between OpenAI, Gemini, and Grok
-- **Theme** with a liquid glass dark/light switcher
 - **Model** selection per provider
 - **System Prompt** prepended to every request
 - **API Keys** stored locally, never sent anywhere except your chosen provider
@@ -64,7 +63,7 @@ You can set a default template and add a custom system prompt in Settings.
 ## Privacy
 
 - Keys are stored in `chrome.storage.local` and never leave your machine.
-- Selected text goes directly from your browser to the provider API. Sento has no backend.
+- Selected text goes directly from your browser to the provider API. Sentō has no backend.
 - The full source code is right here for you to read.
 
 ---

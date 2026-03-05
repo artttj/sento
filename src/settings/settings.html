@@ -36,6 +36,15 @@
           <span id="nav-ai-warning" class="nav-warning hidden" title="Some API keys are not configured">!</span>
         </button>
 
+        <button class="nav-item" data-tab="help" type="button">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="10" cy="10" r="8"/>
+            <path d="M8 7.5a2.2 2.2 0 0 1 4.1 1c0 1.5-2.1 1.5-2.1 3"/>
+            <circle cx="10" cy="14.5" r="0.8" fill="currentColor" stroke="none"/>
+          </svg>
+          <span>Help</span>
+        </button>
+
         <button class="nav-item" data-tab="about" type="button">
           <svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
             <circle cx="10" cy="10" r="8"/>
@@ -65,6 +74,28 @@
 
           <div class="setting-row">
             <div class="setting-label">
+              <div class="setting-title">Pill Labels</div>
+              <div class="setting-desc">Show text labels next to pill icons in the bubble</div>
+            </div>
+            <label class="tpl-switch">
+              <input id="show-pill-labels" type="checkbox" checked />
+              <span class="tpl-switch-track"></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-label">
+              <div class="setting-title">Language</div>
+              <div class="setting-desc">Output language for rewrites</div>
+            </div>
+            <div class="segmented" id="language-segmented">
+              <button class="seg-btn" data-value="en" type="button">English</button>
+              <button class="seg-btn" data-value="de" type="button">Deutsch</button>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-label">
               <div class="setting-title">AI Provider</div>
               <div class="setting-desc">Which service runs rewrite requests</div>
             </div>
@@ -75,23 +106,43 @@
             </div>
           </div>
 
-          <div class="setting-row">
-            <div class="setting-label">
-              <div class="setting-title">Theme</div>
-              <div class="setting-desc">Interface colour scheme</div>
-            </div>
-            <div class="segmented" id="theme-segmented">
-              <button class="seg-btn" data-value="dark" type="button">Dark</button>
-              <button class="seg-btn" data-value="light" type="button">Light</button>
-            </div>
-          </div>
-
           <div class="setting-row setting-row--stack">
             <div class="setting-label">
               <div class="setting-title">System Prompt</div>
-              <div class="setting-desc">Prepended to every request. Leave blank to skip.</div>
+              <div class="setting-desc">Prepended to every request. A humanizer prompt is included by default.</div>
             </div>
-            <textarea id="system-prompt" class="setting-textarea" rows="3" placeholder="You are a helpful assistant..."></textarea>
+            <textarea id="system-prompt" class="setting-textarea" rows="5" placeholder="You are a writing humanizer..."></textarea>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-row">
+            <div class="setting-label">
+              <div class="setting-title">Site Access</div>
+              <div class="setting-desc">Control which websites show the rewrite bubble</div>
+            </div>
+            <div class="segmented" id="site-mode-segmented">
+              <button class="seg-btn" data-value="all" type="button">All Sites</button>
+              <button class="seg-btn" data-value="allowlist" type="button">Allow Only</button>
+              <button class="seg-btn" data-value="blocklist" type="button">Block</button>
+            </div>
+          </div>
+
+          <div id="site-list-row" class="setting-row setting-row--stack hidden">
+            <div class="setting-label">
+              <div class="setting-title" id="site-list-title">Allowed Sites</div>
+              <div class="setting-desc">One domain per line. Use <code>*.example.com</code> for subdomains.</div>
+            </div>
+            <textarea id="site-list" class="setting-textarea" rows="4" placeholder="example.com&#10;*.atlassian.net"></textarea>
+          </div>
+        </div>
+
+        <div class="setting-group" id="template-configs">
+          <div class="setting-row setting-row--tpl-header">
+            <div class="setting-label">
+              <div class="setting-title">Templates</div>
+              <div class="setting-desc">Toggle templates on or off and edit their prompts. Drag to reorder.</div>
+            </div>
           </div>
         </div>
 
@@ -180,6 +231,71 @@
         </div>
 
         <span id="keys-status" class="saved-msg hidden">✓ Saved</span>
+      </section>
+
+      <section id="tab-help" class="tab-panel hidden">
+        <div class="panel-header">
+          <h1>Help</h1>
+          <p>How to use the rewrite bubble and keyboard shortcuts.</p>
+        </div>
+
+        <div class="help-section">
+          <h2 class="help-heading">How it works</h2>
+          <ol class="help-steps">
+            <li>Select text inside any editable field (input, textarea, contenteditable).</li>
+            <li>The rewrite bubble appears below your selection with four templates: <strong>Fix</strong>, <strong>Pro</strong>, <strong>Mine</strong>, and <strong>Trim</strong>.</li>
+            <li>Click a template. The text gets rewritten by your chosen AI provider.</li>
+            <li>Review the preview, then click <strong>Apply</strong> to replace the original text.</li>
+          </ol>
+        </div>
+
+        <div class="help-section">
+          <h2 class="help-heading">Rewrite templates</h2>
+          <div class="help-categories">
+            <div class="help-cat">
+              <div class="help-cat-name">Fix</div>
+              <div class="help-cat-desc">Fix grammar, spelling, punctuation, and clarity. Keeps the original meaning and tone.</div>
+            </div>
+            <div class="help-cat">
+              <div class="help-cat-name">Pro</div>
+              <div class="help-cat-desc">Rewrite in a polished professional tone. Concise, courteous, specific.</div>
+            </div>
+            <div class="help-cat">
+              <div class="help-cat-name">Mine</div>
+              <div class="help-cat-desc">Your own template with a custom rewrite instruction. Configure it in General settings.</div>
+            </div>
+            <div class="help-cat">
+              <div class="help-cat-name">Trim</div>
+              <div class="help-cat-desc">Make the text significantly shorter while keeping key points and action items.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="help-section">
+          <h2 class="help-heading">Shortcuts</h2>
+          <div class="shortcut-list">
+            <div class="shortcut-row">
+              <div class="shortcut-keys">
+                <span class="key">Shift</span>
+                <span class="key-plus">+</span>
+                <span class="key">Click</span>
+              </div>
+              <div class="shortcut-info">
+                <div class="shortcut-action">Force apply</div>
+                <div class="shortcut-label">Hold Shift when clicking a template to skip the preview and apply the rewrite directly</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="help-section">
+          <h2 class="help-heading">Tips</h2>
+          <ul class="help-steps">
+            <li><strong>System prompt:</strong> the default prompt humanizes all rewrites. You can change it in General settings.</li>
+            <li><strong>Long text:</strong> selections over 12,000 characters get truncated. Keep selections focused for better results.</li>
+            <li><strong>Multiple providers:</strong> configure all three providers in AI Connections, then switch between them in General settings.</li>
+          </ul>
+        </div>
       </section>
 
       <section id="tab-about" class="tab-panel hidden">
