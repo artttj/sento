@@ -18,7 +18,7 @@ type Theme = 'dark' | 'light';
 const refs = {
   defaultTemplate: document.getElementById('default-template') as HTMLSelectElement,
   providerSegmented: document.getElementById('provider-segmented') as HTMLElement,
-  themeSwitcher: document.getElementById('theme-switcher') as HTMLFieldSetElement,
+  themeSegmented: document.getElementById('theme-segmented') as HTMLElement,
   systemPrompt: document.getElementById('system-prompt') as HTMLTextAreaElement,
   btnSaveSettings: document.getElementById('btn-save-settings') as HTMLButtonElement,
   settingsStatus: document.getElementById('settings-status') as HTMLElement,
@@ -92,25 +92,6 @@ function wireSegmented(container: HTMLElement, onChange?: (value: string) => voi
   });
 }
 
-function setThemeValue(value: string): void {
-  const radio = refs.themeSwitcher.querySelector<HTMLInputElement>(
-    `input[value="${value}"]`
-  );
-  if (radio) radio.checked = true;
-}
-
-function getThemeValue(): string {
-  return refs.themeSwitcher.querySelector<HTMLInputElement>('input:checked')?.value ?? 'dark';
-}
-
-function wireThemeSwitcher(onChange: (value: string) => void): void {
-  refs.themeSwitcher.querySelectorAll<HTMLInputElement>('.theme-radio').forEach((radio) => {
-    radio.addEventListener('change', () => {
-      if (radio.checked) onChange(radio.value);
-    });
-  });
-}
-
 async function refreshBadges(): Promise<void> {
   const [openaiKey, geminiKey, grokKey] = await Promise.all([getOpenAIKey(), getGeminiKey(), getGrokKey()]);
 
@@ -159,12 +140,12 @@ async function init(): Promise<void> {
   populateSelect(refs.grokModel, PROVIDER_MODELS.grok, PROVIDER_MODELS.grok[0]);
 
   wireSegmented(refs.providerSegmented);
-  wireThemeSwitcher((value) => applyTheme(value === 'light' ? 'light' : 'dark'));
+  wireSegmented(refs.themeSegmented, (value) => applyTheme(value === 'light' ? 'light' : 'dark'));
 
   const settings = await getProviderSettings();
   refs.defaultTemplate.value = settings.defaultTemplateId ?? 'auto_fix';
   setSegmentedValue(refs.providerSegmented, settings.llmProvider);
-  setThemeValue(settings.theme);
+  setSegmentedValue(refs.themeSegmented, settings.theme);
   refs.systemPrompt.value = settings.systemPrompt ?? '';
   refs.openaiModel.value = settings.openaiModel;
   refs.geminiModel.value = settings.geminiModel;
@@ -178,7 +159,7 @@ async function init(): Promise<void> {
 
   refs.btnSaveSettings.addEventListener('click', async () => {
     const llmProvider = (getSegmentedValue(refs.providerSegmented) || 'openai') as Provider;
-    const theme = (getThemeValue() || 'dark') as Theme;
+    const theme = (getSegmentedValue(refs.themeSegmented) || 'dark') as Theme;
 
     await saveProviderSettings({
       defaultTemplateId: refs.defaultTemplate.value as RewriteTemplateId,

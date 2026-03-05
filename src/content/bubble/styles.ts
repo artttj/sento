@@ -8,41 +8,28 @@ export const bubbleStyles = `
 }
 
 .sento-root {
-  --glass-bg:          rgba(10, 11, 22, 0.82);
-  --glass-bg-2:        rgba(16, 18, 34, 0.90);
-  --glass-tile:        rgba(255, 255, 255, 0.07);
-  --glass-tile-2:      rgba(255, 255, 255, 0.13);
-  --glass-border:      rgba(255, 255, 255, 0.22);
-  --glass-border-soft: rgba(255, 255, 255, 0.12);
-  --text:   rgba(240, 244, 255, 0.96);
-  --text-2: rgba(190, 198, 225, 0.82);
-  --text-3: rgba(150, 160, 195, 0.68);
+  --glass-c: #bbbbbc;
+  --glass-l: #fff;
+  --glass-d: #000;
+  --rl: 0.3;
+  --rd: 2;
+  --sat: 150%;
+  --text:   rgba(238, 238, 238, 0.96);
+  --text-2: rgba(196, 196, 196, 0.82);
+  --text-3: rgba(160, 160, 160, 0.68);
   --error:        #ff7070;
   --error-bg:     rgba(255, 80, 80, 0.14);
   --error-border: rgba(255, 110, 110, 0.32);
   --btn-bg:   rgba(255, 255, 255, 0.94);
-  --btn-text: #0a0b18;
-  --shadow: 0 12px 32px rgba(0, 0, 10, 0.62), 0 2px 8px rgba(0, 0, 10, 0.40);
+  --btn-text: #0d0d0d;
   --font: system-ui, -apple-system, 'SF Pro Display', 'Segoe UI', sans-serif;
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .sento-root[data-theme="light"] {
-  --glass-bg:          rgba(10, 11, 22, 0.76);
-  --glass-bg-2:        rgba(16, 18, 34, 0.86);
-  --glass-tile:        rgba(255, 255, 255, 0.09);
-  --glass-tile-2:      rgba(255, 255, 255, 0.16);
-  --glass-border:      rgba(255, 255, 255, 0.24);
-  --glass-border-soft: rgba(255, 255, 255, 0.14);
-  --text:   rgba(240, 244, 255, 0.96);
-  --text-2: rgba(190, 198, 225, 0.82);
-  --text-3: rgba(150, 160, 195, 0.68);
-  --error:        #ff7070;
-  --error-bg:     rgba(255, 80, 80, 0.14);
-  --error-border: rgba(255, 110, 110, 0.32);
-  --btn-bg:   rgba(255, 255, 255, 0.94);
-  --btn-text: #0a0b18;
-  --shadow: 0 12px 32px rgba(0, 0, 10, 0.52), 0 2px 8px rgba(0, 0, 10, 0.32);
+  --rl: 1;
+  --rd: 1;
+  --sat: 180%;
 }
 
 .sento-bubble {
@@ -64,21 +51,34 @@ export const bubbleStyles = `
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 4px;
-  padding: 4px;
-  border-radius: 12px;
-  background: linear-gradient(148deg, var(--glass-bg-2), var(--glass-bg));
-  border: 0.5px solid var(--glass-border-soft);
-  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(32px) saturate(180%);
-  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  padding: 6px;
+  border-radius: 99em;
+  border: none;
+  background-color: color-mix(in srgb, var(--glass-c) 12%, transparent);
+  backdrop-filter: blur(12px) saturate(var(--sat));
+  -webkit-backdrop-filter: blur(12px) saturate(var(--sat));
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 10%), transparent),
+    inset 1.8px 3px 0px -2px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 90%), transparent),
+    inset -2px -2px 0px -2px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 80%), transparent),
+    inset -3px -8px 1px -6px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 60%), transparent),
+    inset -0.3px -1px 4px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 12%), transparent),
+    inset -1.5px 2.5px 0px -2px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 20%), transparent),
+    inset 0px 3px 4px -2px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 20%), transparent),
+    inset 2px -6.5px 1px -4px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent),
+    0px 1px 5px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent),
+    0px 6px 16px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 8%), transparent);
+  transition:
+    background-color 400ms cubic-bezier(1, 0, 0.4, 1),
+    box-shadow 400ms cubic-bezier(1, 0, 0.4, 1);
 }
 
 .template-square {
   position: relative;
   height: 46px;
-  border-radius: 9px;
-  border: 0.5px solid var(--glass-border-soft);
-  background: linear-gradient(165deg, var(--glass-tile-2), var(--glass-tile));
+  border-radius: 99em;
+  border: none;
+  background: transparent;
   color: var(--text);
   cursor: pointer;
   padding: 0 0 2px;
@@ -87,41 +87,20 @@ export const bubbleStyles = `
   align-items: center;
   justify-content: center;
   gap: 2px;
-  transition: transform 180ms var(--ease), box-shadow 180ms var(--ease), border-color 180ms var(--ease), background 180ms var(--ease);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.20), 0 2px 8px rgba(0, 0, 12, 0.40);
-  animation: tile-float 5.6s var(--ease) infinite;
-}
-
-.template-square:nth-child(2) {
-  animation-delay: 160ms;
-}
-
-.template-square:nth-child(3) {
-  animation-delay: 320ms;
-}
-
-.template-square:nth-child(4) {
-  animation-delay: 480ms;
-}
-
-.template-square::before {
-  content: '';
-  position: absolute;
-  left: 3px;
-  right: 3px;
-  top: 3px;
-  height: 44%;
-  border-radius: 6px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0));
-  pointer-events: none;
+  transition: all 180ms var(--ease);
 }
 
 .template-square:hover:not(:disabled),
 .template-square:focus-visible {
-  transform: translateY(-1px);
-  border-color: var(--glass-border);
-  background: linear-gradient(165deg, rgba(255, 255, 255, 0.20), rgba(255, 255, 255, 0.09));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 8px 16px rgba(0, 0, 12, 0.56);
+  background-color: color-mix(in srgb, var(--glass-c) 18%, transparent);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 8%), transparent),
+    inset 1px 2px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 50%), transparent),
+    inset -1px -1px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 40%), transparent);
+}
+
+.template-square:hover:not(:disabled) .theme-icon {
+  scale: 1.15;
 }
 
 .template-square:disabled {
@@ -130,16 +109,26 @@ export const bubbleStyles = `
 }
 
 .template-square.active {
-  border-color: rgba(255, 255, 255, 0.30);
-  background: linear-gradient(165deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 16, 0.40));
+  background-color: color-mix(in srgb, var(--glass-c) 36%, transparent);
   box-shadow:
-    inset 0 2px 6px rgba(0, 0, 20, 0.52),
-    inset 0 1px 0 rgba(255, 255, 255, 0.10),
-    0 0 0 0.5px rgba(255, 255, 255, 0.16);
+    inset 0 0 0 1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 10%), transparent),
+    inset 2px 1px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 90%), transparent),
+    inset -1.5px -1px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 80%), transparent),
+    inset -2px -6px 1px -5px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 60%), transparent),
+    inset -1px 2px 3px -1px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 20%), transparent),
+    inset 0px -4px 1px -2px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent),
+    0px 3px 6px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 8%), transparent);
+  animation: tile-select 440ms ease;
 }
 
 .template-square.loading {
   animation: tile-loading 1s linear infinite;
+}
+
+@keyframes tile-select {
+  0% { scale: 1 1; }
+  50% { scale: 1.06 1; }
+  100% { scale: 1 1; }
 }
 
 .icon-wrap {
@@ -149,6 +138,7 @@ export const bubbleStyles = `
   align-items: center;
   justify-content: center;
   color: var(--text-2);
+  transition: scale 200ms cubic-bezier(0.5, 0, 0, 1);
 }
 
 .template-square.active .icon-wrap {
@@ -189,12 +179,6 @@ export const bubbleStyles = `
   border: 0;
 }
 
-@keyframes tile-float {
-  0%, 100% { transform: translateY(0); }
-  35% { transform: translateY(-1.5px); }
-  70% { transform: translateY(1px); }
-}
-
 @keyframes tile-loading {
   0% { filter: brightness(1); }
   50% { filter: brightness(1.15); }
@@ -207,22 +191,28 @@ export const bubbleStyles = `
 
 .status-msg {
   margin: 0;
-  border-radius: 11px;
-  padding: 7px 9px;
+  border-radius: 99em;
+  padding: 7px 12px;
   font-size: 11px;
   line-height: 1.45;
-  background: linear-gradient(160deg, var(--glass-bg-2), var(--glass-bg));
-  border: 0.5px solid var(--glass-border-soft);
-  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  border: none;
+  background-color: color-mix(in srgb, var(--glass-c) 12%, transparent);
   color: var(--text-3);
-  backdrop-filter: blur(32px) saturate(180%);
-  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  backdrop-filter: blur(12px) saturate(var(--sat));
+  -webkit-backdrop-filter: blur(12px) saturate(var(--sat));
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 10%), transparent),
+    inset 1.8px 3px 0px -2px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 60%), transparent),
+    inset -2px -2px 0px -2px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 50%), transparent),
+    inset -0.3px -1px 4px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 12%), transparent),
+    0px 4px 12px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent);
 }
 
 .status-msg.error {
   background: var(--error-bg);
-  border-color: var(--error-border);
+  border: 0.5px solid var(--error-border);
   color: var(--error);
+  box-shadow: 0px 4px 12px 0px rgba(255, 80, 80, 0.12);
 }
 
 .status-msg button {
@@ -239,24 +229,33 @@ export const bubbleStyles = `
   width: 100%;
   min-height: 92px;
   max-height: 280px;
-  border-radius: 13px;
-  border: 0.5px solid var(--glass-border-soft);
-  background: linear-gradient(168deg, var(--glass-bg-2), var(--glass-bg));
+  border-radius: 21px;
+  border: none;
+  background-color: color-mix(in srgb, var(--glass-c) 12%, transparent);
   color: var(--text);
   font-family: var(--font);
   font-size: 12px;
   line-height: 1.45;
-  padding: 10px;
+  padding: 10px 14px;
   resize: vertical;
   outline: none;
-  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(32px) saturate(180%);
-  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  backdrop-filter: blur(12px) saturate(var(--sat));
+  -webkit-backdrop-filter: blur(12px) saturate(var(--sat));
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 10%), transparent),
+    inset 1.8px 3px 0px -2px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 60%), transparent),
+    inset -2px -2px 0px -2px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 50%), transparent),
+    inset -0.3px -1px 4px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 12%), transparent),
+    0px 4px 12px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent);
 }
 
 .preview:focus {
-  border-color: var(--glass-border);
-  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.10);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 18%), transparent),
+    inset 1.8px 3px 0px -2px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 80%), transparent),
+    inset -2px -2px 0px -2px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 70%), transparent),
+    inset -0.3px -1px 4px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 12%), transparent),
+    0px 6px 16px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 12%), transparent);
 }
 
 .actions {
@@ -267,42 +266,63 @@ export const bubbleStyles = `
 
 .btn-ghost,
 .btn-apply {
-  border-radius: 10px;
-  padding: 6px 10px;
+  border-radius: 99em;
+  padding: 6px 14px;
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
+  transition: all 200ms cubic-bezier(1, 0, 0.4, 1);
 }
 
 .btn-ghost {
-  border: 0.5px solid var(--glass-border-soft);
-  background: linear-gradient(160deg, var(--glass-bg-2), var(--glass-bg));
+  border: none;
+  background-color: color-mix(in srgb, var(--glass-c) 12%, transparent);
   color: var(--text-2);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 2px 6px rgba(0, 0, 12, 0.40);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(12px) saturate(var(--sat));
+  -webkit-backdrop-filter: blur(12px) saturate(var(--sat));
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 10%), transparent),
+    inset 1.8px 3px 0px -2px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 60%), transparent),
+    inset -0.3px -1px 4px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 12%), transparent),
+    0px 3px 8px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 8%), transparent);
 }
 
 .btn-ghost:hover {
-  border-color: var(--glass-border);
   color: var(--text);
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+  background-color: color-mix(in srgb, var(--glass-c) 22%, transparent);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 16%), transparent),
+    inset 1.8px 3px 0px -2px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 80%), transparent),
+    inset -0.3px -1px 4px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 12%), transparent),
+    0px 4px 12px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent);
 }
 
 .btn-apply {
   border: none;
-  background: var(--btn-bg);
-  color: var(--btn-text);
+  background-color: color-mix(in srgb, var(--glass-c) 36%, transparent);
+  color: var(--text);
+  backdrop-filter: blur(12px) saturate(var(--sat));
+  -webkit-backdrop-filter: blur(12px) saturate(var(--sat));
   box-shadow:
-    0 8px 20px rgba(0, 0, 12, 0.52),
-    inset 0 1px 0 rgba(255, 255, 255, 0.60);
+    inset 0 0 0 1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 10%), transparent),
+    inset 2px 1px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 90%), transparent),
+    inset -1.5px -1px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 80%), transparent),
+    inset -2px -6px 1px -5px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 60%), transparent),
+    inset -1px 2px 3px -1px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 20%), transparent),
+    inset 0px -4px 1px -2px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent),
+    0px 3px 6px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 8%), transparent);
 }
 
 .btn-apply:hover {
-  filter: brightness(0.96);
+  background-color: color-mix(in srgb, var(--glass-c) 48%, transparent);
   box-shadow:
-    0 10px 24px rgba(0, 0, 12, 0.60),
-    inset 0 1px 0 rgba(255, 255, 255, 0.60);
+    inset 0 0 0 1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 14%), transparent),
+    inset 2px 1px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 95%), transparent),
+    inset -1.5px -1px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 85%), transparent),
+    inset -2px -6px 1px -5px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 65%), transparent),
+    inset -1px 2px 3px -1px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 20%), transparent),
+    inset 0px -4px 1px -2px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent),
+    0px 4px 10px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent);
 }
 
 .hidden-select,
