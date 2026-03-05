@@ -1,140 +1,93 @@
-# <img src="icons/icon48.png" width="32" alt="" valign="middle" /> Sentō
+# <img src="icons/icon128.png" width="48" alt="" valign="middle" /> Sento
 
-Sentō is a Chrome MV3 extension that adds a **selection-first AI rewrite bubble** to editable fields on any webpage.
+A Chrome extension that adds a floating AI rewrite bubble to any editable field on the web. Select text, pick a template, and get a rewritten version in place.
 
-**Author:** Artem Iagovdik
+- **Works everywhere.** Textarea, input fields, contenteditable editors. If you can type in it, Sento can rewrite it.
+- **Preview before applying.** Every rewrite shows a preview first. You decide what goes in. Nothing changes until you click Apply.
+- **Your keys, your cost.** Bring your own OpenAI, Gemini, or Grok API key. No middleman, no subscriptions, no data harvesting.
+- **Invisible until needed.** The bubble only appears when you select text in a supported field. It stays out of your way otherwise.
+- **Isolated by design.** The bubble lives in Shadow DOM so it never breaks page styles, and page styles never break it.
 
-It uses a local BYOK setup (OpenAI, Gemini, Grok), runs provider calls through the background service worker, and applies rewritten text with native events so React/Vue/contenteditable editors detect updates correctly.
+---
 
-## Highlights
+## Quick Start
 
-- Selection-first trigger: bubble appears only when text is selected in supported editable fields
-- Shadow DOM UI: bubble styles are isolated from host page CSS
-- Preview-first rewrite flow: rewrite -> preview -> apply
-- BYOK provider strategy: OpenAI, Gemini, Grok
-- Provider routing in background script (MV3-safe network path)
-- Framework-aware text replacement with native event dispatch (`beforeinput`, `input`, `change`)
-- Settings UI with Sentō-style visual system and left sidebar navigation
-- App icon set generated from `icons/logo-source.png` and wired in manifest/build
+1. `git clone https://github.com/artttj/sento.git && cd sento`
+2. `npm install && npm run build`
+3. Open `chrome://extensions`, enable **Developer mode**, click **Load unpacked**, select the `dist/` folder.
+4. Click the Sento icon, go to **Settings**, and add your API key under **AI Connections**.
+
+| Provider | Get a key |
+| --- | --- |
+| OpenAI | [platform.openai.com](https://platform.openai.com/api-keys) |
+| Google Gemini | [aistudio.google.com](https://aistudio.google.com/app/apikey) |
+| Grok (xAI) | [console.x.ai](https://console.x.ai/) |
+
+---
+
+## How It Works
+
+1. Select text in any supported editable field.
+2. The rewrite bubble appears near your selection.
+3. Pick a template (Fix, Pro, Code, or Trim).
+4. Review the rewritten text in the preview area.
+5. Click **Apply** to replace the original, or **Retry** to regenerate.
+
+Text replacement uses native browser events (`beforeinput`, `input`, `change`) so React, Vue, and contenteditable editors detect the update correctly.
+
+---
+
+## Rewrite Templates
+
+| Template | What it does |
+| --- | --- |
+| **Fix** | Grammar, spelling, and punctuation cleanup |
+| **Pro** | Polished, professional tone |
+| **Code** | Technical and precise wording |
+| **Trim** | Shorter version, same meaning |
+
+You can set a default template and add a custom system prompt in Settings.
+
+---
+
+## Settings
+
+- **Default Template** to pre-select when the bubble opens
+- **AI Provider** switch between OpenAI, Gemini, and Grok
+- **Theme** with a liquid glass dark/light switcher
+- **Model** selection per provider
+- **System Prompt** prepended to every request
+- **API Keys** stored locally, never sent anywhere except your chosen provider
+
+---
+
+## Privacy
+
+- Keys are stored in `chrome.storage.local` and never leave your machine.
+- Selected text goes directly from your browser to the provider API. Sento has no backend.
+- The full source code is right here for you to read.
+
+---
 
 ## Tech Stack
 
 - TypeScript (strict mode)
 - Chrome Extension Manifest V3
-- esbuild
+- Shadow DOM for UI isolation
+- esbuild for builds
 
-## Project Structure
-
-```text
-src/
-  background/
-    service-worker.ts        # Runtime message handling + request lifecycle
-    providerRouter.ts        # Provider/model/key resolution + timeout/error mapping
-  content/
-    main.ts                  # Content entrypoint
-    rewriteController.ts     # Orchestration between tracker, bubble, input handler
-    selectionTracker.ts      # Selection/focus tracking in editable targets
-    editable.ts              # Editable target detection helpers
-    input/
-      adapters.ts            # TextControl / ContentEditable / Framework fallback adapters
-      inputHandler.ts        # Selection restore + replacement + event dispatch
-    bubble/
-      rewriteBubble.ts       # Shadow DOM popup UI + interaction locking
-      styles.ts              # Bubble tokenized CSS
-  settings/
-    settings.html            # Settings UI markup
-    settings.css             # Sentō-style settings design system clone
-    settings.ts              # Settings state, tabs, segmented controls, key management
-  shared/
-    constants.ts             # Storage keys, defaults, model lists, limits
-    types.ts                 # Shared domain types
-    messages.ts              # Runtime message contracts
-    storage.ts               # chrome.storage.local read/write helpers
-    rewriteTemplates.ts      # Rewrite template definitions + prompt builder
-    providers/
-      openai.ts gemini.ts grok.ts index.ts errors.ts
-scripts/
-  build.js                   # dist build pipeline
-icons/
-  icon16.png icon32.png icon48.png icon128.png
-```
-
-## Requirements
-
-- Node.js 18+
-- Chrome/Chromium with Developer Mode enabled
-
-## Install & Build
-
-```bash
-npm install
-npm run typecheck
-npm run build
-```
-
-Build output is generated in `dist/`.
-
-## Load in Chrome
-
-1. Open `chrome://extensions`
-2. Enable **Developer mode**
-3. Click **Load unpacked**
-4. Select `/private/var/www/sento/dist`
-
-## Settings & BYOK
-
-Open extension settings page and configure:
-
-- Default Rewrite Template
-- Provider (`openai`, `gemini`, `grok`)
-- Theme (`dark`, `light`)
-- Provider model per service
-- Optional system prompt
-- API keys for each provider
-
-All settings and keys are stored in `chrome.storage.local`.
-
-## How Rewrite Works
-
-1. User selects text in supported editable field.
-2. Content tracker captures selection snapshot and shows bubble near selection.
-3. User picks template and clicks `Auto-Fix`.
-4. Content script sends `REWRITE_REQUEST` to background.
-5. Background resolves provider/model/key and executes strategy request.
-6. Bubble shows rewritten text preview.
-7. On `Apply`, input handler restores selection, injects text, and dispatches:
-   - `beforeinput` (`insertReplacementText`)
-   - `input` (`insertReplacementText`)
-   - `change`
+---
 
 ## Supported Targets
 
-- `textarea`
-- text-like `input` (`text`, `search`, `url`, `email`, `tel`)
-- `contenteditable` editors
+- `textarea` and text-like `input` (text, search, url, email, tel)
+- `contenteditable` elements
+- Most rich text editors that use the above
 
-## Known Limitations
+Cross-origin iframes and closed shadow roots are out of scope for now.
 
-- Cross-origin iframe editors are out of scope for this version
-- Closed shadow-root editors are out of scope
-- Non-streaming provider responses (single final response only)
+---
 
-## Troubleshooting
+## License
 
-### Bubble closes while clicking controls
-
-Interaction lock is implemented in `rewriteBubble.ts`.
-If this still happens on a specific site/editor, report URL/editor type and we can add a targeted fallback path.
-
-### Missing key error
-
-Configure provider keys in Settings -> AI Connections.
-
-### Provider timeout/rate limit
-
-Use `Retry` in bubble or switch provider/model in Settings.
-
-## Scripts
-
-- `npm run typecheck` — strict TypeScript validation
-- `npm run build` — build extension into `dist/`
+MIT
