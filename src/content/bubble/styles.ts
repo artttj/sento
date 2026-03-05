@@ -1,3 +1,7 @@
+/**
+ * Shadow DOM styles for the rewrite bubble.
+ */
+
 export const bubbleStyles = `
 :host {
   all: initial;

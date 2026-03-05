@@ -1,3 +1,7 @@
+/**
+ * Rewrite bubble UI component rendered inside Shadow DOM.
+ */
+
 import { REWRITE_TEMPLATES, type RewriteTemplate } from '../../shared/rewriteTemplates';
 import type { RewriteTemplateId } from '../../shared/types';
 import type { SelectionRect } from '../types';

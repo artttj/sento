@@ -1,3 +1,7 @@
+/**
+ * Shared types for the content script layer.
+ */
+
 export type EditableElement = HTMLInputElement | HTMLTextAreaElement | HTMLElement;
 
 export interface SelectionRect {

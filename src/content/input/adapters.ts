@@ -1,3 +1,7 @@
+/**
+ * Input adapters for text insertion via native events and simulated paste.
+ */
+
 import { extractStructuredText, isContentEditableElement, isTextControl } from '../editable';
 
 export interface EditableAdapter {

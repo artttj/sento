@@ -1,3 +1,7 @@
+/**
+ * Provider strategy registry.
+ */
+
 import type { ProviderName, ProviderStrategy } from '../types';
 import { OpenAIProvider } from './openai';
 import { GeminiProvider } from './gemini';

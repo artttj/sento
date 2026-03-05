@@ -1,7 +1,30 @@
+/**
+ * Settings UI translations. Supports English and German.
+ */
+
 import type { AppLanguage } from '../shared/types';
 
 export const TRANSLATIONS: Record<AppLanguage, Record<string, string>> = {
   en: {
+    'nav-general': 'General',
+    'nav-ai-connections': 'AI Connections',
+    'nav-help': 'Help',
+    'nav-privacy': 'Privacy',
+    'nav-about': 'About',
+    'brand-sub': 'Settings',
+    'privacy': 'Privacy',
+    'privacy-desc': 'How Sentō handles your data.',
+    'privacy-section-data': 'Data Collection',
+    'privacy-data-text': 'Sentō collects no personal data. There are no accounts, no analytics, and no telemetry.',
+    'privacy-section-keys': 'API Keys',
+    'privacy-keys-text': 'Your API keys are stored locally using <code>chrome.storage.local</code>. They are never sent to any server — only used to authenticate your requests directly to the AI provider you selected.',
+    'privacy-section-text': 'Selected Text',
+    'privacy-text-body': 'When you rewrite text, the selected content is sent directly from your browser to the AI provider. Sentō is not involved in that transfer and does not store it.',
+    'privacy-section-providers': 'Third-Party Services',
+    'privacy-providers-text': 'By using Sentō you interact with third-party AI providers. Review their privacy policies:',
+    'privacy-section-opensource': 'Open Source',
+    'privacy-opensource-text': 'The full source code is available for review.',
+    'privacy-view-source': 'View source on GitHub',
     'general': 'General',
     'general-desc': 'Configure default behaviour when Sentō is used on editable fields.',
     'default-template': 'Default Rewrite Template',
@@ -63,6 +86,25 @@ export const TRANSLATIONS: Record<AppLanguage, Record<string, string>> = {
     'stack': 'Stack',
   },
   de: {
+    'nav-general': 'Allgemein',
+    'nav-ai-connections': 'KI-Verbindungen',
+    'nav-help': 'Hilfe',
+    'nav-privacy': 'Datenschutz',
+    'nav-about': 'Über',
+    'brand-sub': 'Einstellungen',
+    'privacy': 'Datenschutz',
+    'privacy-desc': 'Wie Sentō mit deinen Daten umgeht.',
+    'privacy-section-data': 'Datenerfassung',
+    'privacy-data-text': 'Sentō erfasst keine persönlichen Daten. Es gibt keine Konten, keine Analysen und keine Telemetrie.',
+    'privacy-section-keys': 'API-Schlüssel',
+    'privacy-keys-text': 'Deine API-Schlüssel werden lokal mit <code>chrome.storage.local</code> gespeichert. Sie werden nie an einen Server gesendet — nur zur direkten Authentifizierung beim gewählten KI-Anbieter.',
+    'privacy-section-text': 'Ausgewählter Text',
+    'privacy-text-body': 'Beim Umschreiben wird der ausgewählte Inhalt direkt von deinem Browser an den KI-Anbieter gesendet. Sentō ist an dieser Übertragung nicht beteiligt und speichert den Inhalt nicht.',
+    'privacy-section-providers': 'Drittanbieter-Dienste',
+    'privacy-providers-text': 'Durch die Nutzung von Sentō interagierst du mit KI-Drittanbietern. Lese deren Datenschutzrichtlinien:',
+    'privacy-section-opensource': 'Open Source',
+    'privacy-opensource-text': 'Der vollständige Quellcode ist zur Überprüfung verfügbar.',
+    'privacy-view-source': 'Quellcode auf GitHub ansehen',
     'general': 'Allgemein',
     'general-desc': 'Konfiguriere das Standardverhalten von Sentō in Bearbeitungsfeldern.',
     'default-template': 'Standard-Umschreib-Vorlage',

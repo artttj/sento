@@ -1,3 +1,7 @@
+/**
+ * OpenAI provider strategy.
+ */
+
 import type { ProviderStrategy } from '../types';
 import { ProviderBadResponseError, ProviderHttpError } from './errors';
 

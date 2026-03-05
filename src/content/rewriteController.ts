@@ -1,3 +1,7 @@
+/**
+ * Orchestrates the rewrite flow: selection tracking, bubble display, and API calls.
+ */
+
 import { MAX_SELECTION_CHARS } from '../shared/constants';
 import { MSG, type RewriteRuntimeResult } from '../shared/messages';
 import { getOrderedTemplates, REWRITE_TEMPLATES } from '../shared/rewriteTemplates';

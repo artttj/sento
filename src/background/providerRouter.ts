@@ -1,3 +1,7 @@
+/**
+ * Provider router. Resolves provider context and sends rewrite requests to the selected AI provider.
+ */
+
 import { REQUEST_TIMEOUT_MS } from '../shared/constants';
 import { buildRewritePrompt } from '../shared/rewriteTemplates';
 import { getProviderSettings, getOpenAIKey, getGeminiKey, getGrokKey } from '../shared/storage';

@@ -1,3 +1,7 @@
+/**
+ * Editable element detection and structured text extraction.
+ */
+
 import type { EditableElement } from './types';
 
 const INPUT_TYPES = new Set(['text', 'search', 'url', 'email', 'tel']);

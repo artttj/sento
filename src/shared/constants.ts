@@ -1,3 +1,7 @@
+/**
+ * Extension-wide constants and default settings.
+ */
+
 export const STORAGE_KEYS = {
   SETTINGS: 'apc_settings',
   OPENAI_KEY: 'apc_openai_key',

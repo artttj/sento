@@ -1,3 +1,7 @@
+/**
+ * Core type definitions shared across the extension.
+ */
+
 export type ProviderName = 'openai' | 'gemini' | 'grok';
 
 export type RewriteTemplateId = 'auto_fix' | 'professional' | 'custom' | 'shorten';

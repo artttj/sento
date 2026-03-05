@@ -1,3 +1,7 @@
+/**
+ * Message type definitions for extension runtime communication.
+ */
+
 import type { RewriteRequestPayload, RewriteResponsePayload, RewriteErrorPayload } from './types';
 
 export const MSG = {

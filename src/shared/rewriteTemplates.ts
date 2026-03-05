@@ -1,3 +1,7 @@
+/**
+ * Rewrite template definitions and prompt builder.
+ */
+
 import type { RewriteTemplateId } from './types';
 
 export interface RewriteTemplate {

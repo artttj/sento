@@ -1,3 +1,7 @@
+/**
+ * Tracks text selection in editable fields and fires callbacks on meaningful changes.
+ */
+
 import { extractStructuredText, findEditableFromNode, isContentEditableElement, isTextControl, rectToPlain } from './editable';
 import type { EditableElement, SelectionSnapshot } from './types';
 
