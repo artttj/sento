@@ -75,15 +75,18 @@ export const bubbleStyles = `
 
 .template-square {
   position: relative;
-  height: 38px;
+  height: 46px;
   border-radius: 9px;
   border: 0.5px solid var(--glass-border-soft);
   background: linear-gradient(165deg, var(--glass-tile-2), var(--glass-tile));
   color: var(--text);
   cursor: pointer;
-  padding: 0;
-  display: grid;
-  place-items: center;
+  padding: 0 0 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
   transition: transform 180ms var(--ease), box-shadow 180ms var(--ease), border-color 180ms var(--ease), background 180ms var(--ease);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.20), 0 2px 8px rgba(0, 0, 12, 0.40);
   animation: tile-float 5.6s var(--ease) infinite;
@@ -157,6 +160,21 @@ export const bubbleStyles = `
   height: 16px;
   display: block;
   fill: currentColor;
+}
+
+.tile-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text-3);
+  line-height: 1;
+  pointer-events: none;
+  transition: color 180ms var(--ease);
+}
+
+.template-square:hover:not(:disabled) .tile-label,
+.template-square.active .tile-label {
+  color: var(--text-2);
 }
 
 .sr-only {

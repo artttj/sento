@@ -1,4 +1,4 @@
-# Sentō
+# <img src="icons/icon48.png" width="32" alt="" valign="middle" /> Sentō
 
 Sentō is a Chrome MV3 extension that adds a **selection-first AI rewrite bubble** to editable fields on any webpage.
 

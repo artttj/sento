@@ -279,13 +279,19 @@ export class RewriteBubble {
     ).join('');
     const iconByTemplate: Record<RewriteTemplateId, string> = {
       auto_fix:
-        '<svg viewBox="0 0 24 24" class="icon-svg" aria-hidden="true"><path d="M12 3.5 13.9 8l4.8 1.1-3.6 3.2.5 4.7-4.1-2.5-4.1 2.5.5-4.7-3.6-3.2L10.1 8 12 3.5Z"/></svg>',
+        '<svg viewBox="0 0 24 24" class="icon-svg" aria-hidden="true"><path d="M12 2.5l1.9 7.1 7.1 1.9-7.1 1.9-1.9 7.1-1.9-7.1-7.1-1.9 7.1-1.9z"/></svg>',
       professional:
-        '<svg viewBox="0 0 24 24" class="icon-svg" aria-hidden="true"><path d="M8 6.5h8V9h4v9.5H4V9h4V6.5Zm2 2h4V8h-4v.5ZM6 11v5.5h12V11h-2v2h-8v-2H6Z"/></svg>',
+        '<svg viewBox="0 0 24 24" class="icon-svg" aria-hidden="true"><path d="M10.5 3h3l1 5.5H9.5L10.5 3zm-1.2 7h5.4l-1.5 11h-2.4L9.3 10z"/></svg>',
       technical:
-        '<svg viewBox="0 0 24 24" class="icon-svg" aria-hidden="true"><path d="m8.8 7.4-4.2 4.6 4.2 4.6 1.5-1.3L7.4 12l2.9-3.3-1.5-1.3Zm6.4 0-1.5 1.3 2.9 3.3-2.9 3.3 1.5 1.3 4.2-4.6-4.2-4.6Z"/></svg>',
+        '<svg viewBox="0 0 24 24" class="icon-svg" aria-hidden="true"><path d="M8.8 7.5L4 12l4.8 4.5 1.6-1.6L7.2 12l3.2-2.9-1.6-1.6zm6.4 0-1.6 1.6 3.2 2.9-3.2 2.9 1.6 1.6L20 12l-4.8-4.5z"/></svg>',
       shorten:
-        '<svg viewBox="0 0 24 24" class="icon-svg" aria-hidden="true"><path d="M5.2 6.2a2 2 0 1 1 2.8 2.8 2 2 0 0 1-2.8-2.8Zm10.7 10.7a2 2 0 1 1 2.8 2.8 2 2 0 0 1-2.8-2.8ZM5 18.3l6.2-6.2 1.4 1.4-6.2 6.2L5 18.3Zm7.9-5.8L18.3 7l1.4 1.4-5.4 5.4-1.4-1.4Z"/></svg>',
+        '<svg viewBox="0 0 24 24" class="icon-svg" aria-hidden="true"><path d="M4 6h16v2.5H4zm0 5.5h11v2.5H4zm0 5.5h7v2.5H4z"/></svg>',
+    };
+    const labelByTemplate: Record<RewriteTemplateId, string> = {
+      auto_fix:     'Fix',
+      professional: 'Pro',
+      technical:    'Code',
+      shorten:      'Trim',
     };
     const templateButtons = REWRITE_TEMPLATES.map((tpl, index) => {
       const isActive = index === 0 ? ' active' : '';
@@ -296,9 +302,10 @@ export class RewriteBubble {
           data-template-id="${tpl.id}"
           aria-label="Rewrite as ${tpl.label}"
           aria-pressed="${index === 0 ? 'true' : 'false'}"
+          title="${tpl.label}"
         >
           <span class="icon-wrap">${iconByTemplate[tpl.id]}</span>
-          <span class="sr-only">${tpl.label}</span>
+          <span class="tile-label">${labelByTemplate[tpl.id]}</span>
         </button>
       `;
     }).join('');
