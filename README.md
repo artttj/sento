@@ -1,70 +1,117 @@
-# <img src="icons/icon128.png" width="48" alt="" valign="middle" /> Sentō
+# <img src="icons/icon128.png" width="36" alt="" valign="middle" /> Sentō
 
-A Chrome extension that adds a floating AI rewrite bubble to any editable field on the web. Select text, pick a template, and get a rewritten version in place.
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](LICENSE) ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![Google Chrome](https://img.shields.io/badge/Google%20Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white)
 
-- **Works everywhere.** Textarea, input fields, contenteditable editors. If you can type in it, Sentō can rewrite it.
-- **Preview before applying.** Every rewrite shows a preview first. You decide what goes in. Nothing changes until you click Apply.
-- **Your keys, your cost.** Bring your own OpenAI, Gemini, or Grok API key. No middleman, no subscriptions, no data harvesting.
-- **Invisible until needed.** The bubble only appears when you select text in a supported field. It stays out of your way otherwise.
-- **Isolated by design.** The bubble lives in Shadow DOM so it never breaks page styles, and page styles never break it.
+## Rewrite anywhere.
+
+Sentō is a Chrome extension that puts a floating AI rewrite bubble inside any editable field. Select text, pick a template, review the result, and apply it in place. No copy-paste loop. No context switching.
+
+- **Works everywhere.** Textarea, input, contenteditable, ProseMirror editors, rich text fields. If you can type in it, Sentō rewrites it.
+- **See before you apply.** Every rewrite shows a preview. Nothing changes until you click Apply.
+- **Your keys, your price.** Connect your own OpenAI, Gemini, or Grok API key. You pay the provider directly—no markups, no subscriptions.
+- **Invisible until needed.** The bubble appears only when you select text. Zero distraction when you don't need it.
+- **Smart site control.** Choose All Sites, Allow List, or Block List to control where the bubble shows.
+- **Privacy by design.** Your API keys stay local. Your text goes straight to the AI provider. Sentō has no backend.
 
 ---
 
 ## Quick Start
 
-1. `git clone https://github.com/artttj/sento.git && cd sento`
-2. `npm install && npm run build`
-3. Open `chrome://extensions`, enable **Developer mode**, click **Load unpacked**, select the `dist/` folder.
-4. Click the Sentō icon, go to **Settings**, and add your API key under **AI Connections**.
+1. **Clone & build:**
+   ```bash
+   git clone https://github.com/artttj/sento.git && cd sento
+   npm install && npm run build
+   ```
+
+2. **Install:**
+   - Open `chrome://extensions`
+   - Turn on **Developer mode** (top right)
+   - Click **Load unpacked**
+   - Select the `dist/` folder
+
+3. **Connect an API key:**
+   - Click the Sentō icon → **Settings** → **AI Connections**
+   - Pick a provider and add your API key
 
 | Provider | Get a key |
 | --- | --- |
-| OpenAI | [platform.openai.com](https://platform.openai.com/api-keys) |
-| Google Gemini | [aistudio.google.com](https://aistudio.google.com/app/apikey) |
+| OpenAI | [platform.openai.com/api-keys](https://platform.openai.com/api-keys) |
+| Google Gemini | [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey) |
 | Grok (xAI) | [console.x.ai](https://console.x.ai/) |
 
 ---
 
 ## How It Works
 
-1. Select text in any supported editable field.
-2. The rewrite bubble appears near your selection.
-3. Pick a template (Fix, Pro, Code, or Trim).
-4. Review the rewritten text in the preview area.
-5. Click **Apply** to replace the original, or **Retry** to regenerate.
+1. Select text in any editable field
+2. The rewrite bubble appears below your selection
+3. Click a template (Fix, Pro, Mine, Trim)
+4. Review the rewritten text
+5. Click **Apply** to replace, or **Retry** for a new version
 
-Text replacement uses native browser events (`beforeinput`, `input`, `change`) so React, Vue, and contenteditable editors detect the update correctly.
+Rich text (bullet points, lists) is preserved and re-inserted correctly—even in Jira, Confluence, and ProseMirror editors.
 
 ---
 
 ## Rewrite Templates
 
-| Template | What it does |
+| Template | Purpose |
 | --- | --- |
-| **Fix** | Grammar, spelling, and punctuation cleanup |
-| **Pro** | Polished, professional tone |
-| **Code** | Technical and precise wording |
-| **Trim** | Shorter version, same meaning |
+| **Fix** | Fix grammar, spelling, and clarity. Keep the tone. |
+| **Pro** | Polished professional tone. Concise and courteous. |
+| **Mine** | Your own custom instruction. Configure in Settings. |
+| **Trim** | Make it 40% shorter. Keep key points. |
 
-You can set a default template and add a custom system prompt in Settings.
+Drag to reorder templates. Toggle any on or off. Edit the instruction for "Mine" directly in Settings.
+
+---
+
+## Languages
+
+The interface supports:
+
+- **English**
+- **Deutsch** (German)
+
+Switch in Settings → General → Language. Your choice is remembered.
+
+Template prompts sent to AI are always in English.
 
 ---
 
 ## Settings
 
-- **Default Template** to pre-select when the bubble opens
-- **AI Provider** switch between OpenAI, Gemini, and Grok
-- **Model** selection per provider
-- **System Prompt** prepended to every request
-- **API Keys** stored locally, never sent anywhere except your chosen provider
+**General**
+- Default template to auto-select
+- Pill label visibility
+- Output language
+- Site access (allow/deny/block specific domains)
+- Custom rewrite prompts per template
+
+**AI Connections**
+- Add and manage API keys for OpenAI, Gemini, Grok
+- Choose which provider to use
+- Select model per provider
 
 ---
 
-## Privacy
+## Real-World Uses
 
-- Keys are stored in `chrome.storage.local` and never leave your machine.
-- Selected text goes directly from your browser to the provider API. Sentō has no backend.
-- The full source code is right here for you to read.
+- **Jira/Linear tickets:** Turn rambling comments into a clean summary
+- **Email drafts:** Fix tone and grammar without leaving your inbox
+- **Slack/Teams messages:** Rewrite for clarity before hitting send
+- **Code reviews:** Polish comments and suggestions
+- **Notion/Markdown:** Fix formatting and tighten prose
+
+---
+
+## Privacy & Security
+
+- **Local keys:** API keys stored in `chrome.storage.local` only. Never synced or sent anywhere.
+- **Direct connection:** Your text travels straight from your browser to the provider API. Sentō never sees it.
+- **No backend:** Sentō is 100% client-side. Open source. No servers.
+
+Provider privacy: [OpenAI](https://openai.com/policies/privacy-policy/) · [Google](https://ai.google.dev/gemini-api/terms) · [xAI](https://x.ai/legal/privacy-policy/)
 
 ---
 
@@ -73,20 +120,20 @@ You can set a default template and add a custom system prompt in Settings.
 - TypeScript (strict mode)
 - Chrome Extension Manifest V3
 - Shadow DOM for UI isolation
-- esbuild for builds
+- esbuild for fast builds
 
 ---
 
-## Supported Targets
+## Keyboard Shortcuts
 
-- `textarea` and text-like `input` (text, search, url, email, tel)
-- `contenteditable` elements
-- Most rich text editors that use the above
+| Action | Windows / macOS |
+| --- | --- |
+| **Force apply** | Shift + Click template |
 
-Cross-origin iframes and closed shadow roots are out of scope for now.
+Skip the preview and apply the rewrite directly.
 
 ---
 
 ## License
 
-MIT
+MIT. You can use, modify, and distribute it. Keep the copyright notice. See [LICENSE](LICENSE).
