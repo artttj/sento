@@ -265,8 +265,8 @@ export class RewriteBubble {
     const targetX = this.lastRect.left + this.lastRect.width / 2;
     const targetY = this.lastRect.bottom + 10;
 
-    const width = this.refs.bubble.offsetWidth || 228;
-    const height = this.refs.bubble.offsetHeight || 46;
+    const width = this.refs.bubble.offsetWidth || 340;
+    const height = this.refs.bubble.offsetHeight || 40;
 
     const left = Math.min(Math.max(padding, targetX - width / 2), window.innerWidth - width - padding);
 

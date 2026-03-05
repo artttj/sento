@@ -8,7 +8,8 @@ export const bubbleStyles = `
 }
 
 .sento-root {
-  --glass-c: #bbbbbc;
+  --bg: rgba(12, 12, 16, 0.82);
+  --bg-2: rgba(18, 18, 24, 0.88);
   --glass-l: #fff;
   --glass-d: #000;
   --rl: 0.3;
@@ -27,14 +28,16 @@ export const bubbleStyles = `
 }
 
 .sento-root[data-theme="light"] {
-  --rl: 1;
-  --rd: 1;
+  --bg: rgba(12, 12, 16, 0.76);
+  --bg-2: rgba(18, 18, 24, 0.82);
+  --rl: 0.5;
+  --rd: 1.5;
   --sat: 180%;
 }
 
 .sento-bubble {
   position: fixed;
-  width: min(228px, calc(100vw - 12px));
+  width: min(340px, calc(100vw - 12px));
   color: var(--text);
   font-family: var(--font);
   z-index: 2147483647;
@@ -50,57 +53,51 @@ export const bubbleStyles = `
 .quick-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 4px;
-  padding: 6px;
-  border-radius: 99em;
+  gap: 3px;
+  padding: 3px;
+  border-radius: 20px;
   border: none;
-  background-color: color-mix(in srgb, var(--glass-c) 12%, transparent);
-  backdrop-filter: blur(12px) saturate(var(--sat));
-  -webkit-backdrop-filter: blur(12px) saturate(var(--sat));
+  background: var(--bg);
+  backdrop-filter: blur(24px) saturate(var(--sat));
+  -webkit-backdrop-filter: blur(24px) saturate(var(--sat));
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 10%), transparent),
-    inset 1.8px 3px 0px -2px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 90%), transparent),
-    inset -2px -2px 0px -2px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 80%), transparent),
-    inset -3px -8px 1px -6px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 60%), transparent),
-    inset -0.3px -1px 4px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 12%), transparent),
-    inset -1.5px 2.5px 0px -2px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 20%), transparent),
-    inset 0px 3px 4px -2px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 20%), transparent),
-    inset 2px -6.5px 1px -4px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent),
-    0px 1px 5px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent),
-    0px 6px 16px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 8%), transparent);
-  transition:
-    background-color 400ms cubic-bezier(1, 0, 0.4, 1),
-    box-shadow 400ms cubic-bezier(1, 0, 0.4, 1);
+    inset 0 0 0 0.5px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 14%), transparent),
+    inset 1.5px 2px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 70%), transparent),
+    inset -1.5px -1.5px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 50%), transparent),
+    inset -2px -6px 1px -4px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 30%), transparent),
+    inset -0.3px -1px 3px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent),
+    inset 0px 2px 3px -1px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 15%), transparent),
+    0px 2px 6px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 12%), transparent),
+    0px 8px 24px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent);
 }
 
 .template-square {
   position: relative;
-  height: 46px;
-  border-radius: 99em;
+  height: 34px;
+  border-radius: 16px;
   border: none;
   background: transparent;
   color: var(--text);
   cursor: pointer;
-  padding: 0 0 2px;
+  padding: 0 8px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  transition: all 180ms var(--ease);
+  gap: 5px;
+  transition: all 200ms var(--ease);
 }
 
 .template-square:hover:not(:disabled),
 .template-square:focus-visible {
-  background-color: color-mix(in srgb, var(--glass-c) 18%, transparent);
+  background-color: color-mix(in srgb, var(--glass-l) 8%, transparent);
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 8%), transparent),
-    inset 1px 2px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 50%), transparent),
-    inset -1px -1px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 40%), transparent);
+    inset 0 0 0 0.5px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 10%), transparent),
+    inset 1px 1.5px 0px -0.5px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 40%), transparent);
 }
 
-.template-square:hover:not(:disabled) .theme-icon {
-  scale: 1.15;
+.template-square:hover:not(:disabled) .icon-wrap {
+  scale: 1.12;
 }
 
 .template-square:disabled {
@@ -109,15 +106,14 @@ export const bubbleStyles = `
 }
 
 .template-square.active {
-  background-color: color-mix(in srgb, var(--glass-c) 36%, transparent);
+  background-color: color-mix(in srgb, var(--glass-l) 12%, transparent);
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 10%), transparent),
-    inset 2px 1px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 90%), transparent),
-    inset -1.5px -1px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 80%), transparent),
-    inset -2px -6px 1px -5px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 60%), transparent),
-    inset -1px 2px 3px -1px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 20%), transparent),
-    inset 0px -4px 1px -2px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent),
-    0px 3px 6px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 8%), transparent);
+    inset 0 0 0 0.5px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 12%), transparent),
+    inset 1.5px 1px 0px -0.5px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 70%), transparent),
+    inset -1px -0.5px 0px -0.5px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 50%), transparent),
+    inset -1.5px -4px 1px -3px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 30%), transparent),
+    inset -0.5px 1.5px 2px -0.5px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 14%), transparent),
+    0px 2px 4px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 6%), transparent);
   animation: tile-select 440ms ease;
 }
 
@@ -127,17 +123,19 @@ export const bubbleStyles = `
 
 @keyframes tile-select {
   0% { scale: 1 1; }
-  50% { scale: 1.06 1; }
+  40% { scale: 1.08 0.96; }
+  70% { scale: 0.97 1.02; }
   100% { scale: 1 1; }
 }
 
 .icon-wrap {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   color: var(--text-2);
+  flex-shrink: 0;
   transition: scale 200ms cubic-bezier(0.5, 0, 0, 1);
 }
 
@@ -146,19 +144,20 @@ export const bubbleStyles = `
 }
 
 .icon-svg {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   display: block;
   fill: currentColor;
 }
 
 .tile-label {
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   color: var(--text-3);
   line-height: 1;
   pointer-events: none;
+  white-space: nowrap;
   transition: color 180ms var(--ease);
 }
 
@@ -191,20 +190,19 @@ export const bubbleStyles = `
 
 .status-msg {
   margin: 0;
-  border-radius: 99em;
+  border-radius: 16px;
   padding: 7px 12px;
   font-size: 11px;
   line-height: 1.45;
   border: none;
-  background-color: color-mix(in srgb, var(--glass-c) 12%, transparent);
+  background: var(--bg);
   color: var(--text-3);
-  backdrop-filter: blur(12px) saturate(var(--sat));
-  -webkit-backdrop-filter: blur(12px) saturate(var(--sat));
+  backdrop-filter: blur(24px) saturate(var(--sat));
+  -webkit-backdrop-filter: blur(24px) saturate(var(--sat));
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 10%), transparent),
-    inset 1.8px 3px 0px -2px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 60%), transparent),
-    inset -2px -2px 0px -2px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 50%), transparent),
-    inset -0.3px -1px 4px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 12%), transparent),
+    inset 0 0 0 0.5px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 14%), transparent),
+    inset 1.5px 2px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 50%), transparent),
+    inset -0.3px -1px 3px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent),
     0px 4px 12px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent);
 }
 
@@ -227,46 +225,46 @@ export const bubbleStyles = `
 
 .preview {
   width: 100%;
-  min-height: 92px;
-  max-height: 280px;
-  border-radius: 21px;
+  min-height: 80px;
+  max-height: 60vh;
+  border-radius: 18px;
   border: none;
-  background-color: color-mix(in srgb, var(--glass-c) 12%, transparent);
+  background: var(--bg);
   color: var(--text);
   font-family: var(--font);
   font-size: 12px;
-  line-height: 1.45;
+  line-height: 1.5;
   padding: 10px 14px;
   resize: vertical;
   outline: none;
-  backdrop-filter: blur(12px) saturate(var(--sat));
-  -webkit-backdrop-filter: blur(12px) saturate(var(--sat));
+  backdrop-filter: blur(24px) saturate(var(--sat));
+  -webkit-backdrop-filter: blur(24px) saturate(var(--sat));
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 10%), transparent),
-    inset 1.8px 3px 0px -2px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 60%), transparent),
-    inset -2px -2px 0px -2px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 50%), transparent),
-    inset -0.3px -1px 4px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 12%), transparent),
+    inset 0 0 0 0.5px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 14%), transparent),
+    inset 1.5px 2px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 50%), transparent),
+    inset -1.5px -1.5px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 30%), transparent),
+    inset -0.3px -1px 3px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent),
     0px 4px 12px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent);
 }
 
 .preview:focus {
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 18%), transparent),
-    inset 1.8px 3px 0px -2px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 80%), transparent),
-    inset -2px -2px 0px -2px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 70%), transparent),
-    inset -0.3px -1px 4px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 12%), transparent),
+    inset 0 0 0 0.5px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 20%), transparent),
+    inset 1.5px 2px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 70%), transparent),
+    inset -1.5px -1.5px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 50%), transparent),
+    inset -0.3px -1px 3px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent),
     0px 6px 16px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 12%), transparent);
 }
 
 .actions {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
+  gap: 6px;
 }
 
 .btn-ghost,
 .btn-apply {
-  border-radius: 99em;
+  border-radius: 14px;
   padding: 6px 14px;
   font-size: 11px;
   font-weight: 600;
@@ -276,53 +274,51 @@ export const bubbleStyles = `
 
 .btn-ghost {
   border: none;
-  background-color: color-mix(in srgb, var(--glass-c) 12%, transparent);
+  background: var(--bg);
   color: var(--text-2);
-  backdrop-filter: blur(12px) saturate(var(--sat));
-  -webkit-backdrop-filter: blur(12px) saturate(var(--sat));
+  backdrop-filter: blur(24px) saturate(var(--sat));
+  -webkit-backdrop-filter: blur(24px) saturate(var(--sat));
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 10%), transparent),
-    inset 1.8px 3px 0px -2px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 60%), transparent),
-    inset -0.3px -1px 4px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 12%), transparent),
+    inset 0 0 0 0.5px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 14%), transparent),
+    inset 1.5px 2px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 50%), transparent),
+    inset -0.3px -1px 3px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent),
     0px 3px 8px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 8%), transparent);
 }
 
 .btn-ghost:hover {
   color: var(--text);
-  background-color: color-mix(in srgb, var(--glass-c) 22%, transparent);
+  background: var(--bg-2);
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 16%), transparent),
-    inset 1.8px 3px 0px -2px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 80%), transparent),
-    inset -0.3px -1px 4px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 12%), transparent),
+    inset 0 0 0 0.5px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 18%), transparent),
+    inset 1.5px 2px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 70%), transparent),
+    inset -0.3px -1px 3px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent),
     0px 4px 12px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent);
 }
 
 .btn-apply {
   border: none;
-  background-color: color-mix(in srgb, var(--glass-c) 36%, transparent);
+  background: var(--bg-2);
   color: var(--text);
-  backdrop-filter: blur(12px) saturate(var(--sat));
-  -webkit-backdrop-filter: blur(12px) saturate(var(--sat));
+  backdrop-filter: blur(24px) saturate(var(--sat));
+  -webkit-backdrop-filter: blur(24px) saturate(var(--sat));
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 10%), transparent),
-    inset 2px 1px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 90%), transparent),
-    inset -1.5px -1px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 80%), transparent),
-    inset -2px -6px 1px -5px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 60%), transparent),
-    inset -1px 2px 3px -1px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 20%), transparent),
-    inset 0px -4px 1px -2px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent),
-    0px 3px 6px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 8%), transparent);
+    inset 0 0 0 0.5px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 14%), transparent),
+    inset 1.5px 1px 0px -0.5px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 70%), transparent),
+    inset -1px -0.5px 0px -0.5px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 50%), transparent),
+    inset -1.5px -4px 1px -3px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 30%), transparent),
+    inset -0.5px 1.5px 2px -0.5px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 14%), transparent),
+    0px 3px 8px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 8%), transparent);
 }
 
 .btn-apply:hover {
-  background-color: color-mix(in srgb, var(--glass-c) 48%, transparent);
+  background: rgba(24, 24, 32, 0.92);
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 14%), transparent),
-    inset 2px 1px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 95%), transparent),
-    inset -1.5px -1px 0px -1px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 85%), transparent),
-    inset -2px -6px 1px -5px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 65%), transparent),
-    inset -1px 2px 3px -1px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 20%), transparent),
-    inset 0px -4px 1px -2px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent),
-    0px 4px 10px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent);
+    inset 0 0 0 0.5px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 18%), transparent),
+    inset 1.5px 1px 0px -0.5px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 80%), transparent),
+    inset -1px -0.5px 0px -0.5px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 60%), transparent),
+    inset -1.5px -4px 1px -3px color-mix(in srgb, var(--glass-l) calc(var(--rl) * 40%), transparent),
+    inset -0.5px 1.5px 2px -0.5px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 14%), transparent),
+    0px 4px 12px 0px color-mix(in srgb, var(--glass-d) calc(var(--rd) * 10%), transparent);
 }
 
 .hidden-select,
