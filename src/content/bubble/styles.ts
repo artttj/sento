@@ -8,37 +8,41 @@ export const bubbleStyles = `
 }
 
 .sento-root {
-  --glass-bg: rgba(252, 254, 255, 0.12);
-  --glass-bg-2: rgba(255, 255, 255, 0.22);
-  --glass-border: rgba(255, 255, 255, 0.5);
-  --glass-border-soft: rgba(255, 255, 255, 0.34);
-  --text: rgba(246, 248, 255, 0.98);
-  --text-2: rgba(224, 229, 242, 0.86);
-  --text-3: rgba(209, 216, 231, 0.74);
-  --error: #ff7d7d;
-  --error-bg: rgba(255, 96, 96, 0.12);
-  --error-border: rgba(255, 130, 130, 0.36);
-  --btn-bg: rgba(255, 255, 255, 0.86);
-  --btn-text: #101218;
-  --shadow: 0 8px 18px rgba(0, 8, 20, 0.14);
+  --glass-bg:          rgba(10, 11, 22, 0.82);
+  --glass-bg-2:        rgba(16, 18, 34, 0.90);
+  --glass-tile:        rgba(255, 255, 255, 0.07);
+  --glass-tile-2:      rgba(255, 255, 255, 0.13);
+  --glass-border:      rgba(255, 255, 255, 0.22);
+  --glass-border-soft: rgba(255, 255, 255, 0.12);
+  --text:   rgba(240, 244, 255, 0.96);
+  --text-2: rgba(190, 198, 225, 0.82);
+  --text-3: rgba(150, 160, 195, 0.68);
+  --error:        #ff7070;
+  --error-bg:     rgba(255, 80, 80, 0.14);
+  --error-border: rgba(255, 110, 110, 0.32);
+  --btn-bg:   rgba(255, 255, 255, 0.94);
+  --btn-text: #0a0b18;
+  --shadow: 0 12px 32px rgba(0, 0, 10, 0.62), 0 2px 8px rgba(0, 0, 10, 0.40);
   --font: system-ui, -apple-system, 'SF Pro Display', 'Segoe UI', sans-serif;
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .sento-root[data-theme="light"] {
-  --glass-bg: rgba(255, 255, 255, 0.62);
-  --glass-bg-2: rgba(255, 255, 255, 0.8);
-  --glass-border: rgba(143, 156, 181, 0.28);
-  --glass-border-soft: rgba(143, 156, 181, 0.2);
-  --text: rgba(16, 20, 30, 0.96);
-  --text-2: rgba(39, 49, 68, 0.88);
-  --text-3: rgba(60, 72, 94, 0.78);
-  --error: #bf3434;
-  --error-bg: rgba(196, 52, 52, 0.08);
-  --error-border: rgba(196, 52, 52, 0.24);
-  --btn-bg: rgba(25, 29, 38, 0.92);
-  --btn-text: rgba(252, 253, 255, 0.96);
-  --shadow: 0 6px 14px rgba(20, 28, 44, 0.1);
+  --glass-bg:          rgba(10, 11, 22, 0.76);
+  --glass-bg-2:        rgba(16, 18, 34, 0.86);
+  --glass-tile:        rgba(255, 255, 255, 0.09);
+  --glass-tile-2:      rgba(255, 255, 255, 0.16);
+  --glass-border:      rgba(255, 255, 255, 0.24);
+  --glass-border-soft: rgba(255, 255, 255, 0.14);
+  --text:   rgba(240, 244, 255, 0.96);
+  --text-2: rgba(190, 198, 225, 0.82);
+  --text-3: rgba(150, 160, 195, 0.68);
+  --error:        #ff7070;
+  --error-bg:     rgba(255, 80, 80, 0.14);
+  --error-border: rgba(255, 110, 110, 0.32);
+  --btn-bg:   rgba(255, 255, 255, 0.94);
+  --btn-text: #0a0b18;
+  --shadow: 0 12px 32px rgba(0, 0, 10, 0.52), 0 2px 8px rgba(0, 0, 10, 0.32);
 }
 
 .sento-bubble {
@@ -64,8 +68,9 @@ export const bubbleStyles = `
   border-radius: 12px;
   background: linear-gradient(148deg, var(--glass-bg-2), var(--glass-bg));
   border: 0.5px solid var(--glass-border-soft);
-  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.42);
-  backdrop-filter: blur(20px) saturate(150%);
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
 }
 
 .template-square {
@@ -73,14 +78,14 @@ export const bubbleStyles = `
   height: 38px;
   border-radius: 9px;
   border: 0.5px solid var(--glass-border-soft);
-  background: linear-gradient(165deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+  background: linear-gradient(165deg, var(--glass-tile-2), var(--glass-tile));
   color: var(--text);
   cursor: pointer;
   padding: 0;
   display: grid;
   place-items: center;
-  transition: transform 180ms var(--ease), box-shadow 180ms var(--ease), border-color 180ms var(--ease);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.46), 0 2px 6px rgba(2, 8, 18, 0.1);
+  transition: transform 180ms var(--ease), box-shadow 180ms var(--ease), border-color 180ms var(--ease), background 180ms var(--ease);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.20), 0 2px 8px rgba(0, 0, 12, 0.40);
   animation: tile-float 5.6s var(--ease) infinite;
 }
 
@@ -104,29 +109,30 @@ export const bubbleStyles = `
   top: 3px;
   height: 44%;
   border-radius: 6px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.36), rgba(255, 255, 255, 0));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0));
   pointer-events: none;
 }
 
 .template-square:hover:not(:disabled),
 .template-square:focus-visible {
-  transform: translateY(-0.5px);
+  transform: translateY(-1px);
   border-color: var(--glass-border);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.58), 0 6px 10px rgba(4, 10, 22, 0.12);
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.20), rgba(255, 255, 255, 0.09));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 8px 16px rgba(0, 0, 12, 0.56);
 }
 
 .template-square:disabled {
-  opacity: 0.52;
+  opacity: 0.38;
   cursor: progress;
 }
 
 .template-square.active {
-  border-color: rgba(255, 255, 255, 0.5);
-  background: linear-gradient(165deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.06));
+  border-color: rgba(255, 255, 255, 0.30);
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 16, 0.40));
   box-shadow:
-    inset 0 1.5px 2px rgba(255, 255, 255, 0.22),
-    inset 0 -2px 6px rgba(15, 22, 34, 0.24),
-    0 0 0 0.5px rgba(255, 255, 255, 0.34);
+    inset 0 2px 6px rgba(0, 0, 20, 0.52),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    0 0 0 0.5px rgba(255, 255, 255, 0.16);
 }
 
 .template-square.loading {
@@ -189,8 +195,10 @@ export const bubbleStyles = `
   line-height: 1.45;
   background: linear-gradient(160deg, var(--glass-bg-2), var(--glass-bg));
   border: 0.5px solid var(--glass-border-soft);
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.12);
   color: var(--text-3);
-  backdrop-filter: blur(14px) saturate(145%);
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
 }
 
 .status-msg.error {
@@ -223,12 +231,14 @@ export const bubbleStyles = `
   padding: 10px;
   resize: vertical;
   outline: none;
-  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(14px) saturate(145%);
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
 }
 
 .preview:focus {
   border-color: var(--glass-border);
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.10);
 }
 
 .actions {
@@ -250,22 +260,31 @@ export const bubbleStyles = `
   border: 0.5px solid var(--glass-border-soft);
   background: linear-gradient(160deg, var(--glass-bg-2), var(--glass-bg));
   color: var(--text-2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 2px 6px rgba(0, 0, 12, 0.40);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .btn-ghost:hover {
   border-color: var(--glass-border);
   color: var(--text);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
 }
 
 .btn-apply {
   border: none;
   background: var(--btn-bg);
   color: var(--btn-text);
-  box-shadow: 0 8px 16px rgba(6, 8, 14, 0.25);
+  box-shadow:
+    0 8px 20px rgba(0, 0, 12, 0.52),
+    inset 0 1px 0 rgba(255, 255, 255, 0.60);
 }
 
 .btn-apply:hover {
-  filter: brightness(0.95);
+  filter: brightness(0.96);
+  box-shadow:
+    0 10px 24px rgba(0, 0, 12, 0.60),
+    inset 0 1px 0 rgba(255, 255, 255, 0.60);
 }
 
 .hidden-select,
