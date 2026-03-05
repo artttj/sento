@@ -59,23 +59,23 @@
     <main class="tab-content">
       <section id="tab-general" class="tab-panel">
         <div class="panel-header">
-          <h1>General</h1>
-          <p>Configure default behaviour when Sentō is used on editable fields.</p>
+          <h1 data-i18n="general">General</h1>
+          <p data-i18n="general-desc">Configure default behaviour when Sentō is used on editable fields.</p>
         </div>
 
         <div class="setting-group">
           <div class="setting-row">
             <div class="setting-label">
-              <div class="setting-title">Default Rewrite Template</div>
-              <div class="setting-desc">Pre-selected template when the bubble opens</div>
+              <div class="setting-title" data-i18n="default-template">Default Rewrite Template</div>
+              <div class="setting-desc" data-i18n="default-template-desc">Pre-selected template when the bubble opens</div>
             </div>
             <select id="default-template" class="setting-select"></select>
           </div>
 
           <div class="setting-row">
             <div class="setting-label">
-              <div class="setting-title">Pill Labels</div>
-              <div class="setting-desc">Show text labels next to pill icons in the bubble</div>
+              <div class="setting-title" data-i18n="pill-labels">Pill Labels</div>
+              <div class="setting-desc" data-i18n="pill-labels-desc">Show text labels next to pill icons in the bubble</div>
             </div>
             <label class="tpl-switch">
               <input id="show-pill-labels" type="checkbox" checked />
@@ -85,8 +85,8 @@
 
           <div class="setting-row">
             <div class="setting-label">
-              <div class="setting-title">Language</div>
-              <div class="setting-desc">Output language for rewrites</div>
+              <div class="setting-title" data-i18n="language">Language</div>
+              <div class="setting-desc" data-i18n="language-desc">Output language for rewrites</div>
             </div>
             <div class="segmented" id="language-segmented">
               <button class="seg-btn" data-value="en" type="button">English</button>
@@ -96,8 +96,8 @@
 
           <div class="setting-row">
             <div class="setting-label">
-              <div class="setting-title">AI Provider</div>
-              <div class="setting-desc">Which service runs rewrite requests</div>
+              <div class="setting-title" data-i18n="ai-provider">AI Provider</div>
+              <div class="setting-desc" data-i18n="ai-provider-desc">Which service runs rewrite requests</div>
             </div>
             <div class="segmented" id="provider-segmented">
               <button class="seg-btn" data-value="openai" type="button">OpenAI</button>
@@ -108,8 +108,8 @@
 
           <div class="setting-row setting-row--stack">
             <div class="setting-label">
-              <div class="setting-title">System Prompt</div>
-              <div class="setting-desc">Prepended to every request. A humanizer prompt is included by default.</div>
+              <div class="setting-title" data-i18n="system-prompt">System Prompt</div>
+              <div class="setting-desc" data-i18n="system-prompt-desc">Prepended to every request. A humanizer prompt is included by default.</div>
             </div>
             <textarea id="system-prompt" class="setting-textarea" rows="5" placeholder="You are a writing humanizer..."></textarea>
           </div>
@@ -118,20 +118,20 @@
         <div class="setting-group">
           <div class="setting-row">
             <div class="setting-label">
-              <div class="setting-title">Site Access</div>
-              <div class="setting-desc">Control which websites show the rewrite bubble</div>
+              <div class="setting-title" data-i18n="site-access">Site Access</div>
+              <div class="setting-desc" data-i18n="site-access-desc">Control which websites show the rewrite bubble</div>
             </div>
             <div class="segmented" id="site-mode-segmented">
-              <button class="seg-btn" data-value="all" type="button">All Sites</button>
-              <button class="seg-btn" data-value="allowlist" type="button">Allow Only</button>
-              <button class="seg-btn" data-value="blocklist" type="button">Block</button>
+              <button class="seg-btn" data-value="all" data-i18n="all-sites" type="button">All Sites</button>
+              <button class="seg-btn" data-value="allowlist" data-i18n="allow-only" type="button">Allow Only</button>
+              <button class="seg-btn" data-value="blocklist" data-i18n="block" type="button">Block</button>
             </div>
           </div>
 
           <div id="site-list-row" class="setting-row setting-row--stack hidden">
             <div class="setting-label">
-              <div class="setting-title" id="site-list-title">Allowed Sites</div>
-              <div class="setting-desc">One domain per line. Use <code>*.example.com</code> for subdomains.</div>
+              <div class="setting-title" id="site-list-title" data-i18n="allowed-sites">Allowed Sites</div>
+              <div class="setting-desc" data-i18n-html="site-list-desc">One domain per line. Use <code>*.example.com</code> for subdomains.</div>
             </div>
             <textarea id="site-list" class="setting-textarea" rows="4" placeholder="example.com&#10;*.atlassian.net"></textarea>
           </div>
@@ -140,28 +140,28 @@
         <div class="setting-group" id="template-configs">
           <div class="setting-row setting-row--tpl-header">
             <div class="setting-label">
-              <div class="setting-title">Templates</div>
-              <div class="setting-desc">Toggle templates on or off and edit their prompts. Drag to reorder.</div>
+              <div class="setting-title" data-i18n="templates">Templates</div>
+              <div class="setting-desc" data-i18n="templates-desc">Toggle templates on or off and edit their prompts. Drag to reorder.</div>
             </div>
           </div>
         </div>
 
         <div class="panel-actions">
-          <button id="btn-save-settings" class="btn btn-primary" type="button">Save Settings</button>
+          <button id="btn-save-settings" class="btn btn-primary" data-i18n="save-settings" type="button">Save Settings</button>
           <span id="settings-status" class="saved-msg hidden">✓ Saved</span>
         </div>
       </section>
 
       <section id="tab-ai-connections" class="tab-panel hidden">
         <div class="panel-header">
-          <h1>AI Connections</h1>
-          <p>API keys are stored locally on your device and never sent by Sentō except directly to your chosen provider.</p>
+          <h1 data-i18n="ai-connections">AI Connections</h1>
+          <p data-i18n="ai-connections-desc">API keys are stored locally on your device and never sent by Sentō except directly to your chosen provider.</p>
         </div>
 
         <div class="privacy-notice" role="note">
-          <div class="privacy-notice-title">Privacy &amp; Data Notice</div>
-          <p>When rewriting text, selected content is sent to OpenAI, Google, or xAI depending on your provider.</p>
-          <p class="privacy-notice-links"><strong>Tip:</strong> avoid sensitive credentials or private data in rewrites.</p>
+          <div class="privacy-notice-title" data-i18n="privacy-notice">Privacy &amp; Data Notice</div>
+          <p data-i18n="privacy-text">When rewriting text, selected content is sent to OpenAI, Google, or xAI depending on your provider.</p>
+          <p class="privacy-notice-links" data-i18n-html="privacy-tip"><strong>Tip:</strong> avoid sensitive credentials or private data in rewrites.</p>
         </div>
 
         <div class="provider-card">
@@ -180,8 +180,8 @@
           <div class="provider-footer">
             <span class="provider-hint">Sent only to <code>api.openai.com</code></span>
             <div class="provider-btns">
-              <button id="btn-save-openai" class="btn btn-primary btn-sm" type="button">Save</button>
-              <button id="btn-clear-openai" class="btn btn-ghost btn-sm" type="button">Clear</button>
+              <button id="btn-save-openai" class="btn btn-primary btn-sm" data-i18n="save" type="button">Save</button>
+              <button id="btn-clear-openai" class="btn btn-ghost btn-sm" data-i18n="clear" type="button">Clear</button>
             </div>
           </div>
         </div>
@@ -202,8 +202,8 @@
           <div class="provider-footer">
             <span class="provider-hint">Sent only to <code>generativelanguage.googleapis.com</code></span>
             <div class="provider-btns">
-              <button id="btn-save-gemini" class="btn btn-primary btn-sm" type="button">Save</button>
-              <button id="btn-clear-gemini" class="btn btn-ghost btn-sm" type="button">Clear</button>
+              <button id="btn-save-gemini" class="btn btn-primary btn-sm" data-i18n="save" type="button">Save</button>
+              <button id="btn-clear-gemini" class="btn btn-ghost btn-sm" data-i18n="clear" type="button">Clear</button>
             </div>
           </div>
         </div>
@@ -224,8 +224,8 @@
           <div class="provider-footer">
             <span class="provider-hint">Sent only to <code>api.x.ai</code></span>
             <div class="provider-btns">
-              <button id="btn-save-grok" class="btn btn-primary btn-sm" type="button">Save</button>
-              <button id="btn-clear-grok" class="btn btn-ghost btn-sm" type="button">Clear</button>
+              <button id="btn-save-grok" class="btn btn-primary btn-sm" data-i18n="save" type="button">Save</button>
+              <button id="btn-clear-grok" class="btn btn-ghost btn-sm" data-i18n="clear" type="button">Clear</button>
             </div>
           </div>
         </div>
@@ -235,44 +235,44 @@
 
       <section id="tab-help" class="tab-panel hidden">
         <div class="panel-header">
-          <h1>Help</h1>
-          <p>How to use the rewrite bubble and keyboard shortcuts.</p>
+          <h1 data-i18n="help">Help</h1>
+          <p data-i18n="help-desc">How to use the rewrite bubble and keyboard shortcuts.</p>
         </div>
 
         <div class="help-section">
-          <h2 class="help-heading">How it works</h2>
+          <h2 class="help-heading" data-i18n="how-it-works">How it works</h2>
           <ol class="help-steps">
-            <li>Select text inside any editable field (input, textarea, contenteditable).</li>
-            <li>The rewrite bubble appears below your selection with four templates: <strong>Fix</strong>, <strong>Pro</strong>, <strong>Mine</strong>, and <strong>Trim</strong>.</li>
-            <li>Click a template. The text gets rewritten by your chosen AI provider.</li>
-            <li>Review the preview, then click <strong>Apply</strong> to replace the original text.</li>
+            <li data-i18n="step1">Select text inside any editable field (input, textarea, contenteditable).</li>
+            <li data-i18n-html="step2">The rewrite bubble appears below your selection with four templates: <strong>Fix</strong>, <strong>Pro</strong>, <strong>Mine</strong>, and <strong>Trim</strong>.</li>
+            <li data-i18n="step3">Click a template. The text gets rewritten by your chosen AI provider.</li>
+            <li data-i18n-html="step4">Review the preview, then click <strong>Apply</strong> to replace the original text.</li>
           </ol>
         </div>
 
         <div class="help-section">
-          <h2 class="help-heading">Rewrite templates</h2>
+          <h2 class="help-heading" data-i18n="rewrite-templates">Rewrite templates</h2>
           <div class="help-categories">
             <div class="help-cat">
-              <div class="help-cat-name">Fix</div>
-              <div class="help-cat-desc">Fix grammar, spelling, punctuation, and clarity. Keeps the original meaning and tone.</div>
+              <div class="help-cat-name" data-i18n="fix">Fix</div>
+              <div class="help-cat-desc" data-i18n="fix-desc">Fix grammar, spelling, punctuation, and clarity. Keeps the original meaning and tone.</div>
             </div>
             <div class="help-cat">
-              <div class="help-cat-name">Pro</div>
-              <div class="help-cat-desc">Rewrite in a polished professional tone. Concise, courteous, specific.</div>
+              <div class="help-cat-name" data-i18n="pro">Pro</div>
+              <div class="help-cat-desc" data-i18n="pro-desc">Rewrite in a polished professional tone. Concise, courteous, specific.</div>
             </div>
             <div class="help-cat">
-              <div class="help-cat-name">Mine</div>
-              <div class="help-cat-desc">Your own template with a custom rewrite instruction. Configure it in General settings.</div>
+              <div class="help-cat-name" data-i18n="mine">Mine</div>
+              <div class="help-cat-desc" data-i18n="mine-desc">Your own template with a custom rewrite instruction. Configure it in General settings.</div>
             </div>
             <div class="help-cat">
-              <div class="help-cat-name">Trim</div>
-              <div class="help-cat-desc">Make the text significantly shorter while keeping key points and action items.</div>
+              <div class="help-cat-name" data-i18n="trim">Trim</div>
+              <div class="help-cat-desc" data-i18n="trim-desc">Make the text significantly shorter while keeping key points and action items.</div>
             </div>
           </div>
         </div>
 
         <div class="help-section">
-          <h2 class="help-heading">Shortcuts</h2>
+          <h2 class="help-heading" data-i18n="shortcuts">Shortcuts</h2>
           <div class="shortcut-list">
             <div class="shortcut-row">
               <div class="shortcut-keys">
@@ -281,44 +281,44 @@
                 <span class="key">Click</span>
               </div>
               <div class="shortcut-info">
-                <div class="shortcut-action">Force apply</div>
-                <div class="shortcut-label">Hold Shift when clicking a template to skip the preview and apply the rewrite directly</div>
+                <div class="shortcut-action" data-i18n="force-apply">Force apply</div>
+                <div class="shortcut-label" data-i18n="force-apply-desc">Hold Shift when clicking a template to skip the preview and apply the rewrite directly</div>
               </div>
             </div>
           </div>
         </div>
 
         <div class="help-section">
-          <h2 class="help-heading">Tips</h2>
+          <h2 class="help-heading" data-i18n="tips">Tips</h2>
           <ul class="help-steps">
-            <li><strong>System prompt:</strong> the default prompt humanizes all rewrites. You can change it in General settings.</li>
-            <li><strong>Long text:</strong> selections over 12,000 characters get truncated. Keep selections focused for better results.</li>
-            <li><strong>Multiple providers:</strong> configure all three providers in AI Connections, then switch between them in General settings.</li>
+            <li data-i18n-html="tips-system-prompt"><strong>System prompt:</strong> the default prompt humanizes all rewrites. You can change it in General settings.</li>
+            <li data-i18n-html="tips-long-text"><strong>Long text:</strong> selections over 12,000 characters get truncated. Keep selections focused for better results.</li>
+            <li data-i18n-html="tips-providers"><strong>Multiple providers:</strong> configure all three providers in AI Connections, then switch between them in General settings.</li>
           </ul>
         </div>
       </section>
 
       <section id="tab-about" class="tab-panel hidden">
         <div class="panel-header">
-          <h1>About Sentō</h1>
-          <p>Universal BYOK rewrite bubble focused on native-feeling text replacement.</p>
+          <h1 data-i18n="about">About Sentō</h1>
+          <p data-i18n="about-desc">Universal BYOK rewrite bubble focused on native-feeling text replacement.</p>
         </div>
 
         <div class="about-block">
           <div class="about-row">
-            <span class="about-label">Version</span>
+            <span class="about-label" data-i18n="version">Version</span>
             <span class="about-value" id="about-version">-</span>
           </div>
           <div class="about-row">
-            <span class="about-label">Author</span>
+            <span class="about-label" data-i18n="author">Author</span>
             <span class="about-value">Artem Iagovdik</span>
           </div>
           <div class="about-row">
-            <span class="about-label">Storage</span>
+            <span class="about-label" data-i18n="storage">Storage</span>
             <span class="about-value">chrome.storage.local</span>
           </div>
           <div class="about-row">
-            <span class="about-label">Stack</span>
+            <span class="about-label" data-i18n="stack">Stack</span>
             <span class="about-value">MV3 + TS + Shadow DOM</span>
           </div>
         </div>

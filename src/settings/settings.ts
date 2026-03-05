@@ -11,6 +11,7 @@ import {
   saveGrokKey,
 } from '../shared/storage';
 import type { AppLanguage, RewriteTemplateId, SiteListMode, TemplateConfig } from '../shared/types';
+import { t } from './i18n';
 
 type Provider = 'openai' | 'gemini' | 'grok';
 
@@ -96,7 +97,9 @@ function wireSegmented(container: HTMLElement, onChange?: (value: string) => voi
 function updateSiteListVisibility(mode: SiteListMode): void {
   const show = mode !== 'all';
   refs.siteListRow.classList.toggle('hidden', !show);
-  refs.siteListTitle.textContent = mode === 'allowlist' ? 'Allowed Sites' : 'Blocked Sites';
+  const lang = (getSegmentedValue(refs.languageSeg) || 'en') as AppLanguage;
+  const titleKey = mode === 'allowlist' ? 'allowed-sites' : 'blocked-sites';
+  refs.siteListTitle.textContent = t(titleKey, lang);
 }
 
 const DRAG_HANDLE_SVG = '<svg viewBox="0 0 12 12" fill="currentColor"><circle cx="4" cy="2.5" r="1"/><circle cx="8" cy="2.5" r="1"/><circle cx="4" cy="6" r="1"/><circle cx="8" cy="6" r="1"/><circle cx="4" cy="9.5" r="1"/><circle cx="8" cy="9.5" r="1"/></svg>';
@@ -223,6 +226,41 @@ async function refreshBadges(): Promise<void> {
   refs.navAiWarning.classList.toggle('hidden', !!(openaiKey && geminiKey && grokKey));
 }
 
+function applyTranslations(lang: AppLanguage): void {
+  document.querySelectorAll('[data-i18n]').forEach((el) => {
+    const key = el.getAttribute('data-i18n');
+    if (key && key !== 'allowed-sites' && key !== 'blocked-sites') {
+      const text = t(key, lang);
+      if (el.innerHTML.includes('<code>')) {
+        const code = el.innerHTML.match(/<code>.*?<\/code>/)?.[0];
+        el.innerHTML = text + (code ? ' ' + code : '');
+      } else {
+        el.textContent = text;
+      }
+    }
+  });
+
+  document.querySelectorAll('[data-i18n-html]').forEach((el) => {
+    const key = el.getAttribute('data-i18n-html');
+    if (key) {
+      el.innerHTML = t(key, lang);
+    }
+  });
+
+  document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (key) {
+      (el as HTMLInputElement).placeholder = t(key, lang);
+    }
+  });
+
+  const mode = getSegmentedValue(refs.siteModeSeg) as SiteListMode;
+  if (mode !== 'all') {
+    const titleKey = mode === 'allowlist' ? 'allowed-sites' : 'blocked-sites';
+    refs.siteListTitle.textContent = t(titleKey, lang);
+  }
+}
+
 function wireTabs(): void {
   const navItems = Array.from(document.querySelectorAll<HTMLElement>('.nav-item'));
   const panels = Array.from(document.querySelectorAll<HTMLElement>('.tab-panel'));
@@ -261,8 +299,11 @@ async function init(): Promise<void> {
   populateSelect(refs.grokModel, PROVIDER_MODELS.grok, PROVIDER_MODELS.grok[0]);
 
   wireSegmented(refs.providerSegmented);
-  wireSegmented(refs.languageSeg);
+  wireSegmented(refs.languageSeg, (value) => {
+    applyTranslations(value as AppLanguage);
+  });
   wireSegmented(refs.siteModeSeg, (value) => {
+    const lang = (getSegmentedValue(refs.languageSeg) || 'en') as AppLanguage;
     updateSiteListVisibility(value as SiteListMode);
   });
 
@@ -279,6 +320,8 @@ async function init(): Promise<void> {
   refs.geminiModel.value = settings.geminiModel;
   refs.grokModel.value = settings.grokModel;
   renderTemplateConfigs(settings.templateConfigs ?? {}, settings.templateOrder);
+
+  applyTranslations(settings.language);
 
   refs.openaiKey.value = await getOpenAIKey();
   refs.geminiKey.value = await getGeminiKey();

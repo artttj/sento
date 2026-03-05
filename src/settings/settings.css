@@ -414,6 +414,7 @@ body {
   font-size: 13px;
   font-weight: 600;
   color: var(--c-text);
+  margin-left: 12px;
 }
 
 .tpl-instruction {
