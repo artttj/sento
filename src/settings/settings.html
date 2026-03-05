@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sentō — Settings</title>
+  <link rel="stylesheet" href="settings.css" />
+</head>
+<body>
+  <div class="settings-layout">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <img src="../icons/icon48.png" class="brand-icon" alt="" aria-hidden="true" />
+        <div class="brand-text">
+          <div class="brand-name">Sentō</div>
+          <div class="brand-sub">Settings</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-tab="general" type="button">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="10" cy="10" r="3"/>
+            <path d="M10 2v1.5m0 13V18M2 10h1.5m13 0H18M4.4 4.4l1.1 1.1m9 9 1.1 1.1M4.4 15.6l1.1-1.1m9-9 1.1-1.1"/>
+          </svg>
+          <span>General</span>
+        </button>
+
+        <button class="nav-item" data-tab="ai-connections" type="button">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="11" width="5" height="6" rx="1"/>
+            <rect x="8" y="6" width="5" height="11" rx="1"/>
+            <rect x="13" y="3" width="4" height="14" rx="1"/>
+          </svg>
+          <span>AI Connections</span>
+          <span id="nav-ai-warning" class="nav-warning hidden" title="Some API keys are not configured">!</span>
+        </button>
+
+        <button class="nav-item" data-tab="about" type="button">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="10" cy="10" r="8"/>
+            <path d="M10 6v1.5m0 6V14"/>
+            <circle cx="10" cy="9" r="0.8" fill="currentColor" stroke="none"/>
+          </svg>
+          <span>About</span>
+        </button>
+      </nav>
+    </aside>
+
+    <main class="tab-content">
+      <section id="tab-general" class="tab-panel">
+        <div class="panel-header">
+          <h1>General</h1>
+          <p>Configure default behaviour when Sentō is used on editable fields.</p>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-row">
+            <div class="setting-label">
+              <div class="setting-title">Default Rewrite Template</div>
+              <div class="setting-desc">Pre-selected template when the bubble opens</div>
+            </div>
+            <select id="default-template" class="setting-select"></select>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-label">
+              <div class="setting-title">AI Provider</div>
+              <div class="setting-desc">Which service runs rewrite requests</div>
+            </div>
+            <div class="segmented" id="provider-segmented">
+              <button class="seg-btn" data-value="openai" type="button">OpenAI</button>
+              <button class="seg-btn" data-value="gemini" type="button">Gemini</button>
+              <button class="seg-btn" data-value="grok" type="button">Grok</button>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-label">
+              <div class="setting-title">Theme</div>
+              <div class="setting-desc">Interface colour scheme</div>
+            </div>
+            <div class="segmented" id="theme-segmented">
+              <button class="seg-btn" data-value="dark" type="button">Dark</button>
+              <button class="seg-btn" data-value="light" type="button">Light</button>
+            </div>
+          </div>
+
+          <div class="setting-row setting-row--stack">
+            <div class="setting-label">
+              <div class="setting-title">System Prompt</div>
+              <div class="setting-desc">Prepended to every request. Leave blank to skip.</div>
+            </div>
+            <textarea id="system-prompt" class="setting-textarea" rows="3" placeholder="You are a helpful assistant..."></textarea>
+          </div>
+        </div>
+
+        <div class="panel-actions">
+          <button id="btn-save-settings" class="btn btn-primary" type="button">Save Settings</button>
+          <span id="settings-status" class="saved-msg hidden">✓ Saved</span>
+        </div>
+      </section>
+
+      <section id="tab-ai-connections" class="tab-panel hidden">
+        <div class="panel-header">
+          <h1>AI Connections</h1>
+          <p>API keys are stored locally on your device and never sent by Sentō except directly to your chosen provider.</p>
+        </div>
+
+        <div class="privacy-notice" role="note">
+          <div class="privacy-notice-title">Privacy &amp; Data Notice</div>
+          <p>When rewriting text, selected content is sent to OpenAI, Google, or xAI depending on your provider.</p>
+          <p class="privacy-notice-links"><strong>Tip:</strong> avoid sensitive credentials or private data in rewrites.</p>
+        </div>
+
+        <div class="provider-card">
+          <div class="provider-header">
+            <div class="provider-info">
+              <div class="provider-name">OpenAI</div>
+              <select id="openai-model" class="provider-model-select setting-select setting-select--sm"></select>
+            </div>
+            <span id="badge-openai" class="status-badge unconfigured">Not Configured</span>
+          </div>
+
+          <div class="provider-key-row">
+            <input id="openai-key" type="password" class="key-input" placeholder="sk-..." autocomplete="off" spellcheck="false" />
+          </div>
+
+          <div class="provider-footer">
+            <span class="provider-hint">Sent only to <code>api.openai.com</code></span>
+            <div class="provider-btns">
+              <button id="btn-save-openai" class="btn btn-primary btn-sm" type="button">Save</button>
+              <button id="btn-clear-openai" class="btn btn-ghost btn-sm" type="button">Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="provider-card">
+          <div class="provider-header">
+            <div class="provider-info">
+              <div class="provider-name">Gemini</div>
+              <select id="gemini-model" class="provider-model-select setting-select setting-select--sm"></select>
+            </div>
+            <span id="badge-gemini" class="status-badge unconfigured">Not Configured</span>
+          </div>
+
+          <div class="provider-key-row">
+            <input id="gemini-key" type="password" class="key-input" placeholder="AIza..." autocomplete="off" spellcheck="false" />
+          </div>
+
+          <div class="provider-footer">
+            <span class="provider-hint">Sent only to <code>generativelanguage.googleapis.com</code></span>
+            <div class="provider-btns">
+              <button id="btn-save-gemini" class="btn btn-primary btn-sm" type="button">Save</button>
+              <button id="btn-clear-gemini" class="btn btn-ghost btn-sm" type="button">Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="provider-card">
+          <div class="provider-header">
+            <div class="provider-info">
+              <div class="provider-name">Grok</div>
+              <select id="grok-model" class="provider-model-select setting-select setting-select--sm"></select>
+            </div>
+            <span id="badge-grok" class="status-badge unconfigured">Not Configured</span>
+          </div>
+
+          <div class="provider-key-row">
+            <input id="grok-key" type="password" class="key-input" placeholder="xai-..." autocomplete="off" spellcheck="false" />
+          </div>
+
+          <div class="provider-footer">
+            <span class="provider-hint">Sent only to <code>api.x.ai</code></span>
+            <div class="provider-btns">
+              <button id="btn-save-grok" class="btn btn-primary btn-sm" type="button">Save</button>
+              <button id="btn-clear-grok" class="btn btn-ghost btn-sm" type="button">Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <span id="keys-status" class="saved-msg hidden">✓ Saved</span>
+      </section>
+
+      <section id="tab-about" class="tab-panel hidden">
+        <div class="panel-header">
+          <h1>About Sentō</h1>
+          <p>Universal BYOK rewrite bubble focused on native-feeling text replacement.</p>
+        </div>
+
+        <div class="about-block">
+          <div class="about-row">
+            <span class="about-label">Version</span>
+            <span class="about-value" id="about-version">-</span>
+          </div>
+          <div class="about-row">
+            <span class="about-label">Author</span>
+            <span class="about-value">Artem Iagovdik</span>
+          </div>
+          <div class="about-row">
+            <span class="about-label">Storage</span>
+            <span class="about-value">chrome.storage.local</span>
+          </div>
+          <div class="about-row">
+            <span class="about-label">Stack</span>
+            <span class="about-value">MV3 + TS + Shadow DOM</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="settings.js"></script>
+</body>
+</html>
