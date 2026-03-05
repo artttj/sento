@@ -16,6 +16,7 @@ interface BubbleRefs {
   bubble: HTMLElement;
   templateSelect: HTMLSelectElement;
   templateButtons: HTMLButtonElement[];
+  gridPill: HTMLElement;
   btnRewrite: HTMLButtonElement;
   btnClose: HTMLButtonElement;
   selectionMeta: HTMLElement;
@@ -56,6 +57,7 @@ export class RewriteBubble {
       templateButtons: Array.from(
         this.shadow.querySelectorAll<HTMLButtonElement>('[data-template-id]')
       ),
+      gridPill: this.shadow.querySelector('.grid-pill') as HTMLElement,
       btnRewrite: this.shadow.querySelector('#sento-rewrite') as HTMLButtonElement,
       btnClose: this.shadow.querySelector('#sento-close') as HTMLButtonElement,
       selectionMeta: this.shadow.querySelector('#sento-selection-meta') as HTMLElement,
@@ -94,6 +96,19 @@ export class RewriteBubble {
     this.refs.bubble.classList.remove('hidden');
     this.refs.selectionMeta.textContent = `${selectedText.length.toLocaleString()} chars selected`;
     this.reposition();
+    this.initPillPosition();
+  }
+
+  private initPillPosition(): void {
+    const active = this.refs.templateButtons.find((b) => b.classList.contains('active'));
+    if (!active) return;
+    const pill = this.refs.gridPill;
+    const padding = 4;
+    pill.style.transition = 'none';
+    pill.style.width = `${active.offsetWidth}px`;
+    pill.style.transform = `translateX(${active.offsetLeft - padding}px)`;
+    void pill.offsetWidth;
+    pill.style.transition = '';
   }
 
   hide(): void {
@@ -138,11 +153,22 @@ export class RewriteBubble {
         button.classList.remove('active');
         void button.offsetWidth;
         button.classList.add('active');
+        this.positionPill(button);
       } else {
         button.classList.remove('active');
       }
       button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     }
+  }
+
+  private positionPill(button: HTMLButtonElement): void {
+    const pill = this.refs.gridPill;
+    const padding = 4;
+    pill.style.width = `${button.offsetWidth}px`;
+    pill.style.transform = `translateX(${button.offsetLeft - padding}px)`;
+    pill.classList.remove('squish');
+    void pill.offsetWidth;
+    pill.classList.add('squish');
   }
 
   setPreview(text: string): void {
@@ -321,6 +347,7 @@ export class RewriteBubble {
       <div class="sento-root" data-theme="dark">
         <div class="sento-bubble hidden">
           <div class="quick-grid" role="toolbar" aria-label="Sentō rewrite templates">
+            <div class="grid-pill"></div>
             ${templateButtons}
           </div>
 
