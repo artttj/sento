@@ -134,7 +134,13 @@ export class RewriteBubble {
     this.refs.templateSelect.value = templateId;
     for (const button of this.refs.templateButtons) {
       const isActive = button.dataset.templateId === templateId;
-      button.classList.toggle('active', isActive);
+      if (isActive) {
+        button.classList.remove('active');
+        void button.offsetWidth;
+        button.classList.add('active');
+      } else {
+        button.classList.remove('active');
+      }
       button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     }
   }
@@ -179,7 +185,7 @@ export class RewriteBubble {
       button.addEventListener('click', () => {
         const templateId = button.dataset.templateId as RewriteTemplateId;
         this.setTemplateId(templateId);
-        this.handlers.onRewrite(templateId);
+        setTimeout(() => this.handlers.onRewrite(templateId), 460);
       });
     }
 
