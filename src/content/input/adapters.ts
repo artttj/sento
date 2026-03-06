@@ -71,9 +71,8 @@ function isSelectionInside(el: HTMLElement, selection: Selection | null): boolea
   return el.contains(selection.getRangeAt(0).commonAncestorContainer);
 }
 
-function setNativeValue(el: HTMLInputElement | HTMLTextAreaElement, value: string): void {
-  const proto = el instanceof HTMLTextAreaElement ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype;
-  const descriptor = Object.getOwnPropertyDescriptor(proto, 'value');
+function setNativeValue(el: HTMLTextAreaElement, value: string): void {
+  const descriptor = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value');
   if (descriptor?.set) {
     descriptor.set.call(el, value);
     return;

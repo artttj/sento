@@ -4,14 +4,8 @@
 
 import type { EditableElement } from './types';
 
-const INPUT_TYPES = new Set(['text', 'search', 'url', 'email', 'tel']);
-
-export function isTextControl(el: Element): el is HTMLInputElement | HTMLTextAreaElement {
-  if (el instanceof HTMLTextAreaElement) return true;
-  if (el instanceof HTMLInputElement) {
-    return INPUT_TYPES.has(el.type || 'text');
-  }
-  return false;
+export function isTextControl(el: Element): el is HTMLTextAreaElement {
+  return el instanceof HTMLTextAreaElement;
 }
 
 export function isContentEditableElement(el: Element): el is HTMLElement {
@@ -27,7 +21,7 @@ export function findEditableFromNode(node: Node | null): EditableElement | null 
 
   if (node instanceof Element) {
     if (isSupportedEditable(node)) return node;
-    const closest = node.closest('textarea,input,[contenteditable="true"],[contenteditable=""]');
+    const closest = node.closest('textarea,[contenteditable="true"],[contenteditable=""]');
     return closest && isSupportedEditable(closest) ? closest : null;
   }
 
