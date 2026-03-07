@@ -166,9 +166,27 @@
         </div>
 
         <div class="privacy-notice" role="note">
-          <div class="privacy-notice-title" data-i18n="privacy-notice">Privacy &amp; Data Notice</div>
-          <p data-i18n="privacy-text">When rewriting text, selected content is sent to OpenAI, Google, or xAI depending on your provider.</p>
-          <p class="privacy-notice-links" data-i18n-html="privacy-tip"><strong>Tip:</strong> avoid sensitive credentials or private data in rewrites.</p>
+          <div class="privacy-notice-title">
+            <svg class="privacy-notice-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M10 2.5L1.5 17h17L10 2.5z"/>
+              <line x1="10" y1="8" x2="10" y2="12"/>
+              <circle cx="10" cy="15" r="0.6" fill="currentColor" stroke="none"/>
+            </svg>
+            Privacy &amp; Data Notice
+          </div>
+          <p>When rewriting text, the selected content is sent directly to your chosen AI provider. Please note:</p>
+          <ul>
+            <li><strong>No Storage:</strong> This extension stores nothing on any server. No content, no API keys — everything stays on your device.</li>
+            <li><strong>Data Transfer:</strong> Your selected text leaves your device and is processed by the AI provider (OpenAI, Google, or xAI).</li>
+            <li><strong>Personal Info:</strong> Avoid rewriting text that contains sensitive health, financial, or private credentials.</li>
+            <li><strong>Your Responsibility:</strong> You are responsible for ensuring compliance with GDPR, CCPA, and other applicable data laws.</li>
+          </ul>
+          <p class="privacy-notice-links">
+            <strong>Privacy Policies:</strong>
+            <a href="https://openai.com/policies/privacy-policy/" target="_blank" rel="noopener">OpenAI</a> ·
+            <a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener">Google AI</a> ·
+            <a href="https://x.ai/legal/privacy-policy/" target="_blank" rel="noopener">xAI</a>
+          </p>
         </div>
 
         <div class="provider-card">
@@ -249,7 +267,7 @@
         <div class="help-section">
           <h2 class="help-heading" data-i18n="how-it-works">How it works</h2>
           <ol class="help-steps">
-            <li data-i18n="step1">Select text inside any editable field (input, textarea, contenteditable).</li>
+            <li data-i18n="step1">Select text inside any editable field (textarea or contenteditable).</li>
             <li data-i18n-html="step2">The rewrite bubble appears below your selection with four templates: <strong>Fix</strong>, <strong>Pro</strong>, <strong>Mine</strong>, and <strong>Trim</strong>.</li>
             <li data-i18n="step3">Click a template. The text gets rewritten by your chosen AI provider.</li>
             <li data-i18n-html="step4">Review the preview, then click <strong>Apply</strong> to replace the original text.</li>
@@ -369,6 +387,13 @@
             <span class="about-value">MV3 + TS + Shadow DOM</span>
           </div>
         </div>
+
+        <a href="https://github.com/artttj/sento" target="_blank" rel="noopener" class="btn-github">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="github-icon">
+            <path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0 1 12 6.844a9.57 9.57 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.744 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+          </svg>
+          View on GitHub
+        </a>
       </section>
     </main>
   </div>
