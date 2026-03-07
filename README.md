@@ -1,4 +1,4 @@
-# <img src="icons/icon128.png" width="36" alt="" valign="middle" /> Sentō
+# <img src="https://raw.githubusercontent.com/artttj/sento/main/icons/icon128.png" width="36" alt="" valign="middle" /> Sentō
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](LICENSE) ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![Google Chrome](https://img.shields.io/badge/Google%20Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white)
 
@@ -6,7 +6,7 @@
 
 Sentō is a Chrome extension that puts a floating AI rewrite bubble inside any editable field. Select text, pick a template, review the result, and apply it in place. No copy-paste loop. No context switching.
 
-- **Works everywhere.** Textarea, input, contenteditable, ProseMirror editors, rich text fields. If you can type in it, Sentō rewrites it.
+- **Works everywhere.** Textarea, contenteditable, ProseMirror editors, rich text fields. If you can type paragraphs in it, Sentō rewrites it.
 - **See before you apply.** Every rewrite shows a preview. Nothing changes until you click Apply.
 - **Your keys, your price.** Connect your own OpenAI, Gemini, or Grok API key. You pay the provider directly—no markups, no subscriptions.
 - **Invisible until needed.** The bubble appears only when you select text. Zero distraction when you don't need it.
