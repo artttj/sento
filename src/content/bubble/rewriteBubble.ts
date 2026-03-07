@@ -116,7 +116,7 @@ export class RewriteBubble {
       button.disabled = loading;
       button.classList.toggle('loading', loading && button.dataset.templateId === selectedId);
     }
-    this.refs.btnRewrite.textContent = loading ? 'Rewriting…' : 'Auto-Fix';
+    this.refs.btnRewrite.textContent = loading ? 'Rewriting…' : 'Fix';
   }
 
   getTemplateId(): RewriteTemplateId {
@@ -313,12 +313,6 @@ export class RewriteBubble {
       shorten:
         '<svg viewBox="0 0 24 24" class="icon-svg" aria-hidden="true"><path d="M4 6h16v2.5H4zm0 5.5h11v2.5H4zm0 5.5h7v2.5H4z"/></svg>',
     };
-    const labelByTemplate: Record<RewriteTemplateId, string> = {
-      auto_fix:     'Fix',
-      professional: 'Pro',
-      custom:       'Mine',
-      shorten:      'Trim',
-    };
     const templateButtons = templates.map((tpl, index) => {
       const isActive = index === 0 ? ' active' : '';
       return `
@@ -331,7 +325,7 @@ export class RewriteBubble {
           title="${tpl.label}"
         >
           <span class="icon-wrap">${iconByTemplate[tpl.id]}</span>
-          <span class="tile-label">${labelByTemplate[tpl.id]}</span>
+          <span class="tile-label">${tpl.label}</span>
         </button>
       `;
     }).join('');

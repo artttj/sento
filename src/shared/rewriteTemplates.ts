@@ -13,25 +13,25 @@ export interface RewriteTemplate {
 export const REWRITE_TEMPLATES: RewriteTemplate[] = [
   {
     id: 'auto_fix',
-    label: 'Auto-Fix',
+    label: 'Fix',
     instruction:
       'Fix all grammar, spelling, and punctuation errors. Improve clarity where the meaning is ambiguous. Keep the original tone, voice, and intent. Do not add new ideas, remove content, or change the level of formality. If the text is already correct, return it unchanged.',
   },
   {
     id: 'professional',
-    label: 'Professional',
+    label: 'Pro',
     instruction:
       'Rewrite in a clear, professional tone suitable for business communication. Be direct and specific. Remove filler words and vague language. Use active voice. Keep sentences short. Maintain the original intent and all key details. Do not sound robotic or overly formal.',
   },
   {
     id: 'custom',
-    label: 'My Own',
+    label: 'Mine',
     instruction:
       'Rewrite the text according to the custom instruction provided by the user. If no custom instruction is set, improve the text for clarity and readability while keeping the original meaning.',
   },
   {
     id: 'shorten',
-    label: 'Shorten',
+    label: 'Trim',
     instruction:
       'Cut the text length by at least 40%. Keep every essential fact, action item, and decision. Remove redundancy, qualifiers, and filler. Prefer short sentences. If the text contains a list, keep the list but tighten each item. Do not drop important context.',
   },
