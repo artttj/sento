@@ -1,4 +1,4 @@
-# <img src="https://raw.githubusercontent.com/artttj/sento/main/icons/icon128.png" width="36" alt="" valign="middle" /> Sentō
+# <img src="icons/icon128.png" width="36" alt="" valign="middle" /> Sentō
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](LICENSE) ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![Google Chrome](https://img.shields.io/badge/Google%20Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white)
 
