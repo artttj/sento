@@ -145,6 +145,11 @@ export const bubbleStyles = `
   fill: currentColor;
 }
 
+.template-square:has(.tile-label.hidden) {
+  width: 34px;
+  padding: 0;
+}
+
 .tile-label {
   font-size: 9px;
   font-weight: 600;
