@@ -36,6 +36,16 @@
           <span id="nav-ai-warning" class="nav-warning hidden" title="Some API keys are not configured">!</span>
         </button>
 
+        <button class="nav-item" data-tab="templates" type="button">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="3" width="6" height="6" rx="1"/>
+            <rect x="11" y="3" width="6" height="6" rx="1"/>
+            <rect x="3" y="11" width="6" height="6" rx="1"/>
+            <rect x="11" y="11" width="6" height="6" rx="1"/>
+          </svg>
+          <span data-i18n="nav-templates">Templates</span>
+        </button>
+
         <button class="nav-item" data-tab="help" type="button">
           <svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
             <circle cx="10" cy="10" r="8"/>
@@ -124,13 +134,6 @@
             </div>
           </div>
 
-          <div class="setting-row setting-row--stack">
-            <div class="setting-label">
-              <div class="setting-title" data-i18n="system-prompt">System Prompt</div>
-              <div class="setting-desc" data-i18n="system-prompt-desc">Prepended to every request. A humanizer prompt is included by default.</div>
-            </div>
-            <textarea id="system-prompt" class="setting-textarea" rows="5" placeholder="You are a writing humanizer..."></textarea>
-          </div>
         </div>
 
         <div class="setting-group">
@@ -155,18 +158,33 @@
           </div>
         </div>
 
-        <div class="setting-group" id="template-configs">
-          <div class="setting-row setting-row--tpl-header">
-            <div class="setting-label">
-              <div class="setting-title" data-i18n="templates">Templates</div>
-              <div class="setting-desc" data-i18n="templates-desc">Toggle templates on or off and edit their prompts. Drag to reorder.</div>
-            </div>
-          </div>
-        </div>
-
         <div class="panel-actions">
           <button id="btn-save-settings" class="btn btn-primary" data-i18n="save-settings" type="button">Save Settings</button>
           <span id="settings-status" class="saved-msg hidden">✓ Saved</span>
+        </div>
+      </section>
+
+      <section id="tab-templates" class="tab-panel hidden">
+        <div class="panel-header">
+          <h1 data-i18n="nav-templates">Templates</h1>
+          <p data-i18n="templates-desc">Toggle templates on or off and edit their prompts. Drag to reorder.</p>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-row setting-row--stack">
+            <div class="setting-label">
+              <div class="setting-title" data-i18n="system-prompt">System Prompt</div>
+              <div class="setting-desc" data-i18n="system-prompt-desc">Prepended to every request. A humanizer prompt is included by default.</div>
+            </div>
+            <textarea id="system-prompt" class="setting-textarea" rows="5" placeholder="You are a writing humanizer..."></textarea>
+          </div>
+        </div>
+
+        <div class="setting-group" id="template-configs"></div>
+
+        <div class="panel-actions">
+          <button id="btn-save-templates" class="btn btn-primary" data-i18n="save-settings" type="button">Save Settings</button>
+          <span id="templates-status" class="saved-msg hidden">✓ Saved</span>
         </div>
       </section>
 

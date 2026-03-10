@@ -32,6 +32,8 @@ const refs = {
   siteList: document.getElementById('site-list') as HTMLTextAreaElement,
   btnSaveSettings: document.getElementById('btn-save-settings') as HTMLButtonElement,
   settingsStatus: document.getElementById('settings-status') as HTMLElement,
+  btnSaveTemplates: document.getElementById('btn-save-templates') as HTMLButtonElement,
+  templatesStatus: document.getElementById('templates-status') as HTMLElement,
 
   openaiModel: document.getElementById('openai-model') as HTMLSelectElement,
   geminiModel: document.getElementById('gemini-model') as HTMLSelectElement,
@@ -334,7 +336,7 @@ async function init(): Promise<void> {
   refs.grokKey.value = await getGrokKey();
   await refreshBadges();
 
-  refs.btnSaveSettings.addEventListener('click', async () => {
+  const saveAllSettings = async (statusEl: HTMLElement): Promise<void> => {
     const llmProvider = (getSegmentedValue(refs.providerSegmented) || 'openai') as Provider;
     const language = (getSegmentedValue(refs.languageSeg) || 'en') as AppLanguage;
     const siteListMode = (getSegmentedValue(refs.siteModeSeg) || 'all') as SiteListMode;
@@ -359,8 +361,11 @@ async function init(): Promise<void> {
       siteList,
     });
 
-    flash(refs.settingsStatus, '✓ Saved');
-  });
+    flash(statusEl, '✓ Saved');
+  };
+
+  refs.btnSaveSettings.addEventListener('click', () => void saveAllSettings(refs.settingsStatus));
+  refs.btnSaveTemplates.addEventListener('click', () => void saveAllSettings(refs.templatesStatus));
 
   refs.btnSaveOpenai.addEventListener('click', async () => {
     await saveOpenAIKey(refs.openaiKey.value.trim());

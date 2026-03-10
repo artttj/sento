@@ -8,6 +8,7 @@ export const TRANSLATIONS: Record<AppLanguage, Record<string, string>> = {
   en: {
     'nav-general': 'General',
     'nav-ai-connections': 'AI Connections',
+    'nav-templates': 'Templates',
     'nav-help': 'Help',
     'nav-privacy': 'Privacy',
     'nav-about': 'About',
@@ -90,6 +91,7 @@ export const TRANSLATIONS: Record<AppLanguage, Record<string, string>> = {
   de: {
     'nav-general': 'Allgemein',
     'nav-ai-connections': 'KI-Verbindungen',
+    'nav-templates': 'Vorlagen',
     'nav-help': 'Hilfe',
     'nav-privacy': 'Datenschutz',
     'nav-about': 'Über',

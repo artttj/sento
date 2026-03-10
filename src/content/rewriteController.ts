@@ -65,11 +65,6 @@ export class RewriteController {
     });
   }
 
-  stop(): void {
-    this.bubble.destroy();
-    this.tracker.stop();
-  }
-
   async start(): Promise<void> {
     const settings = await getProviderSettings();
     this.applySettings(settings);
@@ -138,7 +133,7 @@ export class RewriteController {
   }
 
   private async handleRewrite(templateId: RewriteTemplateId, forceApply = false): Promise<void> {
-    forceApply = forceApply || this.forceInsert;
+    const shouldForce = forceApply || this.forceInsert;
     if (this.loading) return;
 
     const snapshot = this.snapshot;
@@ -193,7 +188,7 @@ export class RewriteController {
         return;
       }
 
-      if (forceApply) {
+      if (shouldForce) {
         this.handleApply(response.payload.text);
         return;
       }

@@ -7,8 +7,8 @@ import type { RewriteTemplateId } from '../../shared/types';
 import type { SelectionRect } from '../types';
 import { bubbleStyles } from './styles';
 
-const INTERACTION_DELAY_POINTER = 1200;
-const INTERACTION_DELAY_POINTER_UP = 900;
+const INTERACTION_DELAY_ACQUIRE = 1200;
+const INTERACTION_DELAY_RELEASE = 900;
 const INTERACTION_DELAY_FOCUS_LOSE = 600;
 const REWRITE_DEBOUNCE_MS = 460;
 
@@ -251,23 +251,23 @@ export class RewriteBubble {
 
   private handlePointerDown = (): void => {
     this.interacting = true;
-    this.interactionUntil = Date.now() + INTERACTION_DELAY_POINTER;
+    this.interactionUntil = Date.now() + INTERACTION_DELAY_ACQUIRE;
   };
 
   private handlePointerUp = (): void => {
     this.interacting = false;
-    this.interactionUntil = Date.now() + INTERACTION_DELAY_POINTER_UP;
+    this.interactionUntil = Date.now() + INTERACTION_DELAY_RELEASE;
   };
 
   private handleFocusIn = (): void => {
     this.interacting = true;
-    this.interactionUntil = Date.now() + INTERACTION_DELAY_POINTER;
+    this.interactionUntil = Date.now() + INTERACTION_DELAY_ACQUIRE;
   };
 
   private handleFocusOut = (event: Event): void => {
     const relatedTarget = (event as FocusEvent).relatedTarget;
     if (this.containsTarget(relatedTarget)) {
-      this.interactionUntil = Date.now() + INTERACTION_DELAY_POINTER_UP;
+      this.interactionUntil = Date.now() + INTERACTION_DELAY_RELEASE;
       return;
     }
     this.interacting = false;
