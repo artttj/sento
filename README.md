@@ -95,23 +95,6 @@ Change it in **Settings → General → Language**.
 
 Prompts sent to AI providers remain in English.
 
-## Settings Overview
-
-### General
-
-- Default template
-- Pill label visibility
-- Force Insert (skip preview)
-- Output language
-- Site access control
-- Custom prompts
-
-### AI Connections
-
-- Add OpenAI, Gemini, or Grok keys
-- Select model
-- Choose provider
-
 ## Common Use Cases
 
 - **Jira / Linear tickets**
@@ -131,20 +114,11 @@ Prompts sent to AI providers remain in English.
 
 ## Privacy and Security
 
-- **Local API keys**
-  Stored only in `chrome.storage.local`.
+- **Local API keys** — stored only in `chrome.storage.local`
+- **Direct requests** — your text goes directly to the AI provider
+- **No backend** — Sentō runs entirely client-side
 
-- **Direct requests**
-  Your text goes directly to the provider API.
-
-- **No backend**
-  Sentō runs entirely client-side.
-
-Provider policies:
-
-- OpenAI: https://openai.com/policies/privacy-policy/
-- Google: https://ai.google.dev/gemini-api/terms
-- xAI: https://x.ai/legal/privacy-policy/
+Provider policies: [OpenAI](https://openai.com/policies/privacy-policy/), [Google](https://ai.google.dev/gemini-api/terms), [xAI](https://x.ai/legal/privacy-policy/)
 
 ## Tech Stack
 
@@ -152,16 +126,6 @@ Provider policies:
 - Chrome Extension Manifest V3
 - Shadow DOM UI isolation
 - esbuild bundling
-
-## Keyboard Shortcuts
-
-| Action | Shortcut |
-|---|---|
-| Force apply rewrite | Shift + Click template |
-
-Holding **Shift** skips the preview and applies the rewrite immediately.
-
-You can make this the default behavior in **Settings → General → Force Insert**.
 
 ## License
 
