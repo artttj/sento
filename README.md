@@ -1,41 +1,39 @@
 # <img src="icons/icon128.png" width="36" alt="" valign="middle" /> Sentō
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](LICENSE)
+![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![Google Chrome](https://img.shields.io/badge/Google%20Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white)
 
 ## Rewrite anywhere
 
-**Sentō** is a Chrome extension that adds a floating AI rewrite bubble to any editable field.  
+**Sentō** is a Chrome extension that adds a floating AI rewrite bubble to any editable field.
 Select text, choose a template, review the result, and apply it instantly.
 
 No copy–paste. No switching tabs. No context loss.
 
----
-
 ## Key Features
 
-- **Works everywhere**  
-  Textareas, `contenteditable`, ProseMirror editors, and rich text fields.  
+- **Works everywhere**
+  Textareas, `contenteditable`, ProseMirror editors, and rich text fields.
   If you can type paragraphs in it, Sentō can rewrite it.
 
-- **Preview before applying**  
+- **Preview before applying**
   Every rewrite shows a preview. Nothing changes until you click **Apply**.
+  Enable **Force Insert** in Settings to skip the preview and apply directly.
+  Or hold **Shift** when clicking a template for a one-off force apply.
 
-- **Bring your own API key**  
-  Connect your own OpenAI, Gemini, or Grok API key.  
+- **Bring your own API key**
+  Connect your own OpenAI, Gemini, or Grok API key.
   You pay the provider directly, no subscriptions, no markup.
 
-- **Appears only when needed**  
+- **Appears only when needed**
   The rewrite bubble shows only when text is selected.
 
-- **Flexible site control**  
+- **Flexible site control**
   Choose **All Sites**, **Allow List**, or **Block List**.
 
-- **Privacy by design**  
+- **Privacy by design**
   Your API keys stay local and requests go directly to the AI provider.
-
----
 
 ## Quick Start
 
@@ -65,8 +63,6 @@ Click the **Sentō icon → Settings → AI Connections**
 | Google Gemini | https://aistudio.google.com/app/apikey |
 | Grok (xAI) | https://console.x.ai/ |
 
----
-
 ## How It Works
 
 1. Select text in any editable field
@@ -76,8 +72,6 @@ Click the **Sentō icon → Settings → AI Connections**
 5. Click **Apply** or **Retry**
 
 Formatting such as lists and bullet points is preserved, including in editors like Jira, Confluence, and ProseMirror.
-
----
 
 ## Rewrite Templates
 
@@ -90,8 +84,6 @@ Formatting such as lists and bullet points is preserved, including in editors li
 
 Templates can be reordered, disabled, or customized in **Settings**.
 
----
-
 ## Languages
 
 The interface currently supports:
@@ -102,8 +94,6 @@ The interface currently supports:
 Change it in **Settings → General → Language**.
 
 Prompts sent to AI providers remain in English.
-
----
 
 ## Settings Overview
 
@@ -122,36 +112,32 @@ Prompts sent to AI providers remain in English.
 - Select model
 - Choose provider
 
----
-
 ## Common Use Cases
 
-- **Jira / Linear tickets**  
+- **Jira / Linear tickets**
   Turn rough notes into a clean update.
 
-- **Email drafts**  
+- **Email drafts**
   Fix tone and grammar before sending.
 
-- **Slack / Teams messages**  
+- **Slack / Teams messages**
   Rewrite messages for clarity.
 
-- **Code review comments**  
+- **Code review comments**
   Make suggestions concise and professional.
 
-- **Notion or Markdown writing**  
+- **Notion or Markdown writing**
   Improve formatting and readability.
-
----
 
 ## Privacy and Security
 
-- **Local API keys**  
+- **Local API keys**
   Stored only in `chrome.storage.local`.
 
-- **Direct requests**  
+- **Direct requests**
   Your text goes directly to the provider API.
 
-- **No backend**  
+- **No backend**
   Sentō runs entirely client-side.
 
 Provider policies:
@@ -160,16 +146,12 @@ Provider policies:
 - Google: https://ai.google.dev/gemini-api/terms
 - xAI: https://x.ai/legal/privacy-policy/
 
----
-
 ## Tech Stack
 
 - TypeScript (strict mode)
 - Chrome Extension Manifest V3
 - Shadow DOM UI isolation
 - esbuild bundling
-
----
 
 ## Keyboard Shortcuts
 
@@ -181,8 +163,6 @@ Holding **Shift** skips the preview and applies the rewrite immediately.
 
 You can make this the default behavior in **Settings → General → Force Insert**.
 
----
-
 ## License
 
-MIT License. See [LICENSE](LICENSE).
+MIT

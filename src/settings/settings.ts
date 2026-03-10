@@ -336,7 +336,12 @@ async function init(): Promise<void> {
   refs.grokKey.value = await getGrokKey();
   await refreshBadges();
 
+  let saving = false;
+
   const saveAllSettings = async (statusEl: HTMLElement): Promise<void> => {
+    if (saving) return;
+    saving = true;
+
     const llmProvider = (getSegmentedValue(refs.providerSegmented) || 'openai') as Provider;
     const language = (getSegmentedValue(refs.languageSeg) || 'en') as AppLanguage;
     const siteListMode = (getSegmentedValue(refs.siteModeSeg) || 'all') as SiteListMode;
@@ -361,11 +366,12 @@ async function init(): Promise<void> {
       siteList,
     });
 
+    saving = false;
     flash(statusEl, '✓ Saved');
   };
 
-  refs.btnSaveSettings.addEventListener('click', () => void saveAllSettings(refs.settingsStatus));
-  refs.btnSaveTemplates.addEventListener('click', () => void saveAllSettings(refs.templatesStatus));
+  refs.btnSaveSettings.addEventListener('click', async () => { await saveAllSettings(refs.settingsStatus); });
+  refs.btnSaveTemplates.addEventListener('click', async () => { await saveAllSettings(refs.templatesStatus); });
 
   refs.btnSaveOpenai.addEventListener('click', async () => {
     await saveOpenAIKey(refs.openaiKey.value.trim());
