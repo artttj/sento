@@ -52,6 +52,7 @@ export const DEFAULT_SETTINGS = {
   grokModel: 'grok-3-mini',
   systemPrompt: DEFAULT_SYSTEM_PROMPT,
   showPillLabels: true,
+  forceInsert: false,
   language: 'en',
   siteListMode: 'all',
   siteList: [] as string[],

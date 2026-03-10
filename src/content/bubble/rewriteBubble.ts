@@ -7,6 +7,11 @@ import type { RewriteTemplateId } from '../../shared/types';
 import type { SelectionRect } from '../types';
 import { bubbleStyles } from './styles';
 
+const INTERACTION_DELAY_POINTER = 1200;
+const INTERACTION_DELAY_POINTER_UP = 900;
+const INTERACTION_DELAY_FOCUS_LOSE = 600;
+const REWRITE_DEBOUNCE_MS = 460;
+
 interface BubbleHandlers {
   onRewrite: (templateId: RewriteTemplateId, forceApply?: boolean) => void;
   onApply: (text: string) => void;
@@ -204,7 +209,7 @@ export class RewriteBubble {
         const templateId = button.dataset.templateId as RewriteTemplateId;
         const forceApply = (e as MouseEvent).shiftKey;
         this.setTemplateId(templateId);
-        setTimeout(() => this.handlers.onRewrite(templateId, forceApply), 460);
+        setTimeout(() => this.handlers.onRewrite(templateId, forceApply), REWRITE_DEBOUNCE_MS);
       });
     }
 
@@ -246,27 +251,27 @@ export class RewriteBubble {
 
   private handlePointerDown = (): void => {
     this.interacting = true;
-    this.interactionUntil = Date.now() + 1200;
+    this.interactionUntil = Date.now() + INTERACTION_DELAY_POINTER;
   };
 
   private handlePointerUp = (): void => {
     this.interacting = false;
-    this.interactionUntil = Date.now() + 900;
+    this.interactionUntil = Date.now() + INTERACTION_DELAY_POINTER_UP;
   };
 
   private handleFocusIn = (): void => {
     this.interacting = true;
-    this.interactionUntil = Date.now() + 1200;
+    this.interactionUntil = Date.now() + INTERACTION_DELAY_POINTER;
   };
 
   private handleFocusOut = (event: Event): void => {
     const relatedTarget = (event as FocusEvent).relatedTarget;
     if (this.containsTarget(relatedTarget)) {
-      this.interactionUntil = Date.now() + 900;
+      this.interactionUntil = Date.now() + INTERACTION_DELAY_POINTER_UP;
       return;
     }
     this.interacting = false;
-    this.interactionUntil = Date.now() + 600;
+    this.interactionUntil = Date.now() + INTERACTION_DELAY_FOCUS_LOSE;
   };
 
   private scheduleReposition(): void {
@@ -339,7 +344,7 @@ export class RewriteBubble {
           </div>
 
           <select id="sento-template" class="hidden-select" aria-hidden="true" tabindex="-1">${options}</select>
-          <button id="sento-rewrite" class="hidden-trigger" type="button">Auto-Fix</button>
+          <button id="sento-rewrite" class="hidden-trigger" type="button">Fix</button>
           <button id="sento-close" class="close-btn" type="button" aria-label="Close">×</button>
 
           <div id="sento-status" class="status-msg hidden">

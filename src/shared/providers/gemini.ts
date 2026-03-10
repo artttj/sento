@@ -3,27 +3,7 @@
  */
 
 import type { ProviderStrategy } from '../types';
-import { ProviderBadResponseError, ProviderHttpError } from './errors';
-
-interface CompletionResponse {
-  choices?: Array<{ message?: { content?: string } }>;
-  error?: { message?: string };
-}
-
-async function parseResponse(res: Response): Promise<string> {
-  const body = (await res.json().catch(() => ({}))) as CompletionResponse;
-
-  if (!res.ok) {
-    throw new ProviderHttpError(res.status, body.error?.message ?? `HTTP ${res.status}`);
-  }
-
-  const text = body.choices?.[0]?.message?.content?.trim();
-  if (!text) {
-    throw new ProviderBadResponseError('Provider returned an empty rewrite result.');
-  }
-
-  return text;
-}
+import { parseProviderResponse } from './utils';
 
 export class GeminiProvider implements ProviderStrategy {
   async rewrite(input: {
@@ -53,6 +33,6 @@ export class GeminiProvider implements ProviderStrategy {
       signal: input.signal,
     });
 
-    return parseResponse(res);
+    return parseProviderResponse(res);
   }
 }

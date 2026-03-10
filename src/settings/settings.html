@@ -92,6 +92,17 @@
 
           <div class="setting-row">
             <div class="setting-label">
+              <div class="setting-title" data-i18n="force-insert">Force Insert</div>
+              <div class="setting-desc" data-i18n="force-insert-desc">Skip preview and apply rewrites directly. Same as holding Shift when clicking a template.</div>
+            </div>
+            <label class="tpl-switch">
+              <input id="force-insert" type="checkbox" />
+              <span class="tpl-switch-track"></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-label">
               <div class="setting-title" data-i18n="language">Language</div>
               <div class="setting-desc" data-i18n="language-desc">Output language for rewrites</div>
             </div>
@@ -270,7 +281,7 @@
             <li data-i18n="step1">Select text inside any editable field (textarea or contenteditable).</li>
             <li data-i18n-html="step2">The rewrite bubble appears below your selection with four templates: <strong>Fix</strong>, <strong>Pro</strong>, <strong>Mine</strong>, and <strong>Trim</strong>.</li>
             <li data-i18n="step3">Click a template. The text gets rewritten by your chosen AI provider.</li>
-            <li data-i18n-html="step4">Review the preview, then click <strong>Apply</strong> to replace the original text.</li>
+            <li data-i18n-html="step4">Review the preview, then click <strong>Apply</strong> to replace the original text. Skip this step by enabling Force Insert in General settings.</li>
           </ol>
         </div>
 
@@ -307,7 +318,7 @@
               </div>
               <div class="shortcut-info">
                 <div class="shortcut-action" data-i18n="force-apply">Force apply</div>
-                <div class="shortcut-label" data-i18n="force-apply-desc">Hold Shift when clicking a template to skip the preview and apply the rewrite directly</div>
+                <div class="shortcut-label" data-i18n="force-apply-desc">Hold Shift when clicking a template to skip the preview and apply the rewrite directly. Enable Force Insert in General to always skip preview.</div>
               </div>
             </div>
           </div>

@@ -45,6 +45,7 @@ export async function getProviderSettings(): Promise<ProviderSettings> {
     templateConfigs: raw.templateConfigs,
     templateOrder: Array.isArray(raw.templateOrder) ? raw.templateOrder : undefined,
     showPillLabels: raw.showPillLabels ?? DEFAULT_SETTINGS.showPillLabels,
+    forceInsert: raw.forceInsert ?? DEFAULT_SETTINGS.forceInsert,
     language: (raw.language && isAppLanguage(raw.language)) ? raw.language : DEFAULT_SETTINGS.language,
     siteListMode,
     siteList: Array.isArray(raw.siteList) ? raw.siteList : [...DEFAULT_SETTINGS.siteList],

@@ -24,6 +24,7 @@ const refs = {
   providerSegmented: document.getElementById('provider-segmented') as HTMLElement,
   systemPrompt: document.getElementById('system-prompt') as HTMLTextAreaElement,
   showPillLabels: document.getElementById('show-pill-labels') as HTMLInputElement,
+  forceInsert: document.getElementById('force-insert') as HTMLInputElement,
   languageSeg: document.getElementById('language-segmented') as HTMLElement,
   siteModeSeg: document.getElementById('site-mode-segmented') as HTMLElement,
   siteListRow: document.getElementById('site-list-row') as HTMLElement,
@@ -316,6 +317,7 @@ async function init(): Promise<void> {
   setSegmentedValue(refs.providerSegmented, settings.llmProvider);
   refs.systemPrompt.value = settings.systemPrompt ?? '';
   refs.showPillLabels.checked = settings.showPillLabels;
+  refs.forceInsert.checked = settings.forceInsert;
   setSegmentedValue(refs.languageSeg, settings.language);
   setSegmentedValue(refs.siteModeSeg, settings.siteListMode);
   refs.siteList.value = settings.siteList.join('\n');
@@ -351,6 +353,7 @@ async function init(): Promise<void> {
       templateConfigs: collectTemplateConfigs(),
       templateOrder: collectTemplateOrder(),
       showPillLabels: refs.showPillLabels.checked,
+      forceInsert: refs.forceInsert.checked,
       language,
       siteListMode,
       siteList,

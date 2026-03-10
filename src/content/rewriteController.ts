@@ -26,6 +26,7 @@ export class RewriteController {
   private loading = false;
   private hasPreview = false;
   private lastTemplateId: RewriteTemplateId = 'auto_fix';
+  private forceInsert = false;
 
   constructor() {
     this.inputHandler = new InputHandler();
@@ -64,6 +65,11 @@ export class RewriteController {
     });
   }
 
+  stop(): void {
+    this.bubble.destroy();
+    this.tracker.stop();
+  }
+
   async start(): Promise<void> {
     const settings = await getProviderSettings();
     this.applySettings(settings);
@@ -91,6 +97,9 @@ export class RewriteController {
     }
     if (settings.showPillLabels !== undefined) {
       this.bubble.setShowLabels(settings.showPillLabels);
+    }
+    if (settings.forceInsert !== undefined) {
+      this.forceInsert = settings.forceInsert;
     }
   }
 
@@ -129,6 +138,7 @@ export class RewriteController {
   }
 
   private async handleRewrite(templateId: RewriteTemplateId, forceApply = false): Promise<void> {
+    forceApply = forceApply || this.forceInsert;
     if (this.loading) return;
 
     const snapshot = this.snapshot;

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="popup">
+    <div class="header">
+      <img src="../icons/icon32.png" class="logo" alt="" aria-hidden="true" />
+      <span class="brand">Sentō</span>
+      <button class="icon-btn" id="btn-settings" title="Open Settings" type="button">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <circle cx="10" cy="10" r="3"/>
+          <path d="M10 2v1.5m0 13V18M2 10h1.5m13 0H18M4.4 4.4l1.1 1.1m9 9 1.1 1.1M4.4 15.6l1.1-1.1m9-9 1.1-1.1"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="site-row">
+      <span class="site-name" id="site-name">—</span>
+    </div>
+
+    <button class="power-btn" id="btn-toggle" type="button" aria-label="Toggle site">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M18.36 6.64A9 9 0 1 1 5.64 6.64"/>
+        <line x1="12" y1="2" x2="12" y2="12"/>
+      </svg>
+    </button>
+
+    <span class="status-label" id="status-label"></span>
+
+    <div class="divider"></div>
+
+    <div class="footer">
+      <span class="footer-hint" id="footer-hint"></span>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

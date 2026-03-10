@@ -84,6 +84,7 @@ Template prompts sent to AI are always in English.
 **General**
 - Default template to auto-select
 - Pill label visibility
+- Force Insert — skip preview and apply rewrites directly
 - Output language
 - Site access (allow/deny/block specific domains)
 - Custom rewrite prompts per template
@@ -130,7 +131,7 @@ Provider privacy: [OpenAI](https://openai.com/policies/privacy-policy/) · [Goog
 | --- | --- |
 | **Force apply** | Shift + Click template |
 
-Skip the preview and apply the rewrite directly.
+Hold Shift when clicking a template to skip the preview and apply the rewrite directly. To always skip the preview without holding Shift, enable **Force Insert** in Settings → General.
 
 ---
 

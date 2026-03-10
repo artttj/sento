@@ -44,6 +44,9 @@ async function build() {
   copyHtml(path.join(src, 'settings', 'settings.html'), path.join(dist, 'settings', 'settings.html'));
   await minifyCss(path.join(src, 'settings', 'settings.css'), path.join(dist, 'settings', 'settings.css'));
 
+  copyHtml(path.join(src, 'popup', 'popup.html'), path.join(dist, 'popup', 'popup.html'));
+  await minifyCss(path.join(src, 'popup', 'popup.css'), path.join(dist, 'popup', 'popup.css'));
+
   const common = {
     bundle: true,
     minify: true,
@@ -68,6 +71,12 @@ async function build() {
       entryPoints: [path.join(src, 'settings', 'settings.ts')],
       format: 'iife',
       outfile: path.join(dist, 'settings', 'settings.js'),
+    }),
+    esbuild.build({
+      ...common,
+      entryPoints: [path.join(src, 'popup', 'popup.ts')],
+      format: 'iife',
+      outfile: path.join(dist, 'popup', 'popup.js'),
     }),
   ]);
 

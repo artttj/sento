@@ -25,6 +25,7 @@ export interface ProviderSettings {
   templateConfigs?: Partial<Record<RewriteTemplateId, TemplateConfig>>;
   templateOrder?: RewriteTemplateId[];
   showPillLabels: boolean;
+  forceInsert: boolean;
   language: AppLanguage;
   siteListMode: SiteListMode;
   siteList: string[];
