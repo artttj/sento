@@ -1,118 +1,164 @@
 # <img src="icons/icon128.png" width="36" alt="" valign="middle" /> Sentō
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](LICENSE) ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![Google Chrome](https://img.shields.io/badge/Google%20Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](LICENSE)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![Google Chrome](https://img.shields.io/badge/Google%20Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white)
 
-## Rewrite anywhere.
+## Rewrite anywhere
 
-Sentō is a Chrome extension that puts a floating AI rewrite bubble inside any editable field. Select text, pick a template, review the result, and apply it in place. No copy-paste loop. No context switching.
+**Sentō** is a Chrome extension that adds a floating AI rewrite bubble to any editable field.  
+Select text, choose a template, review the result, and apply it instantly.
 
-- **Works everywhere.** Textarea, contenteditable, ProseMirror editors, rich text fields. If you can type paragraphs in it, Sentō rewrites it.
-- **See before you apply.** Every rewrite shows a preview. Nothing changes until you click Apply.
-- **Your keys, your price.** Connect your own OpenAI, Gemini, or Grok API key. You pay the provider directly—no markups, no subscriptions.
-- **Invisible until needed.** The bubble appears only when you select text. Zero distraction when you don't need it.
-- **Smart site control.** Choose All Sites, Allow List, or Block List to control where the bubble shows.
-- **Privacy by design.** Your API keys stay local. Your text goes straight to the AI provider. Sentō has no backend.
+No copy–paste. No switching tabs. No context loss.
+
+---
+
+## Key Features
+
+- **Works everywhere**  
+  Textareas, `contenteditable`, ProseMirror editors, and rich text fields.  
+  If you can type paragraphs in it, Sentō can rewrite it.
+
+- **Preview before applying**  
+  Every rewrite shows a preview. Nothing changes until you click **Apply**.
+
+- **Bring your own API key**  
+  Connect your own OpenAI, Gemini, or Grok API key.  
+  You pay the provider directly, no subscriptions, no markup.
+
+- **Appears only when needed**  
+  The rewrite bubble shows only when text is selected.
+
+- **Flexible site control**  
+  Choose **All Sites**, **Allow List**, or **Block List**.
+
+- **Privacy by design**  
+  Your API keys stay local and requests go directly to the AI provider.
 
 ---
 
 ## Quick Start
 
-1. **Clone & build:**
-   ```bash
-   git clone https://github.com/artttj/sento.git && cd sento
-   npm install && npm run build
-   ```
+### 1. Clone and build
 
-2. **Install:**
-   - Open `chrome://extensions`
-   - Turn on **Developer mode** (top right)
-   - Click **Load unpacked**
-   - Select the `dist/` folder
+```bash
+git clone https://github.com/artttj/sento.git
+cd sento
+npm install
+npm run build
+```
 
-3. **Connect an API key:**
-   - Click the Sentō icon → **Settings** → **AI Connections**
-   - Pick a provider and add your API key
+### 2. Install the extension
+
+1. Open `chrome://extensions`
+2. Enable **Developer mode**
+3. Click **Load unpacked**
+4. Select the `dist/` folder
+
+### 3. Add your API key
+
+Click the **Sentō icon → Settings → AI Connections**
 
 | Provider | Get a key |
-| --- | --- |
-| OpenAI | [platform.openai.com/api-keys](https://platform.openai.com/api-keys) |
-| Google Gemini | [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey) |
-| Grok (xAI) | [console.x.ai](https://console.x.ai/) |
+|---|---|
+| OpenAI | https://platform.openai.com/api-keys |
+| Google Gemini | https://aistudio.google.com/app/apikey |
+| Grok (xAI) | https://console.x.ai/ |
 
 ---
 
 ## How It Works
 
 1. Select text in any editable field
-2. The rewrite bubble appears below your selection
-3. Click a template (Fix, Pro, Mine, Trim)
+2. The rewrite bubble appears
+3. Choose a template (Fix, Pro, Mine, Trim)
 4. Review the rewritten text
-5. Click **Apply** to replace, or **Retry** for a new version
+5. Click **Apply** or **Retry**
 
-Rich text (bullet points, lists) is preserved and re-inserted correctly—even in Jira, Confluence, and ProseMirror editors.
+Formatting such as lists and bullet points is preserved, including in editors like Jira, Confluence, and ProseMirror.
 
 ---
 
 ## Rewrite Templates
 
 | Template | Purpose |
-| --- | --- |
-| **Fix** | Fix grammar, spelling, and clarity. Keep the tone. |
-| **Pro** | Polished professional tone. Concise and courteous. |
-| **Mine** | Your own custom instruction. Configure in Settings. |
-| **Trim** | Make it 40% shorter. Keep key points. |
+|---|---|
+| **Fix** | Correct grammar, spelling, and clarity |
+| **Pro** | Rewrite with a concise professional tone |
+| **Mine** | Your custom instruction |
+| **Trim** | Shorten text by about 40 percent |
 
-Drag to reorder templates. Toggle any on or off. Edit the instruction for "Mine" directly in Settings.
+Templates can be reordered, disabled, or customized in **Settings**.
 
 ---
 
 ## Languages
 
-The interface supports:
+The interface currently supports:
 
-- **English**
-- **Deutsch** (German)
+- English
+- Deutsch (German)
 
-Switch in Settings → General → Language. Your choice is remembered.
+Change it in **Settings → General → Language**.
 
-Template prompts sent to AI are always in English.
+Prompts sent to AI providers remain in English.
 
 ---
 
-## Settings
+## Settings Overview
 
-**General**
-- Default template to auto-select
+### General
+
+- Default template
 - Pill label visibility
-- Force Insert — skip preview and apply rewrites directly
+- Force Insert (skip preview)
 - Output language
-- Site access (allow/deny/block specific domains)
-- Custom rewrite prompts per template
+- Site access control
+- Custom prompts
 
-**AI Connections**
-- Add and manage API keys for OpenAI, Gemini, Grok
-- Choose which provider to use
-- Select model per provider
+### AI Connections
 
----
-
-## Real-World Uses
-
-- **Jira/Linear tickets:** Turn rambling comments into a clean summary
-- **Email drafts:** Fix tone and grammar without leaving your inbox
-- **Slack/Teams messages:** Rewrite for clarity before hitting send
-- **Code reviews:** Polish comments and suggestions
-- **Notion/Markdown:** Fix formatting and tighten prose
+- Add OpenAI, Gemini, or Grok keys
+- Select model
+- Choose provider
 
 ---
 
-## Privacy & Security
+## Common Use Cases
 
-- **Local keys:** API keys stored in `chrome.storage.local` only. Never synced or sent anywhere.
-- **Direct connection:** Your text travels straight from your browser to the provider API. Sentō never sees it.
-- **No backend:** Sentō is 100% client-side. Open source. No servers.
+- **Jira / Linear tickets**  
+  Turn rough notes into a clean update.
 
-Provider privacy: [OpenAI](https://openai.com/policies/privacy-policy/) · [Google](https://ai.google.dev/gemini-api/terms) · [xAI](https://x.ai/legal/privacy-policy/)
+- **Email drafts**  
+  Fix tone and grammar before sending.
+
+- **Slack / Teams messages**  
+  Rewrite messages for clarity.
+
+- **Code review comments**  
+  Make suggestions concise and professional.
+
+- **Notion or Markdown writing**  
+  Improve formatting and readability.
+
+---
+
+## Privacy and Security
+
+- **Local API keys**  
+  Stored only in `chrome.storage.local`.
+
+- **Direct requests**  
+  Your text goes directly to the provider API.
+
+- **No backend**  
+  Sentō runs entirely client-side.
+
+Provider policies:
+
+- OpenAI: https://openai.com/policies/privacy-policy/
+- Google: https://ai.google.dev/gemini-api/terms
+- xAI: https://x.ai/legal/privacy-policy/
 
 ---
 
@@ -120,21 +166,23 @@ Provider privacy: [OpenAI](https://openai.com/policies/privacy-policy/) · [Goog
 
 - TypeScript (strict mode)
 - Chrome Extension Manifest V3
-- Shadow DOM for UI isolation
-- esbuild for fast builds
+- Shadow DOM UI isolation
+- esbuild bundling
 
 ---
 
 ## Keyboard Shortcuts
 
-| Action | Windows / macOS |
-| --- | --- |
-| **Force apply** | Shift + Click template |
+| Action | Shortcut |
+|---|---|
+| Force apply rewrite | Shift + Click template |
 
-Hold Shift when clicking a template to skip the preview and apply the rewrite directly. To always skip the preview without holding Shift, enable **Force Insert** in Settings → General.
+Holding **Shift** skips the preview and applies the rewrite immediately.
+
+You can make this the default behavior in **Settings → General → Force Insert**.
 
 ---
 
 ## License
 
-MIT. You can use, modify, and distribute it. Keep the copyright notice. See [LICENSE](LICENSE).
+MIT License. See [LICENSE](LICENSE).
