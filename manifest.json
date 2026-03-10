@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Sentō",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Sentō: universal BYOK rewrite bubble for web editors.",
   "icons": {
     "16": "icons/icon16.png",
