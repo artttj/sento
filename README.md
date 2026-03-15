@@ -6,44 +6,22 @@
 
 ## Rewrite anywhere
 
-**Sentō** is a Chrome extension that adds a floating AI rewrite bubble to any editable field.
-Select text, choose a template, review the result, and apply it instantly.
+Sentō is a Chrome extension that adds a floating AI rewrite bubble to any editable field. Select text, choose a template, review the result, and apply it instantly.
 
-No copy–paste. No switching tabs. No context loss.
+No copy-paste. No switching tabs. No context loss.
 
-<table><tr><td>
-
-![Sentō in action](screenshots/screenshot_1.png)
-
-</td><td>
-
-![Sentō settings](screenshots/screenshot_2.jpg)
-
-</td></tr></table>
+<p align="center">
+  <img src="screenshots/sento_bubble.png" width="600" alt="Sentō in action">
+</p>
 
 ## Key Features
 
-- **Works everywhere**
-  Textareas, `contenteditable`, ProseMirror editors, and rich text fields.
-  If you can type paragraphs in it, Sentō can rewrite it.
-
-- **Preview before applying**
-  Every rewrite shows a preview. Nothing changes until you click **Apply**.
-  Enable **Force Insert** in Settings to skip the preview and apply directly.
-  Or hold **Shift** when clicking a template for a one-off force apply.
-
-- **Bring your own API key**
-  Connect your own OpenAI, Gemini, or Grok API key.
-  You pay the provider directly, no subscriptions, no markup.
-
-- **Appears only when needed**
-  The rewrite bubble shows only when text is selected.
-
-- **Flexible site control**
-  Choose **All Sites**, **Allow List**, or **Block List**.
-
-- **Privacy by design**
-  Your API keys stay local and requests go directly to the AI provider.
+- **Works everywhere**: textareas, contenteditable, ProseMirror, Jira, Confluence, Notion.
+- **Preview before applying**: nothing changes until you click Apply. Hold Shift to skip preview.
+- **Bring your own API key**: OpenAI, Gemini, or Grok. No subscriptions, no markup.
+- **Appears only when needed**: bubble shows only when text is selected.
+- **Flexible site control**: All Sites, Allow List, or Block List.
+- **Privacy by design**: keys stay local, requests go directly to AI providers.
 
 ## Quick Start
 
@@ -59,13 +37,13 @@ npm run build
 ### 2. Install the extension
 
 1. Open `chrome://extensions`
-2. Enable **Developer mode**
-3. Click **Load unpacked**
+2. Enable Developer mode
+3. Click Load unpacked
 4. Select the `dist/` folder
 
 ### 3. Add your API key
 
-Click the **Sentō icon → Settings → AI Connections**
+Click the Sentō icon → Settings → AI Connections
 
 | Provider | Get a key |
 |---|---|
@@ -79,54 +57,40 @@ Click the **Sentō icon → Settings → AI Connections**
 2. The rewrite bubble appears
 3. Choose a template (Fix, Pro, Mine, Trim)
 4. Review the rewritten text
-5. Click **Apply** or **Retry**
+5. Click Apply or Retry
 
-Formatting such as lists and bullet points is preserved, including in editors like Jira, Confluence, and ProseMirror.
+Formatting like lists and bullet points is preserved, including in Jira, Confluence, and ProseMirror.
 
 ## Rewrite Templates
 
 | Template | Purpose |
 |---|---|
-| **Fix** | Correct grammar, spelling, and clarity |
-| **Pro** | Rewrite with a concise professional tone |
-| **Mine** | Your custom instruction |
-| **Trim** | Shorten text by about 40 percent |
+| Fix | Correct grammar, spelling, and clarity |
+| Pro | Rewrite with a concise professional tone |
+| Mine | Your custom instruction |
+| Trim | Shorten text by about 40% |
 
-Templates can be reordered, disabled, or customized in **Settings**.
+Templates can be reordered, disabled, or customized in Settings.
 
 ## Languages
 
-The interface currently supports:
-
-- English
-- Deutsch (German)
-
-Change it in **Settings → General → Language**.
+The interface supports English and Deutsch (German). Change it in Settings → General → Language.
 
 Prompts sent to AI providers remain in English.
 
 ## Common Use Cases
 
-- **Jira / Linear tickets**
-  Turn rough notes into a clean update.
-
-- **Email drafts**
-  Fix tone and grammar before sending.
-
-- **Slack / Teams messages**
-  Rewrite messages for clarity.
-
-- **Code review comments**
-  Make suggestions concise and professional.
-
-- **Notion or Markdown writing**
-  Improve formatting and readability.
+- **Jira / Linear tickets**: turn rough notes into a clean update
+- **Email drafts**: fix tone and grammar before sending
+- **Slack / Teams**: rewrite messages for clarity
+- **Code review comments**: make suggestions concise
+- **Notion or Markdown**: improve formatting and readability
 
 ## Privacy and Security
 
-- **Local API keys** — stored only in `chrome.storage.local`
-- **Direct requests** — your text goes directly to the AI provider
-- **No backend** — Sentō runs entirely client-side
+- API keys stored only in chrome.storage.local
+- Text goes directly to the AI provider
+- No backend: runs entirely client-side
 
 Provider policies: [OpenAI](https://openai.com/policies/privacy-policy/), [Google](https://ai.google.dev/gemini-api/terms), [xAI](https://x.ai/legal/privacy-policy/)
 
@@ -139,4 +103,4 @@ Provider policies: [OpenAI](https://openai.com/policies/privacy-policy/), [Googl
 
 ## License
 
-MIT — see [LICENSE](LICENSE) for details.
+MIT: see [LICENSE](LICENSE) for details.
