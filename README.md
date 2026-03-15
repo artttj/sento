@@ -11,9 +11,15 @@ Select text, choose a template, review the result, and apply it instantly.
 
 No copy–paste. No switching tabs. No context loss.
 
-| Rewrite bubble | Settings |
-|---|---|
-| ![Sentō in action](screenshots/screenshot_1.png) | ![Sentō settings](screenshots/screenshot_2.jpg) |
+<table><tr><td>
+
+![Sentō in action](screenshots/screenshot_1.png)
+
+</td><td>
+
+![Sentō settings](screenshots/screenshot_2.jpg)
+
+</td></tr></table>
 
 ## Key Features
 
