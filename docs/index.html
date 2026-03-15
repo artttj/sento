@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sentō — AI Rewrite Bubble for Chrome</title>
+  
+  <meta name="description" content="Sentō is a Chrome extension that adds a floating AI rewrite bubble to any editable field. Select text, choose a template, and apply instantly.">
+  
+  <meta property="og:title" content="Sentō — AI Rewrite Bubble for Chrome">
+  <meta property="og:description" content="Rewrite anywhere without copy-paste. Select text, pick a template, and apply instantly. Works on Jira, Notion, Slack, and more.">
+  <meta property="og:image" content="https://artttj.github.io/sento/screenshots/sento_bubble.png">
+  <meta property="og:url" content="https://artttj.github.io/sento/">
+  <meta property="og:type" content="website">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sentō — AI Rewrite Bubble for Chrome">
+  <meta name="twitter:description" content="Rewrite anywhere without copy-paste. Select text, pick a template, and apply instantly.">
+  <meta name="twitter:image" content="https://artttj.github.io/sento/screenshots/sento_bubble.png">
+  
+  <link rel="icon" type="image/png" href="https://artttj.github.io/sento/icons/icon128.png">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0a0a0b;
+      color: #e4e4e7;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    
+    header {
+      padding: 48px 0 32px;
+      text-align: center;
+    }
+    
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    
+    .logo img {
+      width: 48px;
+      height: 48px;
+    }
+    
+    .logo h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.5px;
+    }
+    
+    .tagline {
+      font-size: 18px;
+      color: #a1a1aa;
+      margin-bottom: 32px;
+    }
+    
+    .hero-image {
+      background: #18181b;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 48px;
+      border: 1px solid #27272a;
+    }
+    
+    .hero-image img {
+      width: 100%;
+      max-width: 700px;
+      display: block;
+      margin: 0 auto;
+      border-radius: 8px;
+    }
+    
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #3b82f6;
+      color: #fff;
+      font-weight: 600;
+      font-size: 16px;
+      padding: 14px 28px;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.1s;
+    }
+    
+    .cta:hover {
+      background: #2563eb;
+    }
+    
+    .cta:active {
+      transform: scale(0.98);
+    }
+    
+    .cta-secondary {
+      background: #27272a;
+      color: #e4e4e7;
+      margin-left: 12px;
+    }
+    
+    .cta-secondary:hover {
+      background: #3f3f46;
+    }
+    
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+    
+    .feature {
+      background: #18181b;
+      border: 1px solid #27272a;
+      border-radius: 12px;
+      padding: 24px;
+    }
+    
+    .feature h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    
+    .feature p {
+      font-size: 14px;
+      color: #a1a1aa;
+    }
+    
+    .providers {
+      text-align: center;
+      padding: 32px 0;
+      border-top: 1px solid #27272a;
+      border-bottom: 1px solid #27272a;
+      margin-bottom: 48px;
+    }
+    
+    .providers p {
+      font-size: 14px;
+      color: #71717a;
+      margin-bottom: 16px;
+    }
+    
+    .provider-logos {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    
+    .provider-logos span {
+      font-size: 18px;
+      font-weight: 600;
+      color: #52525b;
+    }
+    
+    footer {
+      text-align: center;
+      padding: 32px 0;
+      color: #52525b;
+      font-size: 14px;
+    }
+    
+    footer a {
+      color: #71717a;
+      text-decoration: none;
+    }
+    
+    footer a:hover {
+      color: #a1a1aa;
+    }
+    
+    @media (max-width: 640px) {
+      .logo h1 {
+        font-size: 24px;
+      }
+      
+      .tagline {
+        font-size: 16px;
+      }
+      
+      .cta {
+        display: block;
+        text-align: center;
+        margin-bottom: 12px;
+      }
+      
+      .cta-secondary {
+        display: block;
+        text-align: center;
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">
+        <img src="https://artttj.github.io/sento/icons/icon128.png" alt="Sentō">
+        <h1>Sentō</h1>
+      </div>
+      <p class="tagline">Rewrite anywhere without copy-paste</p>
+      
+      <a href="https://github.com/artttj/sento" class="cta">
+        Install Extension
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="https://github.com/artttj/sento" class="cta cta-secondary">View on GitHub</a>
+    </div>
+  </header>
+  
+  <main class="container">
+    <div class="hero-image">
+      <img src="https://artttj.github.io/sento/screenshots/sento_bubble.png" alt="Sentō in action">
+    </div>
+    
+    <div class="features">
+      <div class="feature">
+        <h3>Works Everywhere</h3>
+        <p>Textareas, contenteditable, ProseMirror, Jira, Confluence, Notion, and more.</p>
+      </div>
+      <div class="feature">
+        <h3>Preview Before Applying</h3>
+        <p>Nothing changes until you click Apply. Hold Shift to skip preview.</p>
+      </div>
+      <div class="feature">
+        <h3>Bring Your Own Key</h3>
+        <p>Use OpenAI, Gemini, or Grok. No subscriptions, no markup.</p>
+      </div>
+      <div class="feature">
+        <h3>Privacy First</h3>
+        <p>API keys stay local. Requests go directly to AI providers. No backend.</p>
+      </div>
+    </div>
+    
+    <div class="providers">
+      <p>Supports your preferred AI provider</p>
+      <div class="provider-logos">
+        <span>OpenAI</span>
+        <span>Gemini</span>
+        <span>Grok</span>
+      </div>
+    </div>
+  </main>
+  
+  <footer>
+    <div class="container">
+      <p>MIT Licensed · <a href="https://github.com/artttj/sento">Source on GitHub</a></p>
+    </div>
+  </footer>
+</body>
+</html>
