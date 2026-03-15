@@ -4,14 +4,15 @@
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![Google Chrome](https://img.shields.io/badge/Google%20Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white)
 
-![Sentō app icon](icons/icon512.png)
-
 ## Rewrite anywhere
 
 **Sentō** is a Chrome extension that adds a floating AI rewrite bubble to any editable field.
 Select text, choose a template, review the result, and apply it instantly.
 
 No copy–paste. No switching tabs. No context loss.
+
+![Sentō in action](screenshots/screenshot_1.png)
+![Sentō settings](screenshots/screenshot_2.jpg)
 
 ## Key Features
 
