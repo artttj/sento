@@ -11,7 +11,7 @@ Sentō is a Chrome extension that adds a floating AI rewrite bubble to any edita
 No copy-paste. No switching tabs. No context loss.
 
 <p align="center">
-  <img src="screenshots/sento_bubble.png" width="600" alt="Sentō in action">
+  <img src="screenshots/sento_1400x560.png" width="600" alt="Sentō in action">
 </p>
 
 ## Key Features
