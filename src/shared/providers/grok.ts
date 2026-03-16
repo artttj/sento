@@ -1,6 +1,4 @@
-/**
- * Grok AI provider strategy.
- */
+// Copyright (c) Artem Iagovdik
 
 import type { ProviderStrategy } from '../types';
 import { ProviderBadResponseError, ProviderHttpError } from './errors';

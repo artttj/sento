@@ -1,6 +1,4 @@
-/**
- * Input event handling for triggering text replacement after a rewrite.
- */
+// Copyright (c) Artem Iagovdik
 
 import { isTextControl } from '../editable';
 import type { ApplyResult, SelectionSnapshot } from '../types';

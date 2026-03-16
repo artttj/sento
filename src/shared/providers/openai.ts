@@ -1,6 +1,4 @@
-/**
- * OpenAI provider strategy.
- */
+// Copyright (c) Artem Iagovdik
 
 import type { ProviderStrategy } from '../types';
 import { parseProviderResponse } from './utils';

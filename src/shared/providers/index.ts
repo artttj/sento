@@ -1,6 +1,4 @@
-/**
- * Provider strategy registry.
- */
+// Copyright (c) Artem Iagovdik
 
 import type { ProviderName, ProviderStrategy } from '../types';
 import { OpenAIProvider } from './openai';

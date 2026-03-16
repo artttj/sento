@@ -1,6 +1,4 @@
-/**
- * Message type definitions for extension runtime communication.
- */
+// Copyright (c) Artem Iagovdik
 
 import type { RewriteRequestPayload, RewriteResponsePayload, RewriteErrorPayload } from './types';
 

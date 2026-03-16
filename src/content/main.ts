@@ -1,6 +1,4 @@
-/**
- * Content script entry point. Checks site access and boots the RewriteController.
- */
+// Copyright (c) Artem Iagovdik
 
 import { getProviderSettings, isSiteAllowed } from '../shared/storage';
 import { RewriteController } from './rewriteController';

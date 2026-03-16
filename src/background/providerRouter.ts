@@ -1,6 +1,4 @@
-/**
- * Provider router. Resolves provider context and sends rewrite requests to the selected AI provider.
- */
+// Copyright (c) Artem Iagovdik
 
 import { REQUEST_TIMEOUT_MS } from '../shared/constants';
 import { buildRewritePrompt } from '../shared/rewriteTemplates';

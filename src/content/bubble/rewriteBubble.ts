@@ -1,6 +1,4 @@
-/**
- * Rewrite bubble UI component rendered inside Shadow DOM.
- */
+// Copyright (c) Artem Iagovdik
 
 import { REWRITE_TEMPLATES, type RewriteTemplate } from '../../shared/rewriteTemplates';
 import type { RewriteTemplateId } from '../../shared/types';

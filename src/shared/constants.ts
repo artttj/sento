@@ -1,6 +1,4 @@
-/**
- * Extension-wide constants and default settings.
- */
+// Copyright (c) Artem Iagovdik
 
 export const STORAGE_KEYS = {
   SETTINGS: 'apc_settings',

@@ -1,6 +1,4 @@
-/**
- * Shadow DOM styles for the rewrite bubble.
- */
+// Copyright (c) Artem Iagovdik
 
 export const bubbleStyles = `
 :host {

@@ -1,6 +1,4 @@
-/**
- * Rewrite template definitions and prompt builder.
- */
+// Copyright (c) Artem Iagovdik
 
 import type { RewriteTemplateId } from './types';
 

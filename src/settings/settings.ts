@@ -1,6 +1,4 @@
-/**
- * Settings page entry point. Loads state, wires controls, and handles saves.
- */
+// Copyright (c) Artem Iagovdik
 
 import { PROVIDER_MODELS } from '../shared/constants';
 import { getOrderedTemplates, REWRITE_TEMPLATES } from '../shared/rewriteTemplates';

@@ -1,6 +1,4 @@
-/**
- * Provider-specific error classes for HTTP and bad-response failures.
- */
+// Copyright (c) Artem Iagovdik
 
 export class ProviderHttpError extends Error {
   status: number;

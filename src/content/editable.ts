@@ -1,6 +1,4 @@
-/**
- * Editable element detection and structured text extraction.
- */
+// Copyright (c) Artem Iagovdik
 
 import type { EditableElement } from './types';
 

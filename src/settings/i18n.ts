@@ -1,6 +1,4 @@
-/**
- * Settings UI translations. Supports English and German.
- */
+// Copyright (c) Artem Iagovdik
 
 import type { AppLanguage } from '../shared/types';
 

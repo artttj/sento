@@ -1,6 +1,4 @@
-/**
- * Shared provider utilities.
- */
+// Copyright (c) Artem Iagovdik
 
 import { ProviderBadResponseError, ProviderHttpError } from './errors';
 

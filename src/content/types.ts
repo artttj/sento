@@ -1,6 +1,4 @@
-/**
- * Shared types for the content script layer.
- */
+// Copyright (c) Artem Iagovdik
 
 export type EditableElement = HTMLTextAreaElement | HTMLElement;
 

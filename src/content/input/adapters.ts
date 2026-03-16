@@ -1,6 +1,4 @@
-/**
- * Input adapters for text insertion via native events and simulated paste.
- */
+// Copyright (c) Artem Iagovdik
 
 import { extractStructuredText, isContentEditableElement, isTextControl } from '../editable';
 

@@ -1,6 +1,4 @@
-/**
- * Background service worker. Listens for rewrite messages and routes them to the AI provider.
- */
+// Copyright (c) Artem Iagovdik
 
 import { MSG, type RuntimeMessage } from '../shared/messages';
 import { rewriteWithProvider } from './providerRouter';

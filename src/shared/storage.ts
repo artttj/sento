@@ -1,6 +1,4 @@
-/**
- * Chrome storage layer for provider settings, API keys, and site access.
- */
+// Copyright (c) Artem Iagovdik
 
 import { DEFAULT_SETTINGS, STORAGE_KEYS } from './constants';
 import type { AppLanguage, ProviderName, ProviderSettings, RewriteTemplateId, SiteListMode } from './types';

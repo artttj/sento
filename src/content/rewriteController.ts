@@ -1,6 +1,4 @@
-/**
- * Orchestrates the rewrite flow: selection tracking, bubble display, and API calls.
- */
+// Copyright (c) Artem Iagovdik
 
 import { MAX_SELECTION_CHARS } from '../shared/constants';
 import { MSG, type RewriteRuntimeResult } from '../shared/messages';

@@ -1,6 +1,4 @@
-/**
- * Core type definitions shared across the extension.
- */
+// Copyright (c) Artem Iagovdik
 
 export type ProviderName = 'openai' | 'gemini' | 'grok';
 
