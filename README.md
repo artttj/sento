@@ -16,7 +16,7 @@ No copy-paste. No switching tabs. No context loss.
 
 ## Key Features
 
-- **Works everywhere**: textareas, contenteditable, ProseMirror, Jira, Confluence, Notion.
+- **Works everywhere**: textareas, contenteditable, ProseMirror, Jira, Confluence.
 - **Preview before applying**: nothing changes until you click Apply. Hold Shift to skip preview.
 - **Bring your own API key**: OpenAI, Gemini, or Grok. No subscriptions, no markup.
 - **Appears only when needed**: bubble shows only when text is selected.
@@ -84,7 +84,7 @@ Prompts sent to AI providers remain in English.
 - **Email drafts**: fix tone and grammar before sending
 - **Slack / Teams**: rewrite messages for clarity
 - **Code review comments**: make suggestions concise
-- **Notion or Markdown**: improve formatting and readability
+- **Markdown**: improve formatting and readability
 
 ## Privacy and Security
 
