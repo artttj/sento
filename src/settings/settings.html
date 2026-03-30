@@ -122,18 +122,6 @@
             </div>
           </div>
 
-          <div class="setting-row">
-            <div class="setting-label">
-              <div class="setting-title" data-i18n="ai-provider">AI Provider</div>
-              <div class="setting-desc" data-i18n="ai-provider-desc">Which service runs rewrite requests</div>
-            </div>
-            <div class="segmented" id="provider-segmented">
-              <button class="seg-btn" data-value="openai" type="button">OpenAI</button>
-              <button class="seg-btn" data-value="gemini" type="button">Gemini</button>
-              <button class="seg-btn" data-value="grok" type="button">Grok</button>
-            </div>
-          </div>
-
         </div>
 
         <div class="setting-group">
@@ -216,6 +204,20 @@
             <a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener">Google AI</a> ·
             <a href="https://x.ai/legal/privacy-policy/" target="_blank" rel="noopener">xAI</a>
           </p>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-row">
+            <div class="setting-label">
+              <div class="setting-title" data-i18n="ai-provider">AI Provider</div>
+              <div class="setting-desc" data-i18n="ai-provider-desc">Which service runs rewrite requests</div>
+            </div>
+            <div class="segmented" id="provider-segmented">
+              <button class="seg-btn" data-value="openai" type="button">OpenAI</button>
+              <button class="seg-btn" data-value="gemini" type="button">Gemini</button>
+              <button class="seg-btn" data-value="grok" type="button">Grok</button>
+            </div>
+          </div>
         </div>
 
         <div class="provider-card">
@@ -347,7 +349,7 @@
           <ul class="help-steps">
             <li data-i18n-html="tips-system-prompt"><strong>System prompt:</strong> the default prompt humanizes all rewrites. You can change it in General settings.</li>
             <li data-i18n-html="tips-long-text"><strong>Long text:</strong> selections over 12,000 characters get truncated. Keep selections focused for better results.</li>
-            <li data-i18n-html="tips-providers"><strong>Multiple providers:</strong> configure all three providers in AI Connections, then switch between them in General settings.</li>
+            <li data-i18n-html="tips-providers"><strong>Multiple providers:</strong> configure all three providers below, then select which one to use for rewrites.</li>
           </ul>
         </div>
       </section>
