@@ -19,6 +19,10 @@ function isAppLanguage(value: string): value is AppLanguage {
   return value === 'en' || value === 'de';
 }
 
+/**
+ * Loads provider settings from chrome.storage.local with validation.
+ * Falls back to defaults for missing or invalid values.
+ */
 export async function getProviderSettings(): Promise<ProviderSettings> {
   const stored = await chrome.storage.local.get(STORAGE_KEYS.SETTINGS);
   const raw = (stored[STORAGE_KEYS.SETTINGS] as Partial<ProviderSettings> | undefined) ?? {};
@@ -50,6 +54,9 @@ export async function getProviderSettings(): Promise<ProviderSettings> {
   };
 }
 
+/**
+ * Merges partial settings into existing settings and persists to storage.
+ */
 export async function saveProviderSettings(partial: Partial<ProviderSettings>): Promise<void> {
   const current = await getProviderSettings();
   await chrome.storage.local.set({

@@ -9,6 +9,8 @@ const INTERACTION_DELAY_ACQUIRE = 1200;
 const INTERACTION_DELAY_RELEASE = 900;
 const INTERACTION_DELAY_FOCUS_LOSE = 600;
 const REWRITE_DEBOUNCE_MS = 460;
+const BUBBLE_OFFSET_Y = 10;
+const VIEWPORT_PADDING = 8;
 
 interface BubbleHandlers {
   onRewrite: (templateId: RewriteTemplateId, forceApply?: boolean) => void;
@@ -283,18 +285,17 @@ export class RewriteBubble {
   private reposition(): void {
     if (!this.lastRect) return;
 
-    const padding = 8;
     const targetX = this.lastRect.left + this.lastRect.width / 2;
-    const targetY = this.lastRect.bottom + 10;
+    const targetY = this.lastRect.bottom + BUBBLE_OFFSET_Y;
 
     const width = this.refs.bubble.offsetWidth || 200;
     const height = this.refs.bubble.offsetHeight || 40;
 
-    const left = Math.min(Math.max(padding, targetX - width / 2), window.innerWidth - width - padding);
+    const left = Math.min(Math.max(VIEWPORT_PADDING, targetX - width / 2), window.innerWidth - width - VIEWPORT_PADDING);
 
     let top = targetY;
-    if (top + height > window.innerHeight - padding) {
-      top = Math.max(padding, this.lastRect.top - height - 10);
+    if (top + height > window.innerHeight - VIEWPORT_PADDING) {
+      top = Math.max(VIEWPORT_PADDING, this.lastRect.top - height - BUBBLE_OFFSET_Y);
     }
 
     this.refs.bubble.style.left = `${Math.round(left)}px`;

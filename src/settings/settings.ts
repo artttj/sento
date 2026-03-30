@@ -12,7 +12,7 @@ import {
   getGrokKey,
   saveGrokKey,
 } from '../shared/storage';
-import type { AppLanguage, RewriteTemplateId, SiteListMode, TemplateConfig } from '../shared/types';
+import type { AppLanguage, ProviderSettings, RewriteTemplateId, SiteListMode, TemplateConfig } from '../shared/types';
 import { t } from './i18n';
 
 type Provider = 'openai' | 'gemini' | 'grok';
@@ -288,10 +288,7 @@ function wireTabs(): void {
   }
 }
 
-async function init(): Promise<void> {
-  wireTabs();
-  refs.aboutVersion.textContent = chrome.runtime.getManifest().version;
-
+function populateTemplateDropdown(): void {
   refs.defaultTemplate.innerHTML = '';
   REWRITE_TEMPLATES.forEach((template) => {
     const option = document.createElement('option');
@@ -299,20 +296,9 @@ async function init(): Promise<void> {
     option.textContent = template.label;
     refs.defaultTemplate.appendChild(option);
   });
-  populateSelect(refs.openaiModel, PROVIDER_MODELS.openai, PROVIDER_MODELS.openai[0]);
-  populateSelect(refs.geminiModel, PROVIDER_MODELS.gemini, PROVIDER_MODELS.gemini[0]);
-  populateSelect(refs.grokModel, PROVIDER_MODELS.grok, PROVIDER_MODELS.grok[0]);
+}
 
-  wireSegmented(refs.providerSegmented);
-  wireSegmented(refs.languageSeg, (value) => {
-    applyTranslations(value as AppLanguage);
-  });
-  wireSegmented(refs.siteModeSeg, (value) => {
-    const lang = (getSegmentedValue(refs.languageSeg) || 'en') as AppLanguage;
-    updateSiteListVisibility(value as SiteListMode);
-  });
-
-  const settings = await getProviderSettings();
+function applySettings(settings: ProviderSettings): void {
   refs.defaultTemplate.value = settings.defaultTemplateId ?? 'auto_fix';
   setSegmentedValue(refs.providerSegmented, settings.llmProvider);
   refs.systemPrompt.value = settings.systemPrompt ?? '';
@@ -321,56 +307,54 @@ async function init(): Promise<void> {
   setSegmentedValue(refs.languageSeg, settings.language);
   setSegmentedValue(refs.siteModeSeg, settings.siteListMode);
   refs.siteList.value = settings.siteList.join('\n');
-  updateSiteListVisibility(settings.siteListMode);
   refs.openaiModel.value = settings.openaiModel;
   refs.geminiModel.value = settings.geminiModel;
   refs.grokModel.value = settings.grokModel;
   renderTemplateConfigs(settings.templateConfigs ?? {}, settings.templateOrder);
-
+  updateSiteListVisibility(settings.siteListMode);
   applyTranslations(settings.language);
+}
 
-  refs.openaiKey.value = await getOpenAIKey();
-  refs.geminiKey.value = await getGeminiKey();
-  refs.grokKey.value = await getGrokKey();
-  await refreshBadges();
+let saving = false;
 
-  let saving = false;
+async function saveAllSettings(statusEl: HTMLElement): Promise<void> {
+  if (saving) return;
+  saving = true;
 
-  const saveAllSettings = async (statusEl: HTMLElement): Promise<void> => {
-    if (saving) return;
-    saving = true;
+  const llmProvider = (getSegmentedValue(refs.providerSegmented) || 'openai') as Provider;
+  const language = (getSegmentedValue(refs.languageSeg) || 'en') as AppLanguage;
+  const siteListMode = (getSegmentedValue(refs.siteModeSeg) || 'all') as SiteListMode;
+  const siteList = refs.siteList.value
+    .split('\n')
+    .map((s) => s.trim())
+    .filter(Boolean);
 
-    const llmProvider = (getSegmentedValue(refs.providerSegmented) || 'openai') as Provider;
-    const language = (getSegmentedValue(refs.languageSeg) || 'en') as AppLanguage;
-    const siteListMode = (getSegmentedValue(refs.siteModeSeg) || 'all') as SiteListMode;
-    const siteList = refs.siteList.value
-      .split('\n')
-      .map((s) => s.trim())
-      .filter(Boolean);
+  await saveProviderSettings({
+    defaultTemplateId: refs.defaultTemplate.value as RewriteTemplateId,
+    llmProvider,
+    openaiModel: refs.openaiModel.value,
+    geminiModel: refs.geminiModel.value,
+    grokModel: refs.grokModel.value,
+    systemPrompt: refs.systemPrompt.value,
+    templateConfigs: collectTemplateConfigs(),
+    templateOrder: collectTemplateOrder(),
+    showPillLabels: refs.showPillLabels.checked,
+    forceInsert: refs.forceInsert.checked,
+    language,
+    siteListMode,
+    siteList,
+  });
 
-    await saveProviderSettings({
-      defaultTemplateId: refs.defaultTemplate.value as RewriteTemplateId,
-      llmProvider,
-      openaiModel: refs.openaiModel.value,
-      geminiModel: refs.geminiModel.value,
-      grokModel: refs.grokModel.value,
-      systemPrompt: refs.systemPrompt.value,
-      templateConfigs: collectTemplateConfigs(),
-      templateOrder: collectTemplateOrder(),
-      showPillLabels: refs.showPillLabels.checked,
-      forceInsert: refs.forceInsert.checked,
-      language,
-      siteListMode,
-      siteList,
-    });
+  saving = false;
+  flash(statusEl, '✓ Saved');
+}
 
-    saving = false;
-    flash(statusEl, '✓ Saved');
-  };
-
+function wireSettingsButtons(): void {
   refs.btnSaveSettings.addEventListener('click', async () => { await saveAllSettings(refs.settingsStatus); });
   refs.btnSaveTemplates.addEventListener('click', async () => { await saveAllSettings(refs.templatesStatus); });
+}
 
+function wireProviderKeyButtons(): void {
   refs.btnSaveOpenai.addEventListener('click', async () => {
     await saveOpenAIKey(refs.openaiKey.value.trim());
     await refreshBadges();
@@ -406,6 +390,48 @@ async function init(): Promise<void> {
     await refreshBadges();
     flash(refs.keysStatus, '✓ Grok key cleared');
   });
+}
+
+async function loadApiKeys(): Promise<void> {
+  const [openaiKey, geminiKey, grokKey] = await Promise.all([
+    getOpenAIKey(),
+    getGeminiKey(),
+    getGrokKey(),
+  ]);
+  refs.openaiKey.value = openaiKey;
+  refs.geminiKey.value = geminiKey;
+  refs.grokKey.value = grokKey;
+
+  setBadge(refs.badgeOpenai, !!openaiKey);
+  setBadge(refs.badgeGemini, !!geminiKey);
+  setBadge(refs.badgeGrok, !!grokKey);
+  refs.navAiWarning.classList.toggle('hidden', !!(openaiKey && geminiKey && grokKey));
+}
+
+async function init(): Promise<void> {
+  wireTabs();
+  refs.aboutVersion.textContent = chrome.runtime.getManifest().version;
+
+  populateTemplateDropdown();
+  populateSelect(refs.openaiModel, PROVIDER_MODELS.openai, PROVIDER_MODELS.openai[0]);
+  populateSelect(refs.geminiModel, PROVIDER_MODELS.gemini, PROVIDER_MODELS.gemini[0]);
+  populateSelect(refs.grokModel, PROVIDER_MODELS.grok, PROVIDER_MODELS.grok[0]);
+
+  wireSegmented(refs.providerSegmented);
+  wireSegmented(refs.languageSeg, (value) => {
+    applyTranslations(value as AppLanguage);
+  });
+  wireSegmented(refs.siteModeSeg, (value) => {
+    const lang = (getSegmentedValue(refs.languageSeg) || 'en') as AppLanguage;
+    updateSiteListVisibility(value as SiteListMode);
+  });
+
+  const settings = await getProviderSettings();
+  applySettings(settings);
+  await loadApiKeys();
+
+  wireSettingsButtons();
+  wireProviderKeyButtons();
 }
 
 void init().catch((error: unknown) => {

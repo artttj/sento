@@ -1,7 +1,7 @@
 // Copyright (c) Artem Iagovdik
 
 import type { ProviderStrategy } from '../types';
-import { parseProviderResponse } from './utils';
+import { buildMessages, parseProviderResponse } from './utils';
 
 export class GeminiProvider implements ProviderStrategy {
   async rewrite(input: {
@@ -11,11 +11,7 @@ export class GeminiProvider implements ProviderStrategy {
     userPrompt: string;
     signal: AbortSignal;
   }): Promise<string> {
-    const messages: Array<{ role: 'system' | 'user'; content: string }> = [];
-    if (input.systemPrompt?.trim()) {
-      messages.push({ role: 'system', content: input.systemPrompt.trim() });
-    }
-    messages.push({ role: 'user', content: input.userPrompt });
+    const messages = buildMessages(input.systemPrompt, input.userPrompt);
 
     const res = await fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', {
       method: 'POST',

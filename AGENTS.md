@@ -146,7 +146,8 @@ Structured error codes: `MISSING_KEY`, `UNAUTHORIZED`, `RATE_LIMITED`, `NETWORK`
 - `declare(strict_types)` equivalent: TypeScript strict mode is on
 - Private methods go at the bottom of each class
 - No `var_dump`/`console.log` debugging left in production code
-- Self-explanatory code preferred over comments
+- Self-explanatory code preferred over comments - do NOT add code comments
+- JSDoc is acceptable for exported public API functions in storage.ts and similar shared utilities
 - Avoid unnecessary abstractions
 
 ## Privacy model

@@ -228,6 +228,7 @@ export class RewriteController {
     if (!this.pendingRequestId) return;
 
     if (isExtensionAlive()) {
+      // Ignore errors - request may have already completed or extension context invalidated
       await chrome.runtime.sendMessage({
         type: MSG.REWRITE_ABORT,
         requestId: this.pendingRequestId,
