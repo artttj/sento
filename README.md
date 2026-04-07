@@ -14,7 +14,9 @@ No copy-paste. No switching tabs. No context loss.
   <img src="screenshots/sento_1400x560.png" width="600" alt="Sentō in action">
 </p>
 
-Chrome Web Store: https://chromewebstore.google.com/detail/njdfdfhcnlfkigkppnhbihlidjmiepfb?utm_source=item-share-cb
+## Chrome Web Store
+
+https://chromewebstore.google.com/detail/njdfdfhcnlfkigkppnhbihlidjmiepfb?utm_source=item-share-cb
 
 ## Key Features
 
