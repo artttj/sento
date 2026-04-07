@@ -8,13 +8,13 @@
 
 Sentō is a Chrome extension that adds a floating AI rewrite bubble to any editable field. Select text, choose a template, review the result, and apply it instantly.
 
-Chrome Web Store: https://chromewebstore.google.com/detail/njdfdfhcnlfkigkppnhbihlidjmiepfb?utm_source=item-share-cb
-
 No copy-paste. No switching tabs. No context loss.
 
 <p align="center">
   <img src="screenshots/sento_1400x560.png" width="600" alt="Sentō in action">
 </p>
+
+Chrome Web Store: https://chromewebstore.google.com/detail/njdfdfhcnlfkigkppnhbihlidjmiepfb?utm_source=item-share-cb
 
 ## Key Features
 
