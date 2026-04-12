@@ -1,13 +1,21 @@
 // Copyright (c) Artem Iagovdik
 
-import { OpenAICompatibleProvider } from './base/OpenAICompatibleProvider';
+import { buildMessages, parseProviderResponse } from './utils';
+import type { ProviderStrategy } from '../types';
 
-export class CustomEndpointProvider extends OpenAICompatibleProvider {
+export interface RewriteInput {
+  apiKey: string;
+  model: string;
+  systemPrompt?: string;
+  userPrompt: string;
+  signal: AbortSignal;
+}
+
+export class CustomEndpointProvider implements ProviderStrategy {
   readonly baseUrl: string;
   private readonly includeAuth: boolean;
 
   constructor(baseUrl: string, includeAuth = true) {
-    super();
     this.baseUrl = baseUrl;
     this.includeAuth = includeAuth;
   }
@@ -17,4 +25,24 @@ export class CustomEndpointProvider extends OpenAICompatibleProvider {
     if (!apiKey?.trim()) return {};
     return { 'Authorization': `Bearer ${apiKey}` };
   };
+
+  async rewrite(input: RewriteInput): Promise<string> {
+    const messages = buildMessages(input.systemPrompt, input.userPrompt);
+
+    const res = await fetch(`${this.baseUrl}/api/chat`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...this.headers(input.apiKey),
+      },
+      body: JSON.stringify({
+        model: input.model,
+        messages,
+        stream: false,
+      }),
+      signal: input.signal,
+    });
+
+    return parseProviderResponse(res);
+  }
 }

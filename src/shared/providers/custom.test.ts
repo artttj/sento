@@ -26,7 +26,7 @@ describe('CustomEndpointProvider', () => {
     });
 
     expect(fetchMock).toHaveBeenCalledWith(
-      'http://localhost:8080/v1/chat/completions',
+      'http://localhost:8080/v1/api/chat',
       expect.objectContaining({ method: 'POST' })
     );
   });
