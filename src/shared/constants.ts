@@ -81,7 +81,7 @@ export const DEFAULT_SETTINGS = {
   openrouterModel: 'anthropic/claude-sonnet-4-6',
   zaiModel: 'zai-7b',
   anthropicModel: 'claude-sonnet-4-6',
-  customEndpoint: 'http://localhost:11434/v1',
+  customEndpoint: 'http://localhost:11434',
   systemPrompt: DEFAULT_SYSTEM_PROMPT,
   showPillLabels: true,
   forceInsert: false,
