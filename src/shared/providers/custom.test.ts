@@ -5,11 +5,10 @@ import { CustomEndpointProvider } from './custom';
 
 const fetchMock = vi.fn();
 
-global.fetch = fetchMock as any;
-
 describe('CustomEndpointProvider', () => {
   beforeEach(() => {
     fetchMock.mockReset();
+    vi.stubGlobal('fetch', fetchMock);
   });
 
   it('uses provided base URL', async () => {

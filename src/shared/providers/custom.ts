@@ -12,7 +12,7 @@ export class CustomEndpointProvider extends OpenAICompatibleProvider {
     this.includeAuth = includeAuth;
   }
 
-  readonly headers = (apiKey: string) => {
+  readonly headers = (apiKey: string): Record<string, string> => {
     if (!this.includeAuth) return {};
     if (!apiKey?.trim()) return {};
     return { 'Authorization': `Bearer ${apiKey}` };
