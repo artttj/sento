@@ -1,6 +1,6 @@
 // Copyright (c) Artem Iagovdik
 
-import { PROVIDER_MODELS } from '../shared/constants';
+import { PROVIDER_MODELS, DEFAULT_SETTINGS } from '../shared/constants';
 import { getOrderedTemplates, REWRITE_TEMPLATES } from '../shared/rewriteTemplates';
 import {
   getProviderSettings,
@@ -11,11 +11,19 @@ import {
   saveGeminiKey,
   getGrokKey,
   saveGrokKey,
+  getOpenRouterKey,
+  saveOpenRouterKey,
+  getZaiKey,
+  saveZaiKey,
+  getAnthropicKey,
+  saveAnthropicKey,
+  getCustomKey,
+  saveCustomKey,
 } from '../shared/storage';
 import type { AppLanguage, ProviderSettings, RewriteTemplateId, SiteListMode, TemplateConfig } from '../shared/types';
 import { t } from './i18n';
 
-type Provider = 'openai' | 'gemini' | 'grok';
+type Provider = 'openai' | 'gemini' | 'grok' | 'openrouter' | 'zai' | 'anthropic' | 'custom';
 
 const refs = {
   defaultTemplate: document.getElementById('default-template') as HTMLSelectElement,
@@ -51,6 +59,32 @@ const refs = {
   badgeOpenai: document.getElementById('badge-openai') as HTMLElement,
   badgeGemini: document.getElementById('badge-gemini') as HTMLElement,
   badgeGrok: document.getElementById('badge-grok') as HTMLElement,
+
+  openrouterModel: document.getElementById('openrouter-model') as HTMLSelectElement,
+  zaiModel: document.getElementById('zai-model') as HTMLSelectElement,
+  anthropicModel: document.getElementById('anthropic-model') as HTMLSelectElement,
+
+  openrouterKey: document.getElementById('openrouter-key') as HTMLInputElement,
+  zaiKey: document.getElementById('zai-key') as HTMLInputElement,
+  anthropicKey: document.getElementById('anthropic-key') as HTMLInputElement,
+
+  btnSaveOpenrouter: document.getElementById('btn-save-openrouter') as HTMLButtonElement,
+  btnClearOpenrouter: document.getElementById('btn-clear-openrouter') as HTMLButtonElement,
+  btnSaveZai: document.getElementById('btn-save-zai') as HTMLButtonElement,
+  btnClearZai: document.getElementById('btn-clear-zai') as HTMLButtonElement,
+  btnSaveAnthropic: document.getElementById('btn-save-anthropic') as HTMLButtonElement,
+  btnClearAnthropic: document.getElementById('btn-clear-anthropic') as HTMLButtonElement,
+
+  badgeOpenrouter: document.getElementById('badge-openrouter') as HTMLElement,
+  badgeZai: document.getElementById('badge-zai') as HTMLElement,
+  badgeAnthropic: document.getElementById('badge-anthropic') as HTMLElement,
+
+  customPreset: document.getElementById('custom-preset') as HTMLSelectElement,
+  customEndpoint: document.getElementById('custom-endpoint') as HTMLInputElement,
+  customKey: document.getElementById('custom-key') as HTMLInputElement,
+  btnSaveCustom: document.getElementById('btn-save-custom') as HTMLButtonElement,
+  btnClearCustom: document.getElementById('btn-clear-custom') as HTMLButtonElement,
+  badgeCustom: document.getElementById('badge-custom') as HTMLElement,
   navAiWarning: document.getElementById('nav-ai-warning') as HTMLElement,
   keysStatus: document.getElementById('keys-status') as HTMLElement,
 
@@ -222,13 +256,31 @@ function collectTemplateConfigs(): Partial<Record<RewriteTemplateId, TemplateCon
 }
 
 async function refreshBadges(): Promise<void> {
-  const [openaiKey, geminiKey, grokKey] = await Promise.all([getOpenAIKey(), getGeminiKey(), getGrokKey()]);
+  const [keys, settingsResult] = await Promise.all([
+    Promise.all([
+      getOpenAIKey(),
+      getGeminiKey(),
+      getGrokKey(),
+      getOpenRouterKey(),
+      getZaiKey(),
+      getAnthropicKey(),
+      getCustomKey(),
+    ]),
+    chrome.storage.local.get('apc_settings'),
+  ]);
 
-  setBadge(refs.badgeOpenai, !!openaiKey);
-  setBadge(refs.badgeGemini, !!geminiKey);
-  setBadge(refs.badgeGrok, !!grokKey);
+  const settings = settingsResult.apc_settings as ProviderSettings | undefined;
+  const customEndpoint = settings?.customEndpoint?.trim() ?? '';
 
-  refs.navAiWarning.classList.toggle('hidden', !!(openaiKey && geminiKey && grokKey));
+  setBadge(refs.badgeOpenai, !!keys[0]);
+  setBadge(refs.badgeGemini, !!keys[1]);
+  setBadge(refs.badgeGrok, !!keys[2]);
+  setBadge(refs.badgeOpenrouter, !!keys[3]);
+  setBadge(refs.badgeZai, !!keys[4]);
+  setBadge(refs.badgeAnthropic, !!keys[5]);
+  setBadge(refs.badgeCustom, !!(keys[6] || customEndpoint));
+
+  refs.navAiWarning.classList.toggle('hidden', keys.some(k => k.trim()));
 }
 
 function applyTranslations(lang: AppLanguage): void {
@@ -310,6 +362,11 @@ function applySettings(settings: ProviderSettings): void {
   refs.openaiModel.value = settings.openaiModel;
   refs.geminiModel.value = settings.geminiModel;
   refs.grokModel.value = settings.grokModel;
+  refs.openrouterModel.value = settings.openrouterModel;
+  refs.zaiModel.value = settings.zaiModel;
+  refs.anthropicModel.value = settings.anthropicModel;
+  refs.customPreset.value = settings.customPreset;
+  refs.customEndpoint.value = settings.customEndpoint;
   renderTemplateConfigs(settings.templateConfigs ?? {}, settings.templateOrder);
   updateSiteListVisibility(settings.siteListMode);
   applyTranslations(settings.language);
@@ -335,6 +392,11 @@ async function saveAllSettings(statusEl: HTMLElement): Promise<void> {
     openaiModel: refs.openaiModel.value,
     geminiModel: refs.geminiModel.value,
     grokModel: refs.grokModel.value,
+    openrouterModel: refs.openrouterModel.value,
+    zaiModel: refs.zaiModel.value,
+    anthropicModel: refs.anthropicModel.value,
+    customEndpoint: refs.customEndpoint.value,
+    customPreset: refs.customPreset.value as 'ollama' | 'lmstudio' | 'custom',
     systemPrompt: refs.systemPrompt.value,
     templateConfigs: collectTemplateConfigs(),
     templateOrder: collectTemplateOrder(),
@@ -390,21 +452,110 @@ function wireProviderKeyButtons(): void {
     await refreshBadges();
     flash(refs.keysStatus, '✓ Grok key cleared');
   });
+
+  refs.btnSaveOpenrouter.addEventListener('click', async () => {
+    await saveOpenRouterKey(refs.openrouterKey.value);
+    await refreshBadges();
+    flash(refs.keysStatus);
+  });
+
+  refs.btnClearOpenrouter.addEventListener('click', async () => {
+    refs.openrouterKey.value = '';
+    await saveOpenRouterKey('');
+    await refreshBadges();
+  });
+
+  refs.btnSaveZai.addEventListener('click', async () => {
+    await saveZaiKey(refs.zaiKey.value);
+    await refreshBadges();
+    flash(refs.keysStatus);
+  });
+
+  refs.btnClearZai.addEventListener('click', async () => {
+    refs.zaiKey.value = '';
+    await saveZaiKey('');
+    await refreshBadges();
+  });
+
+  refs.btnSaveAnthropic.addEventListener('click', async () => {
+    await saveAnthropicKey(refs.anthropicKey.value);
+    await refreshBadges();
+    flash(refs.keysStatus);
+  });
+
+  refs.btnClearAnthropic.addEventListener('click', async () => {
+    refs.anthropicKey.value = '';
+    await saveAnthropicKey('');
+    await refreshBadges();
+  });
+
+  refs.btnSaveCustom.addEventListener('click', async () => {
+    await saveCustomKey(refs.customKey.value);
+    await saveProviderSettings({
+      customEndpoint: refs.customEndpoint.value,
+      customPreset: refs.customPreset.value as 'ollama' | 'lmstudio' | 'custom',
+    });
+    await refreshBadges();
+    flash(refs.keysStatus);
+  });
+
+  refs.btnClearCustom.addEventListener('click', async () => {
+    refs.customKey.value = '';
+    refs.customEndpoint.value = DEFAULT_SETTINGS.customEndpoint;
+    await saveCustomKey('');
+    await saveProviderSettings({
+      customEndpoint: DEFAULT_SETTINGS.customEndpoint,
+      customPreset: DEFAULT_SETTINGS.customPreset,
+    });
+    await refreshBadges();
+  });
+
+  refs.customPreset.addEventListener('change', (e) => {
+    const preset = (e.target as HTMLSelectElement).value;
+    const urls: Record<string, string> = {
+      ollama: 'http://localhost:11434/v1',
+      lmstudio: 'http://localhost:1234/v1',
+      custom: '',
+    };
+    if (urls[preset]) {
+      refs.customEndpoint.value = urls[preset];
+    }
+  });
 }
 
 async function loadApiKeys(): Promise<void> {
-  const [openaiKey, geminiKey, grokKey] = await Promise.all([
-    getOpenAIKey(),
-    getGeminiKey(),
-    getGrokKey(),
+  const [keys, settingsResult] = await Promise.all([
+    Promise.all([
+      getOpenAIKey(),
+      getGeminiKey(),
+      getGrokKey(),
+      getOpenRouterKey(),
+      getZaiKey(),
+      getAnthropicKey(),
+      getCustomKey(),
+    ]),
+    chrome.storage.local.get('apc_settings'),
   ]);
+
+  const [openaiKey, geminiKey, grokKey, openrouterKey, zaiKey, anthropicKey, customKey] = keys;
+  const settings = settingsResult.apc_settings as ProviderSettings | undefined;
+  const customEndpoint = settings?.customEndpoint?.trim() ?? '';
+
   refs.openaiKey.value = openaiKey;
   refs.geminiKey.value = geminiKey;
   refs.grokKey.value = grokKey;
+  refs.openrouterKey.value = openrouterKey;
+  refs.zaiKey.value = zaiKey;
+  refs.anthropicKey.value = anthropicKey;
+  refs.customKey.value = customKey;
 
   setBadge(refs.badgeOpenai, !!openaiKey);
   setBadge(refs.badgeGemini, !!geminiKey);
   setBadge(refs.badgeGrok, !!grokKey);
+  setBadge(refs.badgeOpenrouter, !!openrouterKey);
+  setBadge(refs.badgeZai, !!zaiKey);
+  setBadge(refs.badgeAnthropic, !!anthropicKey);
+  setBadge(refs.badgeCustom, !!(customKey || customEndpoint));
   refs.navAiWarning.classList.toggle('hidden', !!(openaiKey && geminiKey && grokKey));
 }
 
@@ -416,6 +567,9 @@ async function init(): Promise<void> {
   populateSelect(refs.openaiModel, PROVIDER_MODELS.openai, PROVIDER_MODELS.openai[0]);
   populateSelect(refs.geminiModel, PROVIDER_MODELS.gemini, PROVIDER_MODELS.gemini[0]);
   populateSelect(refs.grokModel, PROVIDER_MODELS.grok, PROVIDER_MODELS.grok[0]);
+  populateSelect(refs.openrouterModel, PROVIDER_MODELS.openrouter, PROVIDER_MODELS.openrouter[0]);
+  populateSelect(refs.zaiModel, PROVIDER_MODELS.zai, PROVIDER_MODELS.zai[0]);
+  populateSelect(refs.anthropicModel, PROVIDER_MODELS.anthropic, PROVIDER_MODELS.anthropic[0]);
 
   wireSegmented(refs.providerSegmented);
   wireSegmented(refs.languageSeg, (value) => {
