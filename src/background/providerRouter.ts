@@ -2,11 +2,13 @@
 
 import { REQUEST_TIMEOUT_MS } from '../shared/constants';
 import { buildRewritePrompt } from '../shared/rewriteTemplates';
-import { getProviderSettings, getOpenAIKey, getGeminiKey, getGrokKey } from '../shared/storage';
+import { getProviderSettings, getOpenAIKey, getGeminiKey, getGrokKey, getOpenRouterKey, getZaiKey, getAnthropicKey, getCustomKey } from '../shared/storage';
 import { getProviderStrategy } from '../shared/providers';
+import { CustomEndpointProvider } from '../shared/providers/custom';
 import type {
   ProviderName,
   ProviderSettings,
+  ProviderStrategy,
   RewriteErrorPayload,
   RewriteRequestPayload,
   RewriteResponsePayload,
@@ -47,34 +49,59 @@ function normalizeError(error: unknown, provider?: ProviderName, model?: string)
   return { code: 'UNKNOWN', message: 'Unknown error.', provider, model };
 }
 
-async function resolveProviderContext(): Promise<{ provider: ProviderName; model: string; key: string; systemPrompt?: string; settings: ProviderSettings }> {
+async function resolveProviderContext(): Promise<{
+  provider: ProviderName;
+  model: string;
+  key: string;
+  systemPrompt?: string;
+  settings: ProviderSettings;
+  customStrategy?: ProviderStrategy;
+}> {
   const settings = await getProviderSettings();
   const provider = settings.llmProvider;
 
-  if (provider === 'gemini') {
+  if (provider === 'custom') {
     return {
       provider,
-      model: settings.geminiModel,
-      key: await getGeminiKey(),
+      model: settings.customModel,
+      key: settings.customEndpoint,
       systemPrompt: settings.systemPrompt,
       settings,
+      customStrategy: new CustomEndpointProvider(
+        settings.customEndpoint,
+        !!(await getCustomKey()).trim()
+      ),
     };
   }
 
-  if (provider === 'grok') {
-    return {
-      provider,
-      model: settings.grokModel,
-      key: await getGrokKey(),
-      systemPrompt: settings.systemPrompt,
-      settings,
-    };
-  }
+  const keyMap: Record<ProviderName, () => Promise<string>> = {
+    openai: getOpenAIKey,
+    gemini: getGeminiKey,
+    grok: getGrokKey,
+    openrouter: getOpenRouterKey,
+    zai: getZaiKey,
+    anthropic: getAnthropicKey,
+    custom: getCustomKey,
+  };
+
+  const modelMap: Record<ProviderName, keyof ProviderSettings> = {
+    openai: 'openaiModel',
+    gemini: 'geminiModel',
+    grok: 'grokModel',
+    openrouter: 'openrouterModel',
+    zai: 'zaiModel',
+    anthropic: 'anthropicModel',
+    custom: 'customModel',
+  };
+
+  const key = await keyMap[provider]();
+  const modelKey = modelMap[provider];
+  const model = settings[modelKey] as string;
 
   return {
-    provider: 'openai',
-    model: settings.openaiModel,
-    key: await getOpenAIKey(),
+    provider,
+    model,
+    key,
     systemPrompt: settings.systemPrompt,
     settings,
   };
@@ -85,22 +112,29 @@ export async function rewriteWithProvider(
   signal: AbortSignal
 ): Promise<{ ok: true; payload: RewriteResponsePayload } | { ok: false; error: RewriteErrorPayload }> {
   const started = Date.now();
-  const { provider, model, key, systemPrompt, settings } = await resolveProviderContext();
+  const { provider, model, key, systemPrompt, settings, customStrategy } = await resolveProviderContext();
 
-  if (!key.trim()) {
+  const isCustom = provider === 'custom';
+  const keyForValidation = isCustom ? settings.customEndpoint : key;
+
+  if (!keyForValidation.trim()) {
     return {
       ok: false,
       error: {
         code: 'MISSING_KEY',
-        message: `No ${provider.toUpperCase()} API key configured. Open Settings to add one.`,
+        message: isCustom
+          ? 'No custom endpoint URL configured. Open Settings to add one.'
+          : `No ${provider.toUpperCase()} API key configured. Open Settings to add one.`,
         provider,
         model,
       },
     };
   }
 
+  const apiKey = isCustom ? await getCustomKey() : key;
+
   const templateConfig = settings.templateConfigs?.[payload.templateId];
-  const providerStrategy = getProviderStrategy(provider);
+  const providerStrategy = customStrategy ?? getProviderStrategy(provider);
   const prompt = buildRewritePrompt({
     templateId: payload.templateId,
     text: payload.text,
@@ -115,7 +149,7 @@ export async function rewriteWithProvider(
 
   try {
     const text = await providerStrategy.rewrite({
-      apiKey: key,
+      apiKey: isCustom ? (apiKey ?? '') : apiKey,
       model,
       systemPrompt,
       userPrompt: prompt,
