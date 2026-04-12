@@ -56,11 +56,13 @@ async function resolveProviderContext(): Promise<{
   systemPrompt?: string;
   settings: ProviderSettings;
   customStrategy?: ProviderStrategy;
+  cachedCustomKey?: string;
 }> {
   const settings = await getProviderSettings();
   const provider = settings.llmProvider;
 
   if (provider === 'custom') {
+    const customKey = await getCustomKey();
     return {
       provider,
       model: settings.customModel,
@@ -69,8 +71,9 @@ async function resolveProviderContext(): Promise<{
       settings,
       customStrategy: new CustomEndpointProvider(
         settings.customEndpoint,
-        !!(await getCustomKey()).trim()
+        !!customKey.trim()
       ),
+      cachedCustomKey: customKey,
     };
   }
 
@@ -112,7 +115,7 @@ export async function rewriteWithProvider(
   signal: AbortSignal
 ): Promise<{ ok: true; payload: RewriteResponsePayload } | { ok: false; error: RewriteErrorPayload }> {
   const started = Date.now();
-  const { provider, model, key, systemPrompt, settings, customStrategy } = await resolveProviderContext();
+  const { provider, model, key, systemPrompt, settings, customStrategy, cachedCustomKey } = await resolveProviderContext();
 
   const isCustom = provider === 'custom';
   const keyForValidation = isCustom ? settings.customEndpoint : key;
@@ -131,7 +134,7 @@ export async function rewriteWithProvider(
     };
   }
 
-  const apiKey = isCustom ? await getCustomKey() : key;
+  const apiKey = isCustom ? (cachedCustomKey ?? '') : key;
 
   const templateConfig = settings.templateConfigs?.[payload.templateId];
   const providerStrategy = customStrategy ?? getProviderStrategy(provider);

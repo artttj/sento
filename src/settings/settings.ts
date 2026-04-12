@@ -25,6 +25,12 @@ import { t } from './i18n';
 
 type Provider = 'openai' | 'gemini' | 'grok' | 'openrouter' | 'zai' | 'anthropic' | 'custom';
 
+const CUSTOM_PRESET_URLS: Record<string, string> = {
+  ollama: 'http://localhost:11434/v1',
+  lmstudio: 'http://localhost:1234/v1',
+  custom: '',
+};
+
 const refs = {
   defaultTemplate: document.getElementById('default-template') as HTMLSelectElement,
   providerSegmented: document.getElementById('provider-segmented') as HTMLElement,
@@ -80,6 +86,7 @@ const refs = {
   badgeAnthropic: document.getElementById('badge-anthropic') as HTMLElement,
 
   customPreset: document.getElementById('custom-preset') as HTMLSelectElement,
+  customModel: document.getElementById('custom-model') as HTMLSelectElement,
   customEndpoint: document.getElementById('custom-endpoint') as HTMLInputElement,
   customKey: document.getElementById('custom-key') as HTMLInputElement,
   btnSaveCustom: document.getElementById('btn-save-custom') as HTMLButtonElement,
@@ -269,16 +276,17 @@ async function refreshBadges(): Promise<void> {
     chrome.storage.local.get('apc_settings'),
   ]);
 
+  const [openaiKey, geminiKey, grokKey, openrouterKey, zaiKey, anthropicKey, customKey] = keys;
   const settings = settingsResult.apc_settings as ProviderSettings | undefined;
   const customEndpoint = settings?.customEndpoint?.trim() ?? '';
 
-  setBadge(refs.badgeOpenai, !!keys[0]);
-  setBadge(refs.badgeGemini, !!keys[1]);
-  setBadge(refs.badgeGrok, !!keys[2]);
-  setBadge(refs.badgeOpenrouter, !!keys[3]);
-  setBadge(refs.badgeZai, !!keys[4]);
-  setBadge(refs.badgeAnthropic, !!keys[5]);
-  setBadge(refs.badgeCustom, !!(keys[6] || customEndpoint));
+  setBadge(refs.badgeOpenai, !!openaiKey);
+  setBadge(refs.badgeGemini, !!geminiKey);
+  setBadge(refs.badgeGrok, !!grokKey);
+  setBadge(refs.badgeOpenrouter, !!openrouterKey);
+  setBadge(refs.badgeZai, !!zaiKey);
+  setBadge(refs.badgeAnthropic, !!anthropicKey);
+  setBadge(refs.badgeCustom, !!(customKey || customEndpoint));
 
   refs.navAiWarning.classList.toggle('hidden', keys.some(k => k.trim()));
 }
@@ -365,6 +373,7 @@ function applySettings(settings: ProviderSettings): void {
   refs.openrouterModel.value = settings.openrouterModel;
   refs.zaiModel.value = settings.zaiModel;
   refs.anthropicModel.value = settings.anthropicModel;
+  refs.customModel.value = settings.customModel;
   refs.customPreset.value = settings.customPreset;
   refs.customEndpoint.value = settings.customEndpoint;
   renderTemplateConfigs(settings.templateConfigs ?? {}, settings.templateOrder);
@@ -395,6 +404,7 @@ async function saveAllSettings(statusEl: HTMLElement): Promise<void> {
     openrouterModel: refs.openrouterModel.value,
     zaiModel: refs.zaiModel.value,
     anthropicModel: refs.anthropicModel.value,
+    customModel: refs.customModel.value,
     customEndpoint: refs.customEndpoint.value,
     customPreset: refs.customPreset.value as 'ollama' | 'lmstudio' | 'custom',
     systemPrompt: refs.systemPrompt.value,
@@ -416,78 +426,34 @@ function wireSettingsButtons(): void {
   refs.btnSaveTemplates.addEventListener('click', async () => { await saveAllSettings(refs.templatesStatus); });
 }
 
+function wireKeyButton(
+  input: HTMLInputElement,
+  saveBtn: HTMLButtonElement,
+  clearBtn: HTMLButtonElement,
+  saveFn: (key: string) => Promise<void>,
+  providerName: string
+): void {
+  saveBtn.addEventListener('click', async () => {
+    await saveFn(input.value.trim());
+    await refreshBadges();
+    flash(refs.keysStatus, `✓ ${providerName} key saved`);
+  });
+
+  clearBtn.addEventListener('click', async () => {
+    input.value = '';
+    await saveFn('');
+    await refreshBadges();
+    flash(refs.keysStatus, `✓ ${providerName} key cleared`);
+  });
+}
+
 function wireProviderKeyButtons(): void {
-  refs.btnSaveOpenai.addEventListener('click', async () => {
-    await saveOpenAIKey(refs.openaiKey.value.trim());
-    await refreshBadges();
-    flash(refs.keysStatus, '✓ OpenAI key saved');
-  });
-  refs.btnClearOpenai.addEventListener('click', async () => {
-    refs.openaiKey.value = '';
-    await saveOpenAIKey('');
-    await refreshBadges();
-    flash(refs.keysStatus, '✓ OpenAI key cleared');
-  });
-
-  refs.btnSaveGemini.addEventListener('click', async () => {
-    await saveGeminiKey(refs.geminiKey.value.trim());
-    await refreshBadges();
-    flash(refs.keysStatus, '✓ Gemini key saved');
-  });
-  refs.btnClearGemini.addEventListener('click', async () => {
-    refs.geminiKey.value = '';
-    await saveGeminiKey('');
-    await refreshBadges();
-    flash(refs.keysStatus, '✓ Gemini key cleared');
-  });
-
-  refs.btnSaveGrok.addEventListener('click', async () => {
-    await saveGrokKey(refs.grokKey.value.trim());
-    await refreshBadges();
-    flash(refs.keysStatus, '✓ Grok key saved');
-  });
-  refs.btnClearGrok.addEventListener('click', async () => {
-    refs.grokKey.value = '';
-    await saveGrokKey('');
-    await refreshBadges();
-    flash(refs.keysStatus, '✓ Grok key cleared');
-  });
-
-  refs.btnSaveOpenrouter.addEventListener('click', async () => {
-    await saveOpenRouterKey(refs.openrouterKey.value);
-    await refreshBadges();
-    flash(refs.keysStatus);
-  });
-
-  refs.btnClearOpenrouter.addEventListener('click', async () => {
-    refs.openrouterKey.value = '';
-    await saveOpenRouterKey('');
-    await refreshBadges();
-  });
-
-  refs.btnSaveZai.addEventListener('click', async () => {
-    await saveZaiKey(refs.zaiKey.value);
-    await refreshBadges();
-    flash(refs.keysStatus);
-  });
-
-  refs.btnClearZai.addEventListener('click', async () => {
-    refs.zaiKey.value = '';
-    await saveZaiKey('');
-    await refreshBadges();
-  });
-
-  refs.btnSaveAnthropic.addEventListener('click', async () => {
-    await saveAnthropicKey(refs.anthropicKey.value);
-    await refreshBadges();
-    flash(refs.keysStatus);
-  });
-
-  refs.btnClearAnthropic.addEventListener('click', async () => {
-    refs.anthropicKey.value = '';
-    await saveAnthropicKey('');
-    await refreshBadges();
-  });
+  wireKeyButton(refs.openaiKey, refs.btnSaveOpenai, refs.btnClearOpenai, saveOpenAIKey, 'OpenAI');
+  wireKeyButton(refs.geminiKey, refs.btnSaveGemini, refs.btnClearGemini, saveGeminiKey, 'Gemini');
+  wireKeyButton(refs.grokKey, refs.btnSaveGrok, refs.btnClearGrok, saveGrokKey, 'Grok');
+  wireKeyButton(refs.openrouterKey, refs.btnSaveOpenrouter, refs.btnClearOpenrouter, saveOpenRouterKey, 'OpenRouter');
+  wireKeyButton(refs.zaiKey, refs.btnSaveZai, refs.btnClearZai, saveZaiKey, 'Zai');
+  wireKeyButton(refs.anthropicKey, refs.btnSaveAnthropic, refs.btnClearAnthropic, saveAnthropicKey, 'Anthropic');
 
   refs.btnSaveCustom.addEventListener('click', async () => {
     await saveCustomKey(refs.customKey.value);
@@ -496,7 +462,7 @@ function wireProviderKeyButtons(): void {
       customPreset: refs.customPreset.value as 'ollama' | 'lmstudio' | 'custom',
     });
     await refreshBadges();
-    flash(refs.keysStatus);
+    flash(refs.keysStatus, '✓ Custom endpoint saved');
   });
 
   refs.btnClearCustom.addEventListener('click', async () => {
@@ -508,17 +474,13 @@ function wireProviderKeyButtons(): void {
       customPreset: DEFAULT_SETTINGS.customPreset,
     });
     await refreshBadges();
+    flash(refs.keysStatus, '✓ Custom endpoint cleared');
   });
 
   refs.customPreset.addEventListener('change', (e) => {
     const preset = (e.target as HTMLSelectElement).value;
-    const urls: Record<string, string> = {
-      ollama: 'http://localhost:11434/v1',
-      lmstudio: 'http://localhost:1234/v1',
-      custom: '',
-    };
-    if (urls[preset]) {
-      refs.customEndpoint.value = urls[preset];
+    if (CUSTOM_PRESET_URLS[preset] !== undefined) {
+      refs.customEndpoint.value = CUSTOM_PRESET_URLS[preset];
     }
   });
 }
@@ -570,6 +532,7 @@ async function init(): Promise<void> {
   populateSelect(refs.openrouterModel, PROVIDER_MODELS.openrouter, PROVIDER_MODELS.openrouter[0]);
   populateSelect(refs.zaiModel, PROVIDER_MODELS.zai, PROVIDER_MODELS.zai[0]);
   populateSelect(refs.anthropicModel, PROVIDER_MODELS.anthropic, PROVIDER_MODELS.anthropic[0]);
+  populateSelect(refs.customModel, PROVIDER_MODELS.custom, PROVIDER_MODELS.custom[0]);
 
   wireSegmented(refs.providerSegmented);
   wireSegmented(refs.languageSeg, (value) => {
