@@ -4,7 +4,8 @@ import { DEFAULT_SETTINGS, STORAGE_KEYS } from './constants';
 import type { AppLanguage, ProviderName, ProviderSettings, RewriteTemplateId, SiteListMode } from './types';
 
 function isProviderName(value: string): value is ProviderName {
-  return value === 'openai' || value === 'gemini' || value === 'grok';
+  return value === 'openai' || value === 'gemini' || value === 'grok' ||
+         value === 'openrouter' || value === 'zai' || value === 'anthropic' || value === 'custom';
 }
 
 function isRewriteTemplateId(value: string): value is RewriteTemplateId {
@@ -43,6 +44,12 @@ export async function getProviderSettings(): Promise<ProviderSettings> {
     openaiModel: raw.openaiModel ?? DEFAULT_SETTINGS.openaiModel,
     geminiModel: raw.geminiModel ?? DEFAULT_SETTINGS.geminiModel,
     grokModel: raw.grokModel ?? DEFAULT_SETTINGS.grokModel,
+    openrouterModel: raw.openrouterModel ?? DEFAULT_SETTINGS.openrouterModel,
+    zaiModel: raw.zaiModel ?? DEFAULT_SETTINGS.zaiModel,
+    anthropicModel: raw.anthropicModel ?? DEFAULT_SETTINGS.anthropicModel,
+    customEndpoint: raw.customEndpoint ?? DEFAULT_SETTINGS.customEndpoint,
+    customModel: raw.customModel ?? DEFAULT_SETTINGS.customModel,
+    customPreset: raw.customPreset ?? DEFAULT_SETTINGS.customPreset,
     systemPrompt: raw.systemPrompt ?? DEFAULT_SETTINGS.systemPrompt,
     templateConfigs: raw.templateConfigs,
     templateOrder: Array.isArray(raw.templateOrder) ? raw.templateOrder : undefined,
@@ -109,4 +116,40 @@ export async function getGrokKey(): Promise<string> {
 
 export async function saveGrokKey(key: string): Promise<void> {
   await chrome.storage.local.set({ [STORAGE_KEYS.GROK_KEY]: key });
+}
+
+export async function getOpenRouterKey(): Promise<string> {
+  const result = await chrome.storage.local.get(STORAGE_KEYS.OPENROUTER_KEY);
+  return (result[STORAGE_KEYS.OPENROUTER_KEY] as string | undefined) ?? '';
+}
+
+export async function saveOpenRouterKey(key: string): Promise<void> {
+  await chrome.storage.local.set({ [STORAGE_KEYS.OPENROUTER_KEY]: key });
+}
+
+export async function getZaiKey(): Promise<string> {
+  const result = await chrome.storage.local.get(STORAGE_KEYS.ZAI_KEY);
+  return (result[STORAGE_KEYS.ZAI_KEY] as string | undefined) ?? '';
+}
+
+export async function saveZaiKey(key: string): Promise<void> {
+  await chrome.storage.local.set({ [STORAGE_KEYS.ZAI_KEY]: key });
+}
+
+export async function getAnthropicKey(): Promise<string> {
+  const result = await chrome.storage.local.get(STORAGE_KEYS.ANTHROPIC_KEY);
+  return (result[STORAGE_KEYS.ANTHROPIC_KEY] as string | undefined) ?? '';
+}
+
+export async function saveAnthropicKey(key: string): Promise<void> {
+  await chrome.storage.local.set({ [STORAGE_KEYS.ANTHROPIC_KEY]: key });
+}
+
+export async function getCustomKey(): Promise<string> {
+  const result = await chrome.storage.local.get(STORAGE_KEYS.CUSTOM_KEY);
+  return (result[STORAGE_KEYS.CUSTOM_KEY] as string | undefined) ?? '';
+}
+
+export async function saveCustomKey(key: string): Promise<void> {
+  await chrome.storage.local.set({ [STORAGE_KEYS.CUSTOM_KEY]: key });
 }
