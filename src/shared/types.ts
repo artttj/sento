@@ -23,7 +23,6 @@ export interface ProviderSettings {
   openrouterModel: string;
   anthropicModel: string;
   customEndpoint: string;
-  customModel: string;
   customPreset: 'ollama' | 'lmstudio' | 'custom';
   openaiCustomModel?: string;
   geminiCustomModel?: string;
@@ -31,6 +30,7 @@ export interface ProviderSettings {
   zaiCustomModel?: string;
   openrouterCustomModel?: string;
   anthropicCustomModel?: string;
+  customOverrideModel?: string;
   systemPrompt?: string;
   templateConfigs?: Partial<Record<RewriteTemplateId, TemplateConfig>>;
   templateOrder?: RewriteTemplateId[];

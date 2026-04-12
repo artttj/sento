@@ -92,7 +92,7 @@ const refs = {
   badgeAnthropic: document.getElementById('badge-anthropic') as HTMLElement,
 
   customPreset: document.getElementById('custom-preset') as HTMLSelectElement,
-  customModel: document.getElementById('custom-model') as HTMLSelectElement,
+  customOverrideModel: document.getElementById('custom-override-model') as HTMLInputElement,
   customEndpoint: document.getElementById('custom-endpoint') as HTMLInputElement,
   customKey: document.getElementById('custom-key') as HTMLInputElement,
   btnSaveCustom: document.getElementById('btn-save-custom') as HTMLButtonElement,
@@ -109,6 +109,14 @@ function flash(el: HTMLElement, text = 'Saved'): void {
   el.textContent = text;
   el.classList.remove('hidden');
   setTimeout(() => el.classList.add('hidden'), 1800);
+}
+
+function debounce<T extends (...args: unknown[]) => void>(fn: T, ms: number): (...args: Parameters<T>) => void {
+  let timeout: ReturnType<typeof setTimeout> | null = null;
+  return (...args: Parameters<T>) => {
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => fn(...args), ms);
+  };
 }
 
 function populateSelect(el: HTMLSelectElement, values: string[], selected: string): void {
@@ -385,7 +393,7 @@ function applySettings(settings: ProviderSettings): void {
   refs.zaiCustomModel.value = settings.zaiCustomModel || '';
   refs.anthropicModel.value = settings.anthropicModel;
   refs.anthropicCustomModel.value = settings.anthropicCustomModel || '';
-  refs.customModel.value = settings.customModel;
+  refs.customOverrideModel.value = settings.customOverrideModel || '';
   refs.customPreset.value = settings.customPreset;
   refs.customEndpoint.value = settings.customEndpoint;
   renderTemplateConfigs(settings.templateConfigs ?? {}, settings.templateOrder);
@@ -416,7 +424,6 @@ async function saveAllSettings(statusEl: HTMLElement): Promise<void> {
     openrouterModel: refs.openrouterModel.value,
     zaiModel: refs.zaiModel.value,
     anthropicModel: refs.anthropicModel.value,
-    customModel: refs.customModel.value,
     customEndpoint: refs.customEndpoint.value,
     customPreset: refs.customPreset.value as 'ollama' | 'lmstudio' | 'custom',
     openaiCustomModel: refs.openaiCustomModel.value.trim() || undefined,
@@ -425,6 +432,7 @@ async function saveAllSettings(statusEl: HTMLElement): Promise<void> {
     openrouterCustomModel: refs.openrouterCustomModel.value.trim() || undefined,
     zaiCustomModel: refs.zaiCustomModel.value.trim() || undefined,
     anthropicCustomModel: refs.anthropicCustomModel.value.trim() || undefined,
+    customOverrideModel: refs.customOverrideModel.value.trim() || undefined,
     systemPrompt: refs.systemPrompt.value,
     templateConfigs: collectTemplateConfigs(),
     templateOrder: collectTemplateOrder(),
@@ -442,6 +450,32 @@ async function saveAllSettings(statusEl: HTMLElement): Promise<void> {
 function wireSettingsButtons(): void {
   refs.btnSaveSettings.addEventListener('click', async () => { await saveAllSettings(refs.settingsStatus); });
   refs.btnSaveTemplates.addEventListener('click', async () => { await saveAllSettings(refs.templatesStatus); });
+}
+
+function wireModelInputs(): void {
+  const modelInputs = [
+    refs.openaiModel,
+    refs.geminiModel,
+    refs.grokModel,
+    refs.openrouterModel,
+    refs.zaiModel,
+    refs.anthropicModel,
+    refs.openaiCustomModel,
+    refs.geminiCustomModel,
+    refs.grokCustomModel,
+    refs.openrouterCustomModel,
+    refs.zaiCustomModel,
+    refs.anthropicCustomModel,
+    refs.customOverrideModel,
+  ];
+
+  const debouncedSave = debounce(() => saveAllSettings(refs.settingsStatus), 300);
+
+  modelInputs.forEach((input) => {
+    input.addEventListener('change', () => {
+      debouncedSave();
+    });
+  });
 }
 
 function wireKeyButton(
@@ -550,7 +584,6 @@ async function init(): Promise<void> {
   populateSelect(refs.openrouterModel, PROVIDER_MODELS.openrouter, PROVIDER_MODELS.openrouter[0]);
   populateSelect(refs.zaiModel, PROVIDER_MODELS.zai, PROVIDER_MODELS.zai[0]);
   populateSelect(refs.anthropicModel, PROVIDER_MODELS.anthropic, PROVIDER_MODELS.anthropic[0]);
-  populateSelect(refs.customModel, PROVIDER_MODELS.custom, PROVIDER_MODELS.custom[0]);
 
   wireSegmented(refs.providerSegmented);
   wireSegmented(refs.languageSeg, (value) => {
@@ -566,6 +599,7 @@ async function init(): Promise<void> {
   await loadApiKeys();
 
   wireSettingsButtons();
+  wireModelInputs();
   wireProviderKeyButtons();
 }
 

@@ -9,7 +9,7 @@ describe('OpenRouterProvider', () => {
   beforeEach(() => {
     fetchMock.mockReset();
     vi.stubGlobal('fetch', fetchMock);
-    global.chrome = {
+    globalThis.chrome = {
       runtime: {
         getURL: vi.fn(() => 'https://example.com'),
       },

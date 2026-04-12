@@ -231,7 +231,7 @@
             <div class="provider-info">
               <div class="provider-name">OpenAI</div>
               <select id="openai-model" class="provider-model-select setting-select setting-select--sm"></select>
-              <input id="openai-custom-model" type="text" class="custom-model-input" placeholder="or custom model" autocomplete="off" spellcheck="false" />
+              <input id="openai-custom-model" type="text" class="custom-model-input" placeholder="Custom" autocomplete="off" spellcheck="false" />
             </div>
             <span id="badge-openai" class="status-badge unconfigured">Not Configured</span>
           </div>
@@ -254,7 +254,7 @@
             <div class="provider-info">
               <div class="provider-name">Gemini</div>
               <select id="gemini-model" class="provider-model-select setting-select setting-select--sm"></select>
-              <input id="gemini-custom-model" type="text" class="custom-model-input" placeholder="or custom model" autocomplete="off" spellcheck="false" />
+              <input id="gemini-custom-model" type="text" class="custom-model-input" placeholder="Custom" autocomplete="off" spellcheck="false" />
             </div>
             <span id="badge-gemini" class="status-badge unconfigured">Not Configured</span>
           </div>
@@ -277,7 +277,7 @@
             <div class="provider-info">
               <div class="provider-name">Grok</div>
               <select id="grok-model" class="provider-model-select setting-select setting-select--sm"></select>
-              <input id="grok-custom-model" type="text" class="custom-model-input" placeholder="or custom model" autocomplete="off" spellcheck="false" />
+              <input id="grok-custom-model" type="text" class="custom-model-input" placeholder="Custom" autocomplete="off" spellcheck="false" />
             </div>
             <span id="badge-grok" class="status-badge unconfigured">Not Configured</span>
           </div>
@@ -300,7 +300,7 @@
             <div class="provider-info">
               <div class="provider-name">OpenRouter</div>
               <select id="openrouter-model" class="provider-model-select setting-select setting-select--sm"></select>
-              <input id="openrouter-custom-model" type="text" class="custom-model-input" placeholder="or custom model" autocomplete="off" spellcheck="false" />
+              <input id="openrouter-custom-model" type="text" class="custom-model-input" placeholder="Custom" autocomplete="off" spellcheck="false" />
             </div>
             <span id="badge-openrouter" class="status-badge unconfigured">Not Configured</span>
           </div>
@@ -323,7 +323,7 @@
             <div class="provider-info">
               <div class="provider-name">Zai</div>
               <select id="zai-model" class="provider-model-select setting-select setting-select--sm"></select>
-              <input id="zai-custom-model" type="text" class="custom-model-input" placeholder="or custom model" autocomplete="off" spellcheck="false" />
+              <input id="zai-custom-model" type="text" class="custom-model-input" placeholder="Custom" autocomplete="off" spellcheck="false" />
             </div>
             <span id="badge-zai" class="status-badge unconfigured">Not Configured</span>
           </div>
@@ -346,7 +346,7 @@
             <div class="provider-info">
               <div class="provider-name">Anthropic</div>
               <select id="anthropic-model" class="provider-model-select setting-select setting-select--sm"></select>
-              <input id="anthropic-custom-model" type="text" class="custom-model-input" placeholder="or custom model" autocomplete="off" spellcheck="false" />
+              <input id="anthropic-custom-model" type="text" class="custom-model-input" placeholder="Custom" autocomplete="off" spellcheck="false" />
             </div>
             <span id="badge-anthropic" class="status-badge unconfigured">Not Configured</span>
           </div>
@@ -375,7 +375,7 @@
                   <option value="custom">Custom</option>
                 </select>
                 <input id="custom-endpoint" type="text" class="setting-input setting-input--sm" placeholder="http://localhost:11434/v1" />
-                <select id="custom-model" class="provider-model-select setting-select setting-select--sm"></select>
+                <input id="custom-override-model" type="text" class="custom-model-input" placeholder="Model (e.g. gemini-3-flash-preview)" />
               </div>
             </div>
             <span id="badge-custom" class="status-badge unconfigured">Not Configured</span>
@@ -386,7 +386,7 @@
           </div>
 
           <div class="provider-footer">
-            <span class="provider-hint">OpenAI-compatible endpoint (e.g. Ollama, LM Studio)</span>
+            <span class="provider-hint">OpenAI-compatible: Ollama, Ollama Cloud, LM Studio, etc.</span>
             <div class="provider-btns">
               <button id="btn-save-custom" class="btn btn-primary btn-sm" data-i18n="save" type="button">Save</button>
               <button id="btn-clear-custom" class="btn btn-ghost btn-sm" data-i18n="clear" type="button">Clear</button>

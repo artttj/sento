@@ -63,9 +63,10 @@ async function resolveProviderContext(): Promise<{
 
   if (provider === 'custom') {
     const customKey = await getCustomKey();
+    const model = settings.customOverrideModel?.trim() || 'llama3';
     return {
       provider,
-      model: settings.customModel,
+      model,
       key: settings.customEndpoint,
       systemPrompt: settings.systemPrompt,
       settings,
@@ -94,8 +95,7 @@ async function resolveProviderContext(): Promise<{
     openrouter: 'openrouterModel',
     zai: 'zaiModel',
     anthropic: 'anthropicModel',
-    custom: 'customModel',
-  };
+  } as Record<ProviderName, keyof ProviderSettings>;
 
   const customModelMap: Partial<Record<ProviderName, keyof ProviderSettings>> = {
     openai: 'openaiCustomModel',

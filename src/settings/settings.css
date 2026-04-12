@@ -1686,3 +1686,17 @@ body {
   color: var(--c-text-3);
   opacity: 0.7;
 }
+
+.provider-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.custom-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
