@@ -25,12 +25,6 @@ import { t } from './i18n';
 
 type Provider = 'openai' | 'gemini' | 'grok' | 'openrouter' | 'zai' | 'anthropic' | 'custom';
 
-const CUSTOM_PRESET_URLS: Record<string, string> = {
-  ollama: 'http://localhost:11434/v1',
-  lmstudio: 'http://localhost:1234/v1',
-  custom: '',
-};
-
 const refs = {
   defaultTemplate: document.getElementById('default-template') as HTMLSelectElement,
   providerSegmented: document.getElementById('provider-segmented') as HTMLElement,
@@ -91,7 +85,6 @@ const refs = {
   badgeZai: document.getElementById('badge-zai') as HTMLElement,
   badgeAnthropic: document.getElementById('badge-anthropic') as HTMLElement,
 
-  customPreset: document.getElementById('custom-preset') as HTMLSelectElement,
   customOverrideModel: document.getElementById('custom-override-model') as HTMLInputElement,
   customEndpoint: document.getElementById('custom-endpoint') as HTMLInputElement,
   customKey: document.getElementById('custom-key') as HTMLInputElement,
@@ -394,7 +387,6 @@ function applySettings(settings: ProviderSettings): void {
   refs.anthropicModel.value = settings.anthropicModel;
   refs.anthropicCustomModel.value = settings.anthropicCustomModel || '';
   refs.customOverrideModel.value = settings.customOverrideModel || '';
-  refs.customPreset.value = settings.customPreset;
   refs.customEndpoint.value = settings.customEndpoint;
   renderTemplateConfigs(settings.templateConfigs ?? {}, settings.templateOrder);
   updateSiteListVisibility(settings.siteListMode);
@@ -425,7 +417,6 @@ async function saveAllSettings(statusEl: HTMLElement): Promise<void> {
     zaiModel: refs.zaiModel.value,
     anthropicModel: refs.anthropicModel.value,
     customEndpoint: refs.customEndpoint.value,
-    customPreset: refs.customPreset.value as 'ollama' | 'lmstudio' | 'custom',
     openaiCustomModel: refs.openaiCustomModel.value.trim() || undefined,
     geminiCustomModel: refs.geminiCustomModel.value.trim() || undefined,
     grokCustomModel: refs.grokCustomModel.value.trim() || undefined,
@@ -476,6 +467,12 @@ function wireModelInputs(): void {
       debouncedSave();
     });
   });
+
+  refs.systemPrompt.addEventListener('input', () => debouncedSave());
+  refs.showPillLabels.addEventListener('change', () => debouncedSave());
+  refs.forceInsert.addEventListener('change', () => debouncedSave());
+  refs.defaultTemplate.addEventListener('change', () => debouncedSave());
+  refs.siteList.addEventListener('input', () => debouncedSave());
 }
 
 function wireKeyButton(
@@ -511,7 +508,6 @@ function wireProviderKeyButtons(): void {
     await saveCustomKey(refs.customKey.value);
     await saveProviderSettings({
       customEndpoint: refs.customEndpoint.value,
-      customPreset: refs.customPreset.value as 'ollama' | 'lmstudio' | 'custom',
     });
     await refreshBadges();
     flash(refs.keysStatus, '✓ Custom endpoint saved');
@@ -523,17 +519,9 @@ function wireProviderKeyButtons(): void {
     await saveCustomKey('');
     await saveProviderSettings({
       customEndpoint: DEFAULT_SETTINGS.customEndpoint,
-      customPreset: DEFAULT_SETTINGS.customPreset,
     });
     await refreshBadges();
     flash(refs.keysStatus, '✓ Custom endpoint cleared');
-  });
-
-  refs.customPreset.addEventListener('change', (e) => {
-    const preset = (e.target as HTMLSelectElement).value;
-    if (CUSTOM_PRESET_URLS[preset] !== undefined) {
-      refs.customEndpoint.value = CUSTOM_PRESET_URLS[preset];
-    }
   });
 }
 
@@ -585,7 +573,9 @@ async function init(): Promise<void> {
   populateSelect(refs.zaiModel, PROVIDER_MODELS.zai, PROVIDER_MODELS.zai[0]);
   populateSelect(refs.anthropicModel, PROVIDER_MODELS.anthropic, PROVIDER_MODELS.anthropic[0]);
 
-  wireSegmented(refs.providerSegmented);
+  wireSegmented(refs.providerSegmented, () => {
+    saveAllSettings(refs.settingsStatus);
+  });
   wireSegmented(refs.languageSeg, (value) => {
     applyTranslations(value as AppLanguage);
   });

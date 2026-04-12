@@ -23,7 +23,6 @@ export interface ProviderSettings {
   openrouterModel: string;
   anthropicModel: string;
   customEndpoint: string;
-  customPreset: 'ollama' | 'lmstudio' | 'custom';
   openaiCustomModel?: string;
   geminiCustomModel?: string;
   grokCustomModel?: string;

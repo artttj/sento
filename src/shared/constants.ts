@@ -82,7 +82,6 @@ export const DEFAULT_SETTINGS = {
   zaiModel: 'zai-7b',
   anthropicModel: 'claude-sonnet-4-6',
   customEndpoint: 'http://localhost:11434/v1',
-  customPreset: 'ollama',
   systemPrompt: DEFAULT_SYSTEM_PROMPT,
   showPillLabels: true,
   forceInsert: false,

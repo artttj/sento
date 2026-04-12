@@ -41,7 +41,6 @@ describe('isSiteAllowed', () => {
     zaiModel: 'zai-7b',
     anthropicModel: 'claude-3.5-sonnet',
     customEndpoint: 'http://localhost:11434/v1',
-    customPreset: 'ollama',
     siteListMode: mode,
     siteList: list,
     showPillLabels: true,
