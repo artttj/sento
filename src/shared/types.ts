@@ -1,6 +1,6 @@
 // Copyright (c) Artem Iagovdik
 
-export type ProviderName = 'openai' | 'gemini' | 'grok';
+export type ProviderName = 'openai' | 'gemini' | 'grok' | 'openrouter' | 'zai' | 'anthropic' | 'custom';
 
 export type RewriteTemplateId = 'auto_fix' | 'professional' | 'custom' | 'shorten';
 
@@ -19,6 +19,12 @@ export interface ProviderSettings {
   openaiModel: string;
   geminiModel: string;
   grokModel: string;
+  zaiModel: string;
+  openrouterModel: string;
+  anthropicModel: string;
+  customEndpoint: string;
+  customModel: string;
+  customPreset: 'ollama' | 'lmstudio' | 'custom';
   systemPrompt?: string;
   templateConfigs?: Partial<Record<RewriteTemplateId, TemplateConfig>>;
   templateOrder?: RewriteTemplateId[];
