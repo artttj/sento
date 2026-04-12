@@ -5,12 +5,20 @@ export const STORAGE_KEYS = {
   OPENAI_KEY: 'apc_openai_key',
   GEMINI_KEY: 'apc_gemini_key',
   GROK_KEY: 'apc_grok_key',
+  OPENROUTER_KEY: 'apc_openrouter_key',
+  ZAI_KEY: 'apc_zai_key',
+  ANTHROPIC_KEY: 'apc_anthropic_key',
+  CUSTOM_KEY: 'apc_custom_key',
 } as const;
 
 export const PROVIDER_MODELS: Record<string, string[]> = {
   openai: ['gpt-4o-mini', 'gpt-4.1-mini', 'gpt-4.1'],
   gemini: ['gemini-2.5-flash', 'gemini-2.5-pro'],
   grok: ['grok-3-mini', 'grok-3'],
+  openrouter: ['anthropic/claude-3.5-sonnet', 'openai/gpt-4o', 'google/gemini-2.5-flash', 'meta-llama/llama-3.1-70b'],
+  zai: ['zai-7b', 'zai-70b'],
+  anthropic: ['claude-3.5-sonnet', 'claude-3.5-haiku', 'claude-3-opus'],
+  custom: ['llama3', 'llama3:70b', 'mistral', 'qwen2', 'deepseek-coder', 'phi3'],
 };
 
 export const DEFAULT_SYSTEM_PROMPT = `## Writing Humanizer
@@ -48,6 +56,12 @@ export const DEFAULT_SETTINGS = {
   openaiModel: 'gpt-4.1-mini',
   geminiModel: 'gemini-2.5-flash',
   grokModel: 'grok-3-mini',
+  openrouterModel: 'anthropic/claude-3.5-sonnet',
+  zaiModel: 'zai-7b',
+  anthropicModel: 'claude-3.5-sonnet',
+  customEndpoint: 'http://localhost:11434/v1',
+  customModel: 'llama3',
+  customPreset: 'ollama',
   systemPrompt: DEFAULT_SYSTEM_PROMPT,
   showPillLabels: true,
   forceInsert: false,
