@@ -48,8 +48,11 @@ const refs = {
   templatesStatus: document.getElementById('templates-status') as HTMLElement,
 
   openaiModel: document.getElementById('openai-model') as HTMLSelectElement,
+  openaiCustomModel: document.getElementById('openai-custom-model') as HTMLInputElement,
   geminiModel: document.getElementById('gemini-model') as HTMLSelectElement,
+  geminiCustomModel: document.getElementById('gemini-custom-model') as HTMLInputElement,
   grokModel: document.getElementById('grok-model') as HTMLSelectElement,
+  grokCustomModel: document.getElementById('grok-custom-model') as HTMLInputElement,
 
   openaiKey: document.getElementById('openai-key') as HTMLInputElement,
   geminiKey: document.getElementById('gemini-key') as HTMLInputElement,
@@ -67,8 +70,11 @@ const refs = {
   badgeGrok: document.getElementById('badge-grok') as HTMLElement,
 
   openrouterModel: document.getElementById('openrouter-model') as HTMLSelectElement,
+  openrouterCustomModel: document.getElementById('openrouter-custom-model') as HTMLInputElement,
   zaiModel: document.getElementById('zai-model') as HTMLSelectElement,
+  zaiCustomModel: document.getElementById('zai-custom-model') as HTMLInputElement,
   anthropicModel: document.getElementById('anthropic-model') as HTMLSelectElement,
+  anthropicCustomModel: document.getElementById('anthropic-custom-model') as HTMLInputElement,
 
   openrouterKey: document.getElementById('openrouter-key') as HTMLInputElement,
   zaiKey: document.getElementById('zai-key') as HTMLInputElement,
@@ -368,11 +374,17 @@ function applySettings(settings: ProviderSettings): void {
   setSegmentedValue(refs.siteModeSeg, settings.siteListMode);
   refs.siteList.value = settings.siteList.join('\n');
   refs.openaiModel.value = settings.openaiModel;
+  refs.openaiCustomModel.value = settings.openaiCustomModel || '';
   refs.geminiModel.value = settings.geminiModel;
+  refs.geminiCustomModel.value = settings.geminiCustomModel || '';
   refs.grokModel.value = settings.grokModel;
+  refs.grokCustomModel.value = settings.grokCustomModel || '';
   refs.openrouterModel.value = settings.openrouterModel;
+  refs.openrouterCustomModel.value = settings.openrouterCustomModel || '';
   refs.zaiModel.value = settings.zaiModel;
+  refs.zaiCustomModel.value = settings.zaiCustomModel || '';
   refs.anthropicModel.value = settings.anthropicModel;
+  refs.anthropicCustomModel.value = settings.anthropicCustomModel || '';
   refs.customModel.value = settings.customModel;
   refs.customPreset.value = settings.customPreset;
   refs.customEndpoint.value = settings.customEndpoint;
@@ -407,6 +419,12 @@ async function saveAllSettings(statusEl: HTMLElement): Promise<void> {
     customModel: refs.customModel.value,
     customEndpoint: refs.customEndpoint.value,
     customPreset: refs.customPreset.value as 'ollama' | 'lmstudio' | 'custom',
+    openaiCustomModel: refs.openaiCustomModel.value.trim() || undefined,
+    geminiCustomModel: refs.geminiCustomModel.value.trim() || undefined,
+    grokCustomModel: refs.grokCustomModel.value.trim() || undefined,
+    openrouterCustomModel: refs.openrouterCustomModel.value.trim() || undefined,
+    zaiCustomModel: refs.zaiCustomModel.value.trim() || undefined,
+    anthropicCustomModel: refs.anthropicCustomModel.value.trim() || undefined,
     systemPrompt: refs.systemPrompt.value,
     templateConfigs: collectTemplateConfigs(),
     templateOrder: collectTemplateOrder(),

@@ -209,12 +209,12 @@
         </div>
 
         <div class="setting-group">
-          <div class="setting-row">
+          <div class="setting-row setting-row--stack">
             <div class="setting-label">
               <div class="setting-title" data-i18n="ai-provider">AI Provider</div>
               <div class="setting-desc" data-i18n="ai-provider-desc">Which service runs rewrite requests</div>
             </div>
-            <div class="segmented" id="provider-segmented">
+            <div class="segmented segmented--wrap" id="provider-segmented">
               <button class="seg-btn" data-value="openai" type="button">OpenAI</button>
               <button class="seg-btn" data-value="gemini" type="button">Gemini</button>
               <button class="seg-btn" data-value="grok" type="button">Grok</button>
@@ -231,6 +231,7 @@
             <div class="provider-info">
               <div class="provider-name">OpenAI</div>
               <select id="openai-model" class="provider-model-select setting-select setting-select--sm"></select>
+              <input id="openai-custom-model" type="text" class="custom-model-input" placeholder="or custom model" autocomplete="off" spellcheck="false" />
             </div>
             <span id="badge-openai" class="status-badge unconfigured">Not Configured</span>
           </div>
@@ -253,6 +254,7 @@
             <div class="provider-info">
               <div class="provider-name">Gemini</div>
               <select id="gemini-model" class="provider-model-select setting-select setting-select--sm"></select>
+              <input id="gemini-custom-model" type="text" class="custom-model-input" placeholder="or custom model" autocomplete="off" spellcheck="false" />
             </div>
             <span id="badge-gemini" class="status-badge unconfigured">Not Configured</span>
           </div>
@@ -275,6 +277,7 @@
             <div class="provider-info">
               <div class="provider-name">Grok</div>
               <select id="grok-model" class="provider-model-select setting-select setting-select--sm"></select>
+              <input id="grok-custom-model" type="text" class="custom-model-input" placeholder="or custom model" autocomplete="off" spellcheck="false" />
             </div>
             <span id="badge-grok" class="status-badge unconfigured">Not Configured</span>
           </div>
@@ -297,6 +300,7 @@
             <div class="provider-info">
               <div class="provider-name">OpenRouter</div>
               <select id="openrouter-model" class="provider-model-select setting-select setting-select--sm"></select>
+              <input id="openrouter-custom-model" type="text" class="custom-model-input" placeholder="or custom model" autocomplete="off" spellcheck="false" />
             </div>
             <span id="badge-openrouter" class="status-badge unconfigured">Not Configured</span>
           </div>
@@ -319,6 +323,7 @@
             <div class="provider-info">
               <div class="provider-name">Zai</div>
               <select id="zai-model" class="provider-model-select setting-select setting-select--sm"></select>
+              <input id="zai-custom-model" type="text" class="custom-model-input" placeholder="or custom model" autocomplete="off" spellcheck="false" />
             </div>
             <span id="badge-zai" class="status-badge unconfigured">Not Configured</span>
           </div>
@@ -341,6 +346,7 @@
             <div class="provider-info">
               <div class="provider-name">Anthropic</div>
               <select id="anthropic-model" class="provider-model-select setting-select setting-select--sm"></select>
+              <input id="anthropic-custom-model" type="text" class="custom-model-input" placeholder="or custom model" autocomplete="off" spellcheck="false" />
             </div>
             <span id="badge-anthropic" class="status-badge unconfigured">Not Configured</span>
           </div>

@@ -97,9 +97,21 @@ async function resolveProviderContext(): Promise<{
     custom: 'customModel',
   };
 
+  const customModelMap: Partial<Record<ProviderName, keyof ProviderSettings>> = {
+    openai: 'openaiCustomModel',
+    gemini: 'geminiCustomModel',
+    grok: 'grokCustomModel',
+    openrouter: 'openrouterCustomModel',
+    zai: 'zaiCustomModel',
+    anthropic: 'anthropicCustomModel',
+  };
+
   const key = await keyMap[provider]();
   const modelKey = modelMap[provider];
-  const model = settings[modelKey] as string;
+  const customModelKey = customModelMap[provider];
+  const baseModel = settings[modelKey] as string;
+  const customModel = customModelKey ? settings[customModelKey] as string | undefined : undefined;
+  const model = customModel?.trim() || baseModel;
 
   return {
     provider,

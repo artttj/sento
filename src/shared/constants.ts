@@ -12,13 +12,33 @@ export const STORAGE_KEYS = {
 } as const;
 
 export const PROVIDER_MODELS: Record<string, string[]> = {
-  openai: ['gpt-4o-mini', 'gpt-4.1-mini', 'gpt-4.1'],
-  gemini: ['gemini-2.5-flash', 'gemini-2.5-pro'],
-  grok: ['grok-3-mini', 'grok-3'],
-  openrouter: ['anthropic/claude-3.5-sonnet', 'openai/gpt-4o', 'google/gemini-2.5-flash', 'meta-llama/llama-3.1-70b'],
+  openai: ['gpt-4o-mini', 'gpt-4.1-mini', 'gpt-4.1', 'o1-mini', 'o1'],
+  gemini: ['gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-1.5-flash', 'gemini-1.5-pro'],
+  grok: ['grok-3-mini', 'grok-3', 'grok-4.1-fast'],
+  openrouter: [
+    'anthropic/claude-sonnet-4-6',
+    'anthropic/claude-opus-4-6',
+    'google/gemma-4-26b-a4b-it:free',
+    'meta-llama/llama-3.3-70b-instruct',
+    'deepseek/deepseek-r1:free',
+    'qwen/qwen3-next-80b-a3b-instruct:free',
+    'openai/gpt-oss-120b:free',
+  ],
   zai: ['zai-7b', 'zai-70b'],
-  anthropic: ['claude-3.5-sonnet', 'claude-3.5-haiku', 'claude-3-opus'],
-  custom: ['llama3', 'llama3:70b', 'mistral', 'qwen2', 'deepseek-coder', 'phi3'],
+  anthropic: ['claude-sonnet-4-6', 'claude-opus-4-6', 'claude-haiku-4-5'],
+  custom: [
+    'gemma4',
+    'llama4',
+    'llama3.3',
+    'qwen3.5',
+    'deepseek-r1',
+    'deepseek-v3',
+    'gemma3',
+    'phi4',
+    'mistral',
+    'kimi-k2',
+    'glm-5',
+  ],
 };
 
 export const DEFAULT_SYSTEM_PROMPT = `## Writing Humanizer
@@ -53,14 +73,14 @@ Your task is to transform and humanize any piece of writing, ensuring it is clea
 export const DEFAULT_SETTINGS = {
   defaultTemplateId: 'auto_fix',
   llmProvider: 'openai',
-  openaiModel: 'gpt-4.1-mini',
+  openaiModel: 'gpt-4o-mini',
   geminiModel: 'gemini-2.5-flash',
   grokModel: 'grok-3-mini',
-  openrouterModel: 'anthropic/claude-3.5-sonnet',
+  openrouterModel: 'anthropic/claude-sonnet-4-6',
   zaiModel: 'zai-7b',
-  anthropicModel: 'claude-3.5-sonnet',
+  anthropicModel: 'claude-sonnet-4-6',
   customEndpoint: 'http://localhost:11434/v1',
-  customModel: 'llama3',
+  customModel: 'llama4',
   customPreset: 'ollama',
   systemPrompt: DEFAULT_SYSTEM_PROMPT,
   showPillLabels: true,
