@@ -463,9 +463,18 @@ function wireModelInputs(): void {
   const debouncedSave = debounce(() => saveAllSettings(refs.settingsStatus), 300);
 
   modelInputs.forEach((input) => {
-    input.addEventListener('change', () => {
-      debouncedSave();
-    });
+    if (input instanceof HTMLSelectElement) {
+      input.addEventListener('change', () => {
+        debouncedSave();
+      });
+    } else {
+      input.addEventListener('input', () => {
+        debouncedSave();
+      });
+      input.addEventListener('blur', () => {
+        saveAllSettings(refs.settingsStatus);
+      });
+    }
   });
 
   refs.systemPrompt.addEventListener('input', () => debouncedSave());
