@@ -72,7 +72,7 @@ async function resolveProviderContext(): Promise<{
       settings,
       customStrategy: new CustomEndpointProvider(
         settings.customEndpoint,
-        !!customKey.trim()
+        settings.customUseAuth
       ),
       cachedCustomKey: customKey,
     };

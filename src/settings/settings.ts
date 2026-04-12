@@ -88,6 +88,7 @@ const refs = {
   customOverrideModel: document.getElementById('custom-override-model') as HTMLInputElement,
   customEndpoint: document.getElementById('custom-endpoint') as HTMLInputElement,
   customKey: document.getElementById('custom-key') as HTMLInputElement,
+  customUseAuth: document.getElementById('custom-use-auth') as HTMLInputElement,
   btnSaveCustom: document.getElementById('btn-save-custom') as HTMLButtonElement,
   btnClearCustom: document.getElementById('btn-clear-custom') as HTMLButtonElement,
   badgeCustom: document.getElementById('badge-custom') as HTMLElement,
@@ -388,6 +389,7 @@ function applySettings(settings: ProviderSettings): void {
   refs.anthropicCustomModel.value = settings.anthropicCustomModel || '';
   refs.customOverrideModel.value = settings.customOverrideModel || '';
   refs.customEndpoint.value = settings.customEndpoint;
+  refs.customUseAuth.checked = settings.customUseAuth ?? false;
   renderTemplateConfigs(settings.templateConfigs ?? {}, settings.templateOrder);
   updateSiteListVisibility(settings.siteListMode);
   applyTranslations(settings.language);
@@ -417,6 +419,7 @@ async function saveAllSettings(statusEl: HTMLElement): Promise<void> {
     zaiModel: refs.zaiModel.value,
     anthropicModel: refs.anthropicModel.value,
     customEndpoint: refs.customEndpoint.value,
+    customUseAuth: refs.customUseAuth.checked,
     openaiCustomModel: refs.openaiCustomModel.value.trim() || undefined,
     geminiCustomModel: refs.geminiCustomModel.value.trim() || undefined,
     grokCustomModel: refs.grokCustomModel.value.trim() || undefined,
@@ -480,6 +483,7 @@ function wireModelInputs(): void {
   refs.systemPrompt.addEventListener('input', () => debouncedSave());
   refs.showPillLabels.addEventListener('change', () => debouncedSave());
   refs.forceInsert.addEventListener('change', () => debouncedSave());
+  refs.customUseAuth.addEventListener('change', () => debouncedSave());
   refs.defaultTemplate.addEventListener('change', () => debouncedSave());
   refs.siteList.addEventListener('input', () => debouncedSave());
 }

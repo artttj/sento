@@ -48,6 +48,7 @@ export async function getProviderSettings(): Promise<ProviderSettings> {
     zaiModel: raw.zaiModel ?? DEFAULT_SETTINGS.zaiModel,
     anthropicModel: raw.anthropicModel ?? DEFAULT_SETTINGS.anthropicModel,
     customEndpoint: raw.customEndpoint ?? DEFAULT_SETTINGS.customEndpoint,
+    customUseAuth: raw.customUseAuth ?? DEFAULT_SETTINGS.customUseAuth,
     systemPrompt: raw.systemPrompt ?? DEFAULT_SETTINGS.systemPrompt,
     templateConfigs: raw.templateConfigs,
     templateOrder: Array.isArray(raw.templateOrder) ? raw.templateOrder : undefined,

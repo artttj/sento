@@ -82,6 +82,7 @@ export const DEFAULT_SETTINGS = {
   zaiModel: 'zai-7b',
   anthropicModel: 'claude-sonnet-4-6',
   customEndpoint: 'http://localhost:11434',
+  customUseAuth: false,
   systemPrompt: DEFAULT_SYSTEM_PROMPT,
   showPillLabels: true,
   forceInsert: false,

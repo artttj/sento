@@ -23,6 +23,7 @@ export interface ProviderSettings {
   openrouterModel: string;
   anthropicModel: string;
   customEndpoint: string;
+  customUseAuth: boolean;
   openaiCustomModel?: string;
   geminiCustomModel?: string;
   grokCustomModel?: string;
