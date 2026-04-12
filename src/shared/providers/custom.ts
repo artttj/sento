@@ -15,7 +15,7 @@ export class CustomEndpointProvider implements ProviderStrategy {
   readonly baseUrl: string;
   private readonly includeAuth: boolean;
 
-  constructor(baseUrl: string, includeAuth = true) {
+  constructor(baseUrl: string, includeAuth = false) {
     this.baseUrl = baseUrl;
     this.includeAuth = includeAuth;
   }

@@ -38,7 +38,7 @@ export async function getProviderSettings(): Promise<ProviderSettings> {
   const rawSiteMode = raw.siteListMode;
   const siteListMode: SiteListMode = rawSiteMode && isSiteListMode(rawSiteMode) ? rawSiteMode : DEFAULT_SETTINGS.siteListMode;
 
-  return {
+  const settings: ProviderSettings = {
     defaultTemplateId,
     llmProvider: provider,
     openaiModel: raw.openaiModel ?? DEFAULT_SETTINGS.openaiModel,
@@ -58,6 +58,12 @@ export async function getProviderSettings(): Promise<ProviderSettings> {
     siteListMode,
     siteList: Array.isArray(raw.siteList) ? raw.siteList : [...DEFAULT_SETTINGS.siteList],
   };
+
+  if (raw.customUseAuth === undefined) {
+    await saveProviderSettings({ customUseAuth: false });
+  }
+
+  return settings;
 }
 
 /**
