@@ -194,7 +194,7 @@
           <p data-i18n="privacy-notice-intro">When rewriting text, the selected content is sent directly to your chosen AI provider. Please note:</p>
           <ul>
             <li data-i18n-html="privacy-notice-storage"><strong>No Storage:</strong> This extension stores nothing on any server. No content, no API keys — everything stays on your device.</li>
-            <li data-i18n-html="privacy-notice-transfer"><strong>Data Transfer:</strong> Your selected text leaves your device and is processed by the AI provider (OpenAI, Google, or xAI).</li>
+            <li data-i18n-html="privacy-notice-transfer"><strong>Data Transfer:</strong> Your selected text leaves your device and is processed by the AI provider (OpenAI, Google, xAI, OpenRouter, Zai, Anthropic, or your custom endpoint).</li>
             <li data-i18n-html="privacy-notice-sensitive"><strong>Personal Info:</strong> Avoid rewriting text that contains sensitive health, financial, or private credentials.</li>
             <li data-i18n-html="privacy-notice-responsibility"><strong>Your Responsibility:</strong> You are responsible for ensuring compliance with GDPR, CCPA, and other applicable data laws.</li>
           </ul>
@@ -202,7 +202,9 @@
             <strong data-i18n="privacy-notice-policies">Privacy Policies:</strong>
             <a href="https://openai.com/policies/privacy-policy/" target="_blank" rel="noopener">OpenAI</a> ·
             <a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener">Google AI</a> ·
-            <a href="https://x.ai/legal/privacy-policy/" target="_blank" rel="noopener">xAI</a>
+            <a href="https://x.ai/legal/privacy-policy/" target="_blank" rel="noopener">xAI</a> ·
+            <a href="https://openrouter.ai/privacy" target="_blank" rel="noopener">OpenRouter</a> ·
+            <a href="https://www.anthropic.com/legal/privacy" target="_blank" rel="noopener">Anthropic</a>
           </p>
         </div>
 
@@ -216,6 +218,10 @@
               <button class="seg-btn" data-value="openai" type="button">OpenAI</button>
               <button class="seg-btn" data-value="gemini" type="button">Gemini</button>
               <button class="seg-btn" data-value="grok" type="button">Grok</button>
+              <button class="seg-btn" data-value="openrouter" type="button">OpenRouter</button>
+              <button class="seg-btn" data-value="zai" type="button">Zai</button>
+              <button class="seg-btn" data-value="anthropic" type="button">Anthropic</button>
+              <button class="seg-btn" data-value="custom" type="button">Custom</button>
             </div>
           </div>
         </div>
@@ -282,6 +288,102 @@
             <div class="provider-btns">
               <button id="btn-save-grok" class="btn btn-primary btn-sm" data-i18n="save" type="button">Save</button>
               <button id="btn-clear-grok" class="btn btn-ghost btn-sm" data-i18n="clear" type="button">Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="provider-card">
+          <div class="provider-header">
+            <div class="provider-info">
+              <div class="provider-name">OpenRouter</div>
+              <select id="openrouter-model" class="provider-model-select setting-select setting-select--sm"></select>
+            </div>
+            <span id="badge-openrouter" class="status-badge unconfigured">Not Configured</span>
+          </div>
+
+          <div class="provider-key-row">
+            <input id="openrouter-key" type="password" class="key-input" placeholder="sk-or-..." autocomplete="off" spellcheck="false" />
+          </div>
+
+          <div class="provider-footer">
+            <span class="provider-hint">Sent only to <code>openrouter.ai</code></span>
+            <div class="provider-btns">
+              <button id="btn-save-openrouter" class="btn btn-primary btn-sm" data-i18n="save" type="button">Save</button>
+              <button id="btn-clear-openrouter" class="btn btn-ghost btn-sm" data-i18n="clear" type="button">Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="provider-card">
+          <div class="provider-header">
+            <div class="provider-info">
+              <div class="provider-name">Zai</div>
+              <select id="zai-model" class="provider-model-select setting-select setting-select--sm"></select>
+            </div>
+            <span id="badge-zai" class="status-badge unconfigured">Not Configured</span>
+          </div>
+
+          <div class="provider-key-row">
+            <input id="zai-key" type="password" class="key-input" placeholder="zai-..." autocomplete="off" spellcheck="false" />
+          </div>
+
+          <div class="provider-footer">
+            <span class="provider-hint">Sent only to <code>api.zai.ai</code></span>
+            <div class="provider-btns">
+              <button id="btn-save-zai" class="btn btn-primary btn-sm" data-i18n="save" type="button">Save</button>
+              <button id="btn-clear-zai" class="btn btn-ghost btn-sm" data-i18n="clear" type="button">Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="provider-card">
+          <div class="provider-header">
+            <div class="provider-info">
+              <div class="provider-name">Anthropic</div>
+              <select id="anthropic-model" class="provider-model-select setting-select setting-select--sm"></select>
+            </div>
+            <span id="badge-anthropic" class="status-badge unconfigured">Not Configured</span>
+          </div>
+
+          <div class="provider-key-row">
+            <input id="anthropic-key" type="password" class="key-input" placeholder="sk-ant-..." autocomplete="off" spellcheck="false" />
+          </div>
+
+          <div class="provider-footer">
+            <span class="provider-hint">Sent only to <code>api.anthropic.com</code></span>
+            <div class="provider-btns">
+              <button id="btn-save-anthropic" class="btn btn-primary btn-sm" data-i18n="save" type="button">Save</button>
+              <button id="btn-clear-anthropic" class="btn btn-ghost btn-sm" data-i18n="clear" type="button">Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="provider-card">
+          <div class="provider-header">
+            <div class="provider-info">
+              <div class="provider-name">Custom</div>
+              <div class="custom-controls">
+                <select id="custom-preset" class="setting-select setting-select--sm">
+                  <option value="ollama">Ollama</option>
+                  <option value="lmstudio">LM Studio</option>
+                  <option value="custom">Custom</option>
+                </select>
+                <input id="custom-endpoint" type="text" class="setting-input setting-input--sm" placeholder="http://localhost:11434/v1" />
+                <select id="custom-model" class="provider-model-select setting-select setting-select--sm"></select>
+              </div>
+            </div>
+            <span id="badge-custom" class="status-badge unconfigured">Not Configured</span>
+          </div>
+
+          <div class="provider-key-row">
+            <input id="custom-key" type="password" class="key-input" placeholder="Optional API key" autocomplete="off" spellcheck="false" />
+          </div>
+
+          <div class="provider-footer">
+            <span class="provider-hint">OpenAI-compatible endpoint (e.g. Ollama, LM Studio)</span>
+            <div class="provider-btns">
+              <button id="btn-save-custom" class="btn btn-primary btn-sm" data-i18n="save" type="button">Save</button>
+              <button id="btn-clear-custom" class="btn btn-ghost btn-sm" data-i18n="clear" type="button">Clear</button>
             </div>
           </div>
         </div>
@@ -383,6 +485,8 @@
               <li><a href="https://openai.com/policies/privacy-policy/" target="_blank" rel="noopener">OpenAI</a></li>
               <li><a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener">Google AI</a></li>
               <li><a href="https://x.ai/legal/privacy-policy/" target="_blank" rel="noopener">xAI (Grok)</a></li>
+              <li><a href="https://openrouter.ai/privacy" target="_blank" rel="noopener">OpenRouter</a></li>
+              <li><a href="https://www.anthropic.com/legal/privacy" target="_blank" rel="noopener">Anthropic</a></li>
             </ul>
           </div>
 
