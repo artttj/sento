@@ -1,6 +1,6 @@
 // Copyright (c) Artem Iagovdik
 
-import { REQUEST_TIMEOUT_MS } from '../shared/constants';
+import { CUSTOM_REQUEST_TIMEOUT_MS, REQUEST_TIMEOUT_MS } from '../shared/constants';
 import { buildRewritePrompt } from '../shared/rewriteTemplates';
 import { getProviderSettings, getOpenAIKey, getGeminiKey, getGrokKey, getOpenRouterKey, getZaiKey, getAnthropicKey, getCustomKey } from '../shared/storage';
 import { getProviderStrategy } from '../shared/providers';
@@ -170,7 +170,8 @@ export async function rewriteWithProvider(
     instructionOverride: templateConfig?.instruction,
   });
 
-  const timeout = AbortSignal.timeout(REQUEST_TIMEOUT_MS);
+  const timeoutMs = isCustom ? CUSTOM_REQUEST_TIMEOUT_MS : REQUEST_TIMEOUT_MS;
+  const timeout = AbortSignal.timeout(timeoutMs);
   const combinedSignal = AbortSignal.any([signal, timeout]);
 
   try {

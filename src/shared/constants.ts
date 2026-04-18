@@ -86,3 +86,5 @@ export const DEFAULT_SETTINGS = {
 export const MAX_SELECTION_CHARS = 12000;
 
 export const REQUEST_TIMEOUT_MS = 30000;
+
+export const CUSTOM_REQUEST_TIMEOUT_MS = 180000;
