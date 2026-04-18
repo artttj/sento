@@ -1,6 +1,7 @@
 // Copyright (c) Artem Iagovdik
 
 import { REWRITE_TEMPLATES, type RewriteTemplate } from '../../shared/rewriteTemplates';
+import { renderTemplateIcon } from '../../shared/templateIcons';
 import type { RewriteTemplateId } from '../../shared/types';
 import type { SelectionRect } from '../types';
 import { bubbleStyles } from './styles';
@@ -307,16 +308,6 @@ export class RewriteBubble {
     const options = templates.map(
       (tpl) => `<option value="${tpl.id}">${tpl.label}</option>`
     ).join('');
-    const iconByTemplate: Record<RewriteTemplateId, string> = {
-      auto_fix:
-        '<svg viewBox="0 0 24 24" class="icon-svg" aria-hidden="true"><path d="M12 2.5l1.9 7.1 7.1 1.9-7.1 1.9-1.9 7.1-1.9-7.1-7.1-1.9 7.1-1.9z"/></svg>',
-      professional:
-        '<svg viewBox="0 0 24 24" class="icon-svg" aria-hidden="true"><path d="M10.5 3h3l1 5.5H9.5L10.5 3zm-1.2 7h5.4l-1.5 11h-2.4L9.3 10z"/></svg>',
-      custom:
-        '<svg viewBox="0 0 24 24" class="icon-svg" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="4" r="1.5"/><circle cx="12" cy="20" r="1.5"/><circle cx="4" cy="12" r="1.5"/><circle cx="20" cy="12" r="1.5"/></svg>',
-      shorten:
-        '<svg viewBox="0 0 24 24" class="icon-svg" aria-hidden="true"><path d="M4 6h16v2.5H4zm0 5.5h11v2.5H4zm0 5.5h7v2.5H4z"/></svg>',
-    };
     const templateButtons = templates.map((tpl, index) => {
       const isActive = index === 0 ? ' active' : '';
       return `
@@ -328,7 +319,7 @@ export class RewriteBubble {
           aria-pressed="${index === 0 ? 'true' : 'false'}"
           title="${tpl.label}"
         >
-          <span class="icon-wrap">${iconByTemplate[tpl.id]}</span>
+          <span class="icon-wrap">${renderTemplateIcon(tpl.id)}</span>
           <span class="tile-label">${tpl.label}</span>
         </button>
       `;

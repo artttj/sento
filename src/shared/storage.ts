@@ -9,7 +9,7 @@ function isProviderName(value: string): value is ProviderName {
 }
 
 function isRewriteTemplateId(value: string): value is RewriteTemplateId {
-  return value === 'auto_fix' || value === 'professional' || value === 'custom' || value === 'shorten';
+  return value === 'auto_fix' || value === 'professional' || value === 'custom' || value === 'translate';
 }
 
 function isSiteListMode(value: string): value is SiteListMode {

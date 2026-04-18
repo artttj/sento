@@ -5,7 +5,7 @@ import type { RewriteTemplateId } from './types';
 describe('REWRITE_TEMPLATES', () => {
   it('contains all expected template ids', () => {
     const ids = REWRITE_TEMPLATES.map((t) => t.id);
-    expect(ids).toEqual(['auto_fix', 'professional', 'custom', 'shorten']);
+    expect(ids).toEqual(['auto_fix', 'professional', 'custom', 'translate']);
   });
 
   it('all templates have non-empty instructions', () => {
@@ -19,27 +19,27 @@ describe('REWRITE_TEMPLATES', () => {
 describe('getOrderedTemplates', () => {
   it('returns default order when no order specified', () => {
     const templates = getOrderedTemplates();
-    expect(templates.map((t) => t.id)).toEqual(['auto_fix', 'professional', 'custom', 'shorten']);
+    expect(templates.map((t) => t.id)).toEqual(['auto_fix', 'professional', 'custom', 'translate']);
   });
 
   it('returns default order when order is empty', () => {
     const templates = getOrderedTemplates([]);
-    expect(templates.map((t) => t.id)).toEqual(['auto_fix', 'professional', 'custom', 'shorten']);
+    expect(templates.map((t) => t.id)).toEqual(['auto_fix', 'professional', 'custom', 'translate']);
   });
 
   it('returns reordered templates', () => {
-    const templates = getOrderedTemplates(['shorten', 'auto_fix']);
-    expect(templates.map((t) => t.id)).toEqual(['shorten', 'auto_fix', 'professional', 'custom']);
+    const templates = getOrderedTemplates(['translate', 'auto_fix']);
+    expect(templates.map((t) => t.id)).toEqual(['translate', 'auto_fix', 'professional', 'custom']);
   });
 
   it('handles partial order', () => {
     const templates = getOrderedTemplates(['professional']);
-    expect(templates.map((t) => t.id)).toEqual(['professional', 'auto_fix', 'custom', 'shorten']);
+    expect(templates.map((t) => t.id)).toEqual(['professional', 'auto_fix', 'custom', 'translate']);
   });
 
   it('ignores invalid template ids', () => {
     const templates = getOrderedTemplates(['invalid', 'auto_fix'] as RewriteTemplateId[]);
-    expect(templates.map((t) => t.id)).toEqual(['auto_fix', 'professional', 'custom', 'shorten']);
+    expect(templates.map((t) => t.id)).toEqual(['auto_fix', 'professional', 'custom', 'translate']);
   });
 });
 

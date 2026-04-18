@@ -59,7 +59,7 @@ Rewrite the user's text with a clear, direct, natural voice. Strip AI-sounding p
 9. No em dashes. Use commas or colons.
 10. No emojis, hashtags, semicolons, or asterisks unless the source already uses them.
 11. Keep "you" and "your" when the source addresses the reader directly.
-12. Mirror the source language. Respond in whatever language the input uses.
+12. Mirror the source language by default. Respond in whatever language the input uses, unless the task explicitly asks you to translate.
 
 ## Output
 Return only the rewritten text. Keep a single consistent voice. Use the fewest words needed without losing meaning.`;

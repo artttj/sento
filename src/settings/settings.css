@@ -410,11 +410,28 @@ body {
   cursor: not-allowed;
 }
 
+.tpl-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-left: 12px;
+  color: var(--c-text);
+  flex-shrink: 0;
+}
+
+.tpl-icon-svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
 .tpl-name {
   font-size: 13px;
   font-weight: 600;
   color: var(--c-text);
-  margin-left: 12px;
+  margin-left: 8px;
 }
 
 .tpl-instruction {

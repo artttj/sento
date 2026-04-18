@@ -2,7 +2,7 @@
 
 export type ProviderName = 'openai' | 'gemini' | 'grok' | 'openrouter' | 'zai' | 'anthropic' | 'custom';
 
-export type RewriteTemplateId = 'auto_fix' | 'professional' | 'custom' | 'shorten';
+export type RewriteTemplateId = 'auto_fix' | 'professional' | 'custom' | 'translate';
 
 export type SiteListMode = 'all' | 'allowlist' | 'blocklist';
 

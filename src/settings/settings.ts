@@ -2,6 +2,7 @@
 
 import { PROVIDER_MODELS, DEFAULT_SETTINGS } from '../shared/constants';
 import { getOrderedTemplates, REWRITE_TEMPLATES } from '../shared/rewriteTemplates';
+import { renderTemplateIcon } from '../shared/templateIcons';
 import {
   getProviderSettings,
   saveProviderSettings,
@@ -211,6 +212,16 @@ function renderTemplateConfigs(configs: Partial<Record<RewriteTemplateId, Templa
     `;
     const textarea = card.querySelector('.tpl-instruction') as HTMLTextAreaElement;
     textarea.value = instruction;
+    const header = card.querySelector('.tpl-header');
+    const nameEl = card.querySelector('.tpl-name');
+    if (header && nameEl) {
+      header.insertAdjacentHTML(
+        'beforeend',
+        `<span class="tpl-icon">${renderTemplateIcon(tpl.id, 'tpl-icon-svg')}</span>`,
+      );
+      const iconSpan = header.querySelector(':scope > .tpl-icon');
+      if (iconSpan) header.insertBefore(iconSpan, nameEl);
+    }
     container.appendChild(card);
 
     const checkbox = card.querySelector('.tpl-checkbox') as HTMLInputElement;

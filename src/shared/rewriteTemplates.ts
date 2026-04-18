@@ -23,15 +23,15 @@ export const REWRITE_TEMPLATES: RewriteTemplate[] = [
   },
   {
     id: 'custom',
-    label: 'Mine',
+    label: 'Custom',
     instruction:
       "Follow the user's custom instruction. If none is provided, improve clarity and readability while preserving meaning.",
   },
   {
-    id: 'shorten',
-    label: 'Trim',
+    id: 'translate',
+    label: 'Translate',
     instruction:
-      'Cut length by at least 40%. Keep every fact, action item, and decision. Remove redundancy, qualifiers, and filler. Prefer short sentences. In lists, keep every item but tighten each one.',
+      'Translate the text to English. Preserve tone, formatting, and meaning. If the source is already in English, translate it to the language you judge most useful from the surrounding context. Do not transliterate names.',
   },
 ];
 
@@ -60,9 +60,10 @@ export function buildRewritePrompt(input: { templateId: RewriteTemplateId; text:
     .filter(Boolean)
     .join('\n');
 
+  const isTranslate = input.templateId === 'translate';
   return [
     `Task: ${instruction}`,
-    'Write the output in the same language as the original text.',
+    isTranslate ? '' : 'Write the output in the same language as the original text.',
     'Return only the rewritten text. Do not include commentary, quotes, markdown fences, or explanations.\nPreserve the original formatting structure: keep line breaks, bullet points, numbered lists, and paragraph spacing intact.',
     context ? `Context:\n${context}` : '',
     'Original text:',
