@@ -49,6 +49,13 @@ export async function getProviderSettings(): Promise<ProviderSettings> {
     anthropicModel: raw.anthropicModel ?? DEFAULT_SETTINGS.anthropicModel,
     customEndpoint: raw.customEndpoint ?? DEFAULT_SETTINGS.customEndpoint,
     customUseAuth: raw.customUseAuth ?? DEFAULT_SETTINGS.customUseAuth,
+    customOverrideModel: raw.customOverrideModel,
+    openaiCustomModel: raw.openaiCustomModel,
+    geminiCustomModel: raw.geminiCustomModel,
+    grokCustomModel: raw.grokCustomModel,
+    openrouterCustomModel: raw.openrouterCustomModel,
+    zaiCustomModel: raw.zaiCustomModel,
+    anthropicCustomModel: raw.anthropicCustomModel,
     systemPrompt: raw.systemPrompt ?? DEFAULT_SETTINGS.systemPrompt,
     templateConfigs: raw.templateConfigs,
     templateOrder: Array.isArray(raw.templateOrder) ? raw.templateOrder : undefined,
@@ -60,7 +67,9 @@ export async function getProviderSettings(): Promise<ProviderSettings> {
   };
 
   if (raw.customUseAuth === undefined) {
-    await saveProviderSettings({ customUseAuth: false });
+    await chrome.storage.local.set({
+      [STORAGE_KEYS.SETTINGS]: { ...settings, customUseAuth: false },
+    });
   }
 
   return settings;

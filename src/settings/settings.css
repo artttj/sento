@@ -800,11 +800,6 @@ body {
   font-size: 12px;
 }
 
-.saved-msg {
-  color: var(--c-success);
-  font-size: 12px;
-  font-weight: 500;
-}
 
 .hidden { display: none !important; }
 
@@ -1681,7 +1676,7 @@ body {
 }
 
 .custom-model-input {
-  width: 110px;
+  width: 160px;
   padding: 4px 8px;
   background: rgba(255,255,255,0.04);
   border: 1px dashed var(--c-border);
@@ -1715,4 +1710,33 @@ body {
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   GLOBAL TOAST
+═══════════════════════════════════════════════════════════════════════════ */
+.global-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  padding: 8px 20px;
+  background: var(--c-elevated);
+  border: 1px solid var(--c-border-hi);
+  border-radius: var(--r-lg);
+  color: var(--c-success);
+  font-size: 13px;
+  font-weight: 500;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  backdrop-filter: var(--glass-blur-sm);
+  -webkit-backdrop-filter: var(--glass-blur-sm);
+  box-shadow: var(--shadow-md);
+  transition: opacity var(--t) var(--ease), transform var(--t) var(--ease);
+}
+
+.global-toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }

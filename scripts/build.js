@@ -36,6 +36,8 @@ async function build() {
   mkdirp(dist);
 
   copyFile(path.join(root, 'manifest.json'), path.join(dist, 'manifest.json'));
+  mkdirp(path.join(dist, 'rules'));
+  copyFile(path.join(root, 'rules', 'local_cors.json'), path.join(dist, 'rules', 'local_cors.json'));
   mkdirp(path.join(dist, 'icons'));
   for (const icon of ['icon16.png', 'icon32.png', 'icon48.png', 'icon128.png']) {
     copyFile(path.join(root, 'icons', icon), path.join(dist, 'icons', icon));

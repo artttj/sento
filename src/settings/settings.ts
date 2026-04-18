@@ -37,9 +37,7 @@ const refs = {
   siteListTitle: document.getElementById('site-list-title') as HTMLElement,
   siteList: document.getElementById('site-list') as HTMLTextAreaElement,
   btnSaveSettings: document.getElementById('btn-save-settings') as HTMLButtonElement,
-  settingsStatus: document.getElementById('settings-status') as HTMLElement,
   btnSaveTemplates: document.getElementById('btn-save-templates') as HTMLButtonElement,
-  templatesStatus: document.getElementById('templates-status') as HTMLElement,
 
   openaiModel: document.getElementById('openai-model') as HTMLSelectElement,
   openaiCustomModel: document.getElementById('openai-custom-model') as HTMLInputElement,
@@ -93,16 +91,26 @@ const refs = {
   btnClearCustom: document.getElementById('btn-clear-custom') as HTMLButtonElement,
   badgeCustom: document.getElementById('badge-custom') as HTMLElement,
   navAiWarning: document.getElementById('nav-ai-warning') as HTMLElement,
-  keysStatus: document.getElementById('keys-status') as HTMLElement,
+  globalToast: document.getElementById('global-toast') as HTMLElement,
 
   aboutVersion: document.getElementById('about-version') as HTMLElement,
   templateConfigs: document.getElementById('template-configs') as HTMLElement,
 };
 
-function flash(el: HTMLElement, text = 'Saved'): void {
+let flashTimer: ReturnType<typeof setTimeout> | null = null;
+
+function flash(text = '✓ Saved'): void {
+  const el = refs.globalToast;
   el.textContent = text;
   el.classList.remove('hidden');
-  setTimeout(() => el.classList.add('hidden'), 1800);
+  el.classList.add('visible');
+  if (flashTimer) clearTimeout(flashTimer);
+  flashTimer = setTimeout(() => {
+    el.classList.remove('visible');
+    setTimeout(() => {
+      if (!el.classList.contains('visible')) el.classList.add('hidden');
+    }, 200);
+  }, 1800);
 }
 
 function debounce<T extends (...args: unknown[]) => void>(fn: T, ms: number): (...args: Parameters<T>) => void {
@@ -124,9 +132,24 @@ function populateSelect(el: HTMLSelectElement, values: string[], selected: strin
   });
 }
 
+function isActiveProviderConfigured(provider: Provider, keys: string[], customEndpoint: string): boolean {
+  if (provider === 'custom') return !!customEndpoint.trim();
+  const keyIndex: Record<string, number> = {
+    openai: 0, gemini: 1, grok: 2, openrouter: 3, zai: 4, anthropic: 5,
+  };
+  const idx = keyIndex[provider];
+  return idx !== undefined && !!keys[idx]?.trim();
+}
+
 function setBadge(el: HTMLElement, connected: boolean): void {
   el.textContent = connected ? 'Connected' : 'Not Configured';
   el.className = connected ? 'status-badge connected' : 'status-badge unconfigured';
+}
+
+function updateProviderCardVisibility(active: Provider): void {
+  document.querySelectorAll<HTMLElement>('.provider-card[data-provider]').forEach((card) => {
+    card.classList.toggle('hidden', card.dataset.provider !== active);
+  });
 }
 
 function setSegmentedValue(container: HTMLElement, value: string): void {
@@ -296,7 +319,11 @@ async function refreshBadges(): Promise<void> {
   setBadge(refs.badgeAnthropic, !!anthropicKey);
   setBadge(refs.badgeCustom, !!(customKey || customEndpoint));
 
-  refs.navAiWarning.classList.toggle('hidden', keys.some(k => k.trim()));
+  const activeProvider = (settings?.llmProvider ?? 'openai') as Provider;
+  refs.navAiWarning.classList.toggle(
+    'hidden',
+    isActiveProviderConfigured(activeProvider, [openaiKey, geminiKey, grokKey, openrouterKey, zaiKey, anthropicKey], customEndpoint),
+  );
 }
 
 function applyTranslations(lang: AppLanguage): void {
@@ -369,6 +396,7 @@ function populateTemplateDropdown(): void {
 function applySettings(settings: ProviderSettings): void {
   refs.defaultTemplate.value = settings.defaultTemplateId ?? 'auto_fix';
   setSegmentedValue(refs.providerSegmented, settings.llmProvider);
+  updateProviderCardVisibility(settings.llmProvider as Provider);
   refs.systemPrompt.value = settings.systemPrompt ?? '';
   refs.showPillLabels.checked = settings.showPillLabels;
   refs.forceInsert.checked = settings.forceInsert;
@@ -396,54 +424,65 @@ function applySettings(settings: ProviderSettings): void {
 }
 
 let saving = false;
+let pendingSave = false;
 
-async function saveAllSettings(statusEl: HTMLElement): Promise<void> {
-  if (saving) return;
+async function saveAllSettings(): Promise<void> {
+  if (saving) {
+    pendingSave = true;
+    return;
+  }
   saving = true;
 
-  const llmProvider = (getSegmentedValue(refs.providerSegmented) || 'openai') as Provider;
-  const language = (getSegmentedValue(refs.languageSeg) || 'en') as AppLanguage;
-  const siteListMode = (getSegmentedValue(refs.siteModeSeg) || 'all') as SiteListMode;
-  const siteList = refs.siteList.value
-    .split('\n')
-    .map((s) => s.trim())
-    .filter(Boolean);
+  try {
+    const llmProvider = (getSegmentedValue(refs.providerSegmented) || 'openai') as Provider;
+    const language = (getSegmentedValue(refs.languageSeg) || 'en') as AppLanguage;
+    const siteListMode = (getSegmentedValue(refs.siteModeSeg) || 'all') as SiteListMode;
+    const siteList = refs.siteList.value
+      .split('\n')
+      .map((s) => s.trim())
+      .filter(Boolean);
 
-  await saveProviderSettings({
-    defaultTemplateId: refs.defaultTemplate.value as RewriteTemplateId,
-    llmProvider,
-    openaiModel: refs.openaiModel.value,
-    geminiModel: refs.geminiModel.value,
-    grokModel: refs.grokModel.value,
-    openrouterModel: refs.openrouterModel.value,
-    zaiModel: refs.zaiModel.value,
-    anthropicModel: refs.anthropicModel.value,
-    customEndpoint: refs.customEndpoint.value,
-    customUseAuth: refs.customUseAuth.checked,
-    openaiCustomModel: refs.openaiCustomModel.value.trim() || undefined,
-    geminiCustomModel: refs.geminiCustomModel.value.trim() || undefined,
-    grokCustomModel: refs.grokCustomModel.value.trim() || undefined,
-    openrouterCustomModel: refs.openrouterCustomModel.value.trim() || undefined,
-    zaiCustomModel: refs.zaiCustomModel.value.trim() || undefined,
-    anthropicCustomModel: refs.anthropicCustomModel.value.trim() || undefined,
-    customOverrideModel: refs.customOverrideModel.value.trim() || undefined,
-    systemPrompt: refs.systemPrompt.value,
-    templateConfigs: collectTemplateConfigs(),
-    templateOrder: collectTemplateOrder(),
-    showPillLabels: refs.showPillLabels.checked,
-    forceInsert: refs.forceInsert.checked,
-    language,
-    siteListMode,
-    siteList,
-  });
+    await saveProviderSettings({
+      defaultTemplateId: refs.defaultTemplate.value as RewriteTemplateId,
+      llmProvider,
+      openaiModel: refs.openaiModel.value,
+      geminiModel: refs.geminiModel.value,
+      grokModel: refs.grokModel.value,
+      openrouterModel: refs.openrouterModel.value,
+      zaiModel: refs.zaiModel.value,
+      anthropicModel: refs.anthropicModel.value,
+      customEndpoint: refs.customEndpoint.value,
+      customUseAuth: refs.customUseAuth.checked,
+      openaiCustomModel: refs.openaiCustomModel.value.trim() || undefined,
+      geminiCustomModel: refs.geminiCustomModel.value.trim() || undefined,
+      grokCustomModel: refs.grokCustomModel.value.trim() || undefined,
+      openrouterCustomModel: refs.openrouterCustomModel.value.trim() || undefined,
+      zaiCustomModel: refs.zaiCustomModel.value.trim() || undefined,
+      anthropicCustomModel: refs.anthropicCustomModel.value.trim() || undefined,
+      customOverrideModel: refs.customOverrideModel.value.trim() || undefined,
+      systemPrompt: refs.systemPrompt.value,
+      templateConfigs: collectTemplateConfigs(),
+      templateOrder: collectTemplateOrder(),
+      showPillLabels: refs.showPillLabels.checked,
+      forceInsert: refs.forceInsert.checked,
+      language,
+      siteListMode,
+      siteList,
+    });
 
-  saving = false;
-  flash(statusEl, '✓ Saved');
+    flash('✓ Saved');
+  } finally {
+    saving = false;
+    if (pendingSave) {
+      pendingSave = false;
+      void saveAllSettings();
+    }
+  }
 }
 
 function wireSettingsButtons(): void {
-  refs.btnSaveSettings.addEventListener('click', async () => { await saveAllSettings(refs.settingsStatus); });
-  refs.btnSaveTemplates.addEventListener('click', async () => { await saveAllSettings(refs.templatesStatus); });
+  refs.btnSaveSettings.addEventListener('click', async () => { await saveAllSettings(); });
+  refs.btnSaveTemplates.addEventListener('click', async () => { await saveAllSettings(); });
 }
 
 function wireModelInputs(): void {
@@ -461,9 +500,10 @@ function wireModelInputs(): void {
     refs.zaiCustomModel,
     refs.anthropicCustomModel,
     refs.customOverrideModel,
+    refs.customEndpoint,
   ];
 
-  const debouncedSave = debounce(() => saveAllSettings(refs.settingsStatus), 300);
+  const debouncedSave = debounce(() => saveAllSettings(), 300);
 
   modelInputs.forEach((input) => {
     if (input instanceof HTMLSelectElement) {
@@ -475,7 +515,7 @@ function wireModelInputs(): void {
         debouncedSave();
       });
       input.addEventListener('blur', () => {
-        saveAllSettings(refs.settingsStatus);
+        saveAllSettings();
       });
     }
   });
@@ -498,14 +538,14 @@ function wireKeyButton(
   saveBtn.addEventListener('click', async () => {
     await saveFn(input.value.trim());
     await refreshBadges();
-    flash(refs.keysStatus, `✓ ${providerName} key saved`);
+    flash(`✓ ${providerName} key saved`);
   });
 
   clearBtn.addEventListener('click', async () => {
     input.value = '';
     await saveFn('');
     await refreshBadges();
-    flash(refs.keysStatus, `✓ ${providerName} key cleared`);
+    flash(`✓ ${providerName} key cleared`);
   });
 }
 
@@ -519,22 +559,20 @@ function wireProviderKeyButtons(): void {
 
   refs.btnSaveCustom.addEventListener('click', async () => {
     await saveCustomKey(refs.customKey.value);
-    await saveProviderSettings({
-      customEndpoint: refs.customEndpoint.value,
-    });
+    await saveAllSettings();
     await refreshBadges();
-    flash(refs.keysStatus, '✓ Custom endpoint saved');
+    flash('✓ Custom endpoint saved');
   });
 
   refs.btnClearCustom.addEventListener('click', async () => {
     refs.customKey.value = '';
     refs.customEndpoint.value = DEFAULT_SETTINGS.customEndpoint;
+    refs.customOverrideModel.value = '';
+    refs.customUseAuth.checked = false;
     await saveCustomKey('');
-    await saveProviderSettings({
-      customEndpoint: DEFAULT_SETTINGS.customEndpoint,
-    });
+    await saveAllSettings();
     await refreshBadges();
-    flash(refs.keysStatus, '✓ Custom endpoint cleared');
+    flash('✓ Custom endpoint cleared');
   });
 }
 
@@ -571,7 +609,12 @@ async function loadApiKeys(): Promise<void> {
   setBadge(refs.badgeZai, !!zaiKey);
   setBadge(refs.badgeAnthropic, !!anthropicKey);
   setBadge(refs.badgeCustom, !!(customKey || customEndpoint));
-  refs.navAiWarning.classList.toggle('hidden', !!(openaiKey && geminiKey && grokKey));
+
+  const activeProvider = (settings?.llmProvider ?? 'openai') as Provider;
+  refs.navAiWarning.classList.toggle(
+    'hidden',
+    isActiveProviderConfigured(activeProvider, [openaiKey, geminiKey, grokKey, openrouterKey, zaiKey, anthropicKey], customEndpoint),
+  );
 }
 
 async function init(): Promise<void> {
@@ -586,8 +629,9 @@ async function init(): Promise<void> {
   populateSelect(refs.zaiModel, PROVIDER_MODELS.zai, PROVIDER_MODELS.zai[0]);
   populateSelect(refs.anthropicModel, PROVIDER_MODELS.anthropic, PROVIDER_MODELS.anthropic[0]);
 
-  wireSegmented(refs.providerSegmented, () => {
-    saveAllSettings(refs.settingsStatus);
+  wireSegmented(refs.providerSegmented, (value) => {
+    updateProviderCardVisibility(value as Provider);
+    saveAllSettings();
   });
   wireSegmented(refs.languageSeg, (value) => {
     applyTranslations(value as AppLanguage);

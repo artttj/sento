@@ -19,9 +19,13 @@
 
       <nav class="sidebar-nav">
         <button class="nav-item active" data-tab="general" type="button">
-          <svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
-            <circle cx="10" cy="10" r="3"/>
-            <path d="M10 2v1.5m0 13V18M2 10h1.5m13 0H18M4.4 4.4l1.1 1.1m9 9 1.1 1.1M4.4 15.6l1.1-1.1m9-9 1.1-1.1"/>
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <line x1="3" y1="5" x2="13" y2="5"/>
+            <circle cx="15" cy="5" r="1.5"/>
+            <line x1="7" y1="10" x2="17" y2="10"/>
+            <circle cx="5" cy="10" r="1.5"/>
+            <line x1="3" y1="15" x2="11" y2="15"/>
+            <circle cx="13" cy="15" r="1.5"/>
           </svg>
           <span data-i18n="nav-general">General</span>
         </button>
@@ -148,7 +152,6 @@
 
         <div class="panel-actions">
           <button id="btn-save-settings" class="btn btn-primary" data-i18n="save-settings" type="button">Save Settings</button>
-          <span id="settings-status" class="saved-msg hidden">✓ Saved</span>
         </div>
       </section>
 
@@ -172,7 +175,6 @@
 
         <div class="panel-actions">
           <button id="btn-save-templates" class="btn btn-primary" data-i18n="save-settings" type="button">Save Settings</button>
-          <span id="templates-status" class="saved-msg hidden">✓ Saved</span>
         </div>
       </section>
 
@@ -226,7 +228,7 @@
           </div>
         </div>
 
-        <div class="provider-card">
+        <div class="provider-card" data-provider="openai">
           <div class="provider-header">
             <div class="provider-info">
               <div class="provider-name">OpenAI</div>
@@ -249,7 +251,7 @@
           </div>
         </div>
 
-        <div class="provider-card">
+        <div class="provider-card" data-provider="gemini">
           <div class="provider-header">
             <div class="provider-info">
               <div class="provider-name">Gemini</div>
@@ -272,7 +274,7 @@
           </div>
         </div>
 
-        <div class="provider-card">
+        <div class="provider-card" data-provider="grok">
           <div class="provider-header">
             <div class="provider-info">
               <div class="provider-name">Grok</div>
@@ -295,7 +297,7 @@
           </div>
         </div>
 
-        <div class="provider-card">
+        <div class="provider-card" data-provider="openrouter">
           <div class="provider-header">
             <div class="provider-info">
               <div class="provider-name">OpenRouter</div>
@@ -318,7 +320,7 @@
           </div>
         </div>
 
-        <div class="provider-card">
+        <div class="provider-card" data-provider="zai">
           <div class="provider-header">
             <div class="provider-info">
               <div class="provider-name">Zai</div>
@@ -341,7 +343,7 @@
           </div>
         </div>
 
-        <div class="provider-card">
+        <div class="provider-card" data-provider="anthropic">
           <div class="provider-header">
             <div class="provider-info">
               <div class="provider-name">Anthropic</div>
@@ -364,13 +366,13 @@
           </div>
         </div>
 
-        <div class="provider-card">
+        <div class="provider-card" data-provider="custom">
           <div class="provider-header">
             <div class="provider-info">
               <div class="provider-name">Custom</div>
               <div class="custom-controls">
                 <input id="custom-endpoint" type="text" class="setting-input setting-input--sm" placeholder="http://localhost:11434" />
-                <input id="custom-override-model" type="text" class="custom-model-input" placeholder="Model (e.g. qwen3:1.7b, llama3)" />
+                <input id="custom-override-model" type="text" class="custom-model-input" placeholder="e.g. llama3, qwen3:1.7b" />
               </div>
             </div>
             <span id="badge-custom" class="status-badge unconfigured">Not Configured</span>
@@ -396,7 +398,6 @@
           </div>
         </div>
 
-        <span id="keys-status" class="saved-msg hidden">✓ Saved</span>
       </section>
 
       <section id="tab-help" class="tab-panel hidden">
@@ -533,6 +534,8 @@
       </section>
     </main>
   </div>
+
+  <div id="global-toast" class="global-toast hidden"></div>
 
   <script type="module" src="settings.js"></script>
 </body>

@@ -13,25 +13,25 @@ export const REWRITE_TEMPLATES: RewriteTemplate[] = [
     id: 'auto_fix',
     label: 'Fix',
     instruction:
-      'Fix all grammar, spelling, and punctuation errors. Improve clarity where the meaning is ambiguous. Keep the original tone, voice, and intent. Do not add new ideas, remove content, or change the level of formality. If the text is already correct, return it unchanged.',
+      'Correct grammar, spelling, and punctuation. Resolve ambiguous phrasing only when the meaning is unclear. Preserve the original tone, voice, formality, and intent. Do not add or remove ideas. Return the text unchanged if it has no errors.',
   },
   {
     id: 'professional',
     label: 'Pro',
     instruction:
-      'Rewrite in a clear, professional tone suitable for business communication. Be direct and specific. Remove filler words and vague language. Use active voice. Keep sentences short. Maintain the original intent and all key details. Do not sound robotic or overly formal.',
+      'Rewrite in a polished business tone. Use active voice, short sentences, and specific language. Cut filler and hedging. Preserve intent and every key detail. Stay conversational, not stiff or corporate.',
   },
   {
     id: 'custom',
     label: 'Mine',
     instruction:
-      'Rewrite the text according to the custom instruction provided by the user. If no custom instruction is set, improve the text for clarity and readability while keeping the original meaning.',
+      "Follow the user's custom instruction. If none is provided, improve clarity and readability while preserving meaning.",
   },
   {
     id: 'shorten',
     label: 'Trim',
     instruction:
-      'Cut the text length by at least 40%. Keep every essential fact, action item, and decision. Remove redundancy, qualifiers, and filler. Prefer short sentences. If the text contains a list, keep the list but tighten each item. Do not drop important context.',
+      'Cut length by at least 40%. Keep every fact, action item, and decision. Remove redundancy, qualifiers, and filler. Prefer short sentences. In lists, keep every item but tighten each one.',
   },
 ];
 
@@ -50,7 +50,7 @@ export function getTemplate(id: RewriteTemplateId): RewriteTemplate {
   return templateMap.get(id) ?? REWRITE_TEMPLATES[0];
 }
 
-export function buildRewritePrompt(input: { templateId: RewriteTemplateId; text: string; url?: string; title?: string; instructionOverride?: string; language?: string }): string {
+export function buildRewritePrompt(input: { templateId: RewriteTemplateId; text: string; url?: string; title?: string; instructionOverride?: string }): string {
   const template = getTemplate(input.templateId);
   const instruction = input.instructionOverride?.trim() || template.instruction;
   const context = [
@@ -60,14 +60,10 @@ export function buildRewritePrompt(input: { templateId: RewriteTemplateId; text:
     .filter(Boolean)
     .join('\n');
 
-  const langNote = input.language && input.language !== 'en'
-    ? `Write the output in the same language as the original text. If the original is in ${input.language === 'de' ? 'German' : input.language}, respond in that language.`
-    : '';
-
   return [
     `Task: ${instruction}`,
+    'Write the output in the same language as the original text.',
     'Return only the rewritten text. Do not include commentary, quotes, markdown fences, or explanations.\nPreserve the original formatting structure: keep line breaks, bullet points, numbered lists, and paragraph spacing intact.',
-    langNote,
     context ? `Context:\n${context}` : '',
     'Original text:',
     input.text,

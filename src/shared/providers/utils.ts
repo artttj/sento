@@ -4,6 +4,7 @@ import { ProviderBadResponseError, ProviderHttpError } from './errors';
 
 export interface CompletionResponse {
   choices?: Array<{ message?: { content?: string } }>;
+  message?: { content?: string };
   error?: { message?: string };
 }
 
@@ -28,7 +29,8 @@ export async function parseProviderResponse(res: Response): Promise<string> {
     throw new ProviderHttpError(res.status, body.error?.message ?? `HTTP ${res.status}`);
   }
 
-  const text = body.choices?.[0]?.message?.content?.trim();
+  const text = body.choices?.[0]?.message?.content?.trim()
+    || body.message?.content?.trim();
   if (!text) {
     throw new ProviderBadResponseError('Provider returned an empty rewrite result.');
   }

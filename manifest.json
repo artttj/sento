@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Sentō",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Sentō: universal BYOK rewrite bubble for web editors.",
   "icons": {
     "16": "icons/icon16.png",
@@ -17,7 +17,7 @@
     },
     "default_popup": "popup/popup.html"
   },
-  "permissions": ["storage", "tabs"],
+  "permissions": ["storage", "tabs", "declarativeNetRequest"],
   "host_permissions": [
     "*://*/*",
     "https://api.openai.com/*",
@@ -27,6 +27,15 @@
     "https://api.zai.ai/*",
     "https://api.anthropic.com/*"
   ],
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "local_cors",
+        "enabled": true,
+        "path": "rules/local_cors.json"
+      }
+    ]
+  },
   "background": {
     "service_worker": "background/service-worker.js",
     "type": "module"

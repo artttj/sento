@@ -59,7 +59,7 @@ describe('getTemplate', () => {
 describe('buildRewritePrompt', () => {
   it('includes task with instruction', () => {
     const prompt = buildRewritePrompt({ templateId: 'auto_fix', text: 'Hello' });
-    expect(prompt).toContain('Task: Fix all grammar');
+    expect(prompt).toContain('Task: Correct grammar');
   });
 
   it('includes original text', () => {
@@ -95,15 +95,9 @@ describe('buildRewritePrompt', () => {
     expect(prompt).not.toContain('Fix all grammar');
   });
 
-  it('includes language note for non-english', () => {
-    const prompt = buildRewritePrompt({ templateId: 'auto_fix', text: 'Hallo', language: 'de' });
-    expect(prompt).toContain('German');
-    expect(prompt).toContain('same language');
-  });
-
-  it('excludes language note for english', () => {
-    const prompt = buildRewritePrompt({ templateId: 'auto_fix', text: 'Hello', language: 'en' });
-    expect(prompt).not.toContain('same language');
+  it('always includes source-language directive', () => {
+    const prompt = buildRewritePrompt({ templateId: 'auto_fix', text: 'Привет' });
+    expect(prompt).toContain('same language as the original text');
   });
 
   it('includes output requirements', () => {

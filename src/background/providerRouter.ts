@@ -63,7 +63,7 @@ async function resolveProviderContext(): Promise<{
 
   if (provider === 'custom') {
     const customKey = await getCustomKey();
-    const model = settings.customOverrideModel?.trim() || 'llama3';
+    const model = settings.customOverrideModel?.trim() || '';
     return {
       provider,
       model,
@@ -146,6 +146,18 @@ export async function rewriteWithProvider(
     };
   }
 
+  if (isCustom && !model) {
+    return {
+      ok: false,
+      error: {
+        code: 'MISSING_KEY',
+        message: 'No model name configured for custom endpoint. Open Settings to add one.',
+        provider,
+        model: '',
+      },
+    };
+  }
+
   const apiKey = isCustom ? (cachedCustomKey ?? '') : key;
 
   const templateConfig = settings.templateConfigs?.[payload.templateId];
@@ -156,7 +168,6 @@ export async function rewriteWithProvider(
     title: payload.context?.title,
     url: payload.context?.url,
     instructionOverride: templateConfig?.instruction,
-    language: settings.language,
   });
 
   const timeout = AbortSignal.timeout(REQUEST_TIMEOUT_MS);
